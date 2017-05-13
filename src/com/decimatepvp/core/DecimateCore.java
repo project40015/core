@@ -1,5 +1,7 @@
 package com.decimatepvp.core;
 
+import net.milkbowl.vault.economy.Economy;
+
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -13,16 +15,19 @@ import com.decimatepvp.core.listener.PlayerUseItemListener;
 import com.decimatepvp.core.utils.DecimateConfig;
 import com.decimatepvp.functions.freeze.FreezeCommand;
 import com.decimatepvp.functions.freeze.FreezeManager;
+import com.decimatepvp.functions.harvester.HarvesterCommand;
 import com.decimatepvp.functions.harvester.HarvesterManager;
+import com.decimatepvp.functions.itemcooldown.ItemCooldownManager;
+import com.decimatepvp.functions.minicommands.ColorsCommand;
+import com.decimatepvp.functions.minicommands.NightVisionCommand;
 import com.decimatepvp.functions.spectate.SpectateCommand;
 import com.decimatepvp.functions.spectate.SpectateManager;
+import com.decimatepvp.functions.staffchat.StaffChatCommand;
 import com.decimatepvp.functions.staffchat.StaffChatManager;
 import com.decimatepvp.functions.tntfill.TntFillCommand;
 import com.decimatepvp.functions.tntfill.TntFillManager;
 import com.decimatepvp.functions.togglechat.ToggleChatCommand;
 import com.decimatepvp.functions.togglechat.ToggleChatManager;
-
-import net.milkbowl.vault.economy.Economy;
 
 public class DecimateCore extends JavaPlugin {
 	
@@ -42,6 +47,7 @@ public class DecimateCore extends JavaPlugin {
 	private ToggleChatManager toggleChatManager;
 	private StaffChatManager staffChatManager;
 	private HarvesterManager harvesterManager;
+	private ItemCooldownManager itemCooldownManager;
 	
 	@Override
 	public void onEnable() {
@@ -54,12 +60,13 @@ public class DecimateCore extends JavaPlugin {
 		toggleChatManager = new ToggleChatManager();
 		staffChatManager = new StaffChatManager();
 		harvesterManager = new HarvesterManager();
+		itemCooldownManager = new ItemCooldownManager();
 		
 		setupEco();
 		loadCommands();
 		loadListeners(harvesterManager, staffChatManager, freezeManager, new PlayerBreakBlockListener(),
 				new EntityItemListener(), new ExplosionListener(), new PlayerUseItemListener(),
-				toggleChatManager, spectateManager);
+				toggleChatManager, spectateManager, itemCooldownManager);
 	}
 
 	private void loadListeners(Listener... listeners) {
@@ -77,6 +84,11 @@ public class DecimateCore extends JavaPlugin {
 		getCommand("tntfill").setExecutor(new TntFillCommand(this));
 		getCommand("spectate").setExecutor(new SpectateCommand(this));
 		getCommand("togglechat").setExecutor(new ToggleChatCommand(this));
+		getCommand("staffchat").setExecutor(new StaffChatCommand());
+		getCommand("harvester").setExecutor(new HarvesterCommand());
+		getCommand("colors").setExecutor(new ColorsCommand());
+		getCommand("nv").setExecutor(new NightVisionCommand());
+
 	}
 
 	public static DecimateCore getCore() {
@@ -119,6 +131,10 @@ public class DecimateCore extends JavaPlugin {
 
 	public HarvesterManager getHarvesterManager() {
 		return harvesterManager;
+	}
+	
+	public ItemCooldownManager getItemCooldownManager() {
+		return itemCooldownManager;
 	}
 
 }

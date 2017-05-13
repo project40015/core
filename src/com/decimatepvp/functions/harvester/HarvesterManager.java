@@ -1,12 +1,12 @@
 package com.decimatepvp.functions.harvester;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -23,18 +23,21 @@ public class HarvesterManager implements Manager, Listener {
 	public HarvesterManager() {
 		harvesterItem = ItemUtils.createItem(Material.DIAMOND_HOE, 1, (byte) 0, "&6&l* &2&lHarvester Hoe &l&6*",
 				"&6* Allows you to harvest multiple sugarcane stacks");
+		harvesterItem.addEnchantment(Enchantment.DURABILITY, 3);
 	}
 	
-	@SuppressWarnings("deprecation")
 	@EventHandler
 	public void onSugarCaneBreak(BlockBreakEvent event) {
 		Player player = event.getPlayer();
 		ItemStack hand = player.getItemInHand();
-		if((hand != null) && (hand.equals(harvesterItem))) {
+		if((hand != null) && ItemUtils.isItemCloned(hand, harvesterItem)) {
 			Block block = event.getBlock();
 			if(block.getType() == Material.SUGAR_CANE_BLOCK) {
 				player.getLocation().setYaw(0);
-				List<Block> line = player.getLineOfSight((HashSet<Byte>) null, 6);
+				List<Block> line = new ArrayList<>();
+				for(int i = 1; i <= 6; i++){
+					line.add(player.getLocation().getDirection().normalize().multiply(i).toLocation(player.getWorld()).getBlock());
+				}
 				
 				//Gets the sugarcane on the side of the main line of sight
 				for(Block b : line) {

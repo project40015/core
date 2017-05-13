@@ -16,4 +16,12 @@ commands:
     description: Toggles chat.
   spectate:
     description: Toggle spectator mode.
+  harvester:
+    description: Gives wand.
+  staffchat:
+    description: Enable staff chat.
+  colors:
+    description: View colors.
+  nv:
+    description: Toggle night vision.
  
