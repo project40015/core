@@ -16,19 +16,13 @@ commands:
     description: Toggles chat.
   spectate:
     description: Toggle spectator mode.
-<<<<<<< HEAD
-  harvester:
-    description: Gives wand.
   staffchat:
     description: Enable staff chat.
   colors:
     description: View colors.
   nv:
     description: Toggle night vision.
-=======
   staffchat:
     description: Toggles staffchat.
   harvester:
-    description: Gives you the Harvester item.
->>>>>>> origin/Random-Branch-2
- 
+    description: Gives you the Harvester item. 
