@@ -13,7 +13,7 @@ public class DecimateConfig {
 	private double costOfSand = 50;
 	private int tntFillRange = 50;
 	
-	private String staffchatFormat = "&8&l[&c&lStaffChat&8&l]&r {DISPLAYNAME} >> {MESSAGE}";
+	private String staffchatFormat = "&8&l[&c&lStaffChat&8&l]&r %s >> %s";
 	
 	// Map<EntityID, Value>
 	public Map<Integer, Double> spawnerValues = Maps.newHashMap();
@@ -61,7 +61,7 @@ public class DecimateConfig {
 	}
 	
 	public String formatStaffChatMessage(Player player, String message) {
-		return String.format(staffchatFormat, "");
+		return String.format(staffchatFormat, player.getDisplayName(), message);
 	}
 
 }

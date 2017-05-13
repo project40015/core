@@ -1,4 +1,4 @@
-package com.decimatepvp.functions.staffchat;
+package com.decimatepvp.functions.harvester;
 
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
@@ -8,11 +8,11 @@ import org.bukkit.entity.Player;
 
 import com.decimatepvp.core.DecimateCore;
 
-public class StaffChatCommand implements CommandExecutor {
+public class HarvesterCommand implements CommandExecutor {
 	
 	private DecimateCore core;
 	
-	public StaffChatCommand() {
+	public HarvesterCommand() {
 		core = DecimateCore.getCore();
 	}
 
@@ -20,9 +20,9 @@ public class StaffChatCommand implements CommandExecutor {
 	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
 		if(sender instanceof Player) {
 			Player player = (Player) sender;
-			if(player.hasPermission("Decimate.staff.chat")) {
-				core.getStaffChatManager().togglePlayer(player);
-				player.sendMessage(ChatColor.GREEN + "You have toggled StaffChat!");
+			if(player.hasPermission("Decimate.trench.hoe")) {
+				core.getHarvesterManager().giveHarvester(player);
+				player.sendMessage(ChatColor.GREEN + "You have been given a Harvester Hoe!");
 			}
 			else {
 				sender.sendMessage(ChatColor.RED + "Only players may use this command.");
