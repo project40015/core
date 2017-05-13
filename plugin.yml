@@ -12,4 +12,8 @@ commands:
     description: Freeze players.
   logout:
     description: Disconnect.
+  togglechat:
+    description: Toggles chat.
+  spectate:
+    description: Toggle spectator mode.
  
