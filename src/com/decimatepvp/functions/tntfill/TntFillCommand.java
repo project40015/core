@@ -73,22 +73,24 @@ public class TntFillCommand implements CommandExecutor {
 			return false;
 		}
 		
-		if(PlayerUtils.getTotal(player.getInventory(), Material.TNT) < amount){
-			player.sendMessage(ChatColor.RED + "You do not have " + ChatColor.YELLOW
-					+ amount + " TNT" + ChatColor.RED + "!");
-			return false;
-		}
-		
 		Bukkit.getServer().getScheduler().runTaskAsynchronously(DecimateCore.getCore(), new Runnable(){
 
 			@Override
 			public void run() {
 				List<Location> dispensers = getLocations(player.getLocation(), range);
-				int size = dispensers.size();
-				int saved = core.getTntFillManager().fill(dispensers, amount);
-				PlayerUtils.removeItems(player, Material.TNT, amount - saved);
 				
-				player.sendMessage(ChatColor.GREEN + "Spread " + ChatColor.AQUA + (amount - saved) + " TNT " + ChatColor.GREEN
+				int size = dispensers.size();
+				int total = 0;
+				int inventory = PlayerUtils.getTotal(player.getInventory(), Material.TNT);
+				if(amount*size > inventory){
+					total = inventory;
+				}else{
+					total = amount*size;
+				}
+				int saved = core.getTntFillManager().fill(dispensers, total);
+				PlayerUtils.removeItems(player, Material.TNT, total - saved);
+				
+				player.sendMessage(ChatColor.GREEN + "Spread " + ChatColor.AQUA + (total - saved) + " TNT " + ChatColor.GREEN
 						+ "over " + ChatColor.AQUA + size + " dispensers" + ChatColor.GREEN + "!");
 				
 				core.getTntFillManager().putOnCooldown(player);
