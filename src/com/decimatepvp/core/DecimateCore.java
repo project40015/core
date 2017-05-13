@@ -1,7 +1,5 @@
 package com.decimatepvp.core;
 
-import net.milkbowl.vault.economy.Economy;
-
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -15,12 +13,16 @@ import com.decimatepvp.core.listener.PlayerUseItemListener;
 import com.decimatepvp.core.utils.DecimateConfig;
 import com.decimatepvp.functions.freeze.FreezeCommand;
 import com.decimatepvp.functions.freeze.FreezeManager;
+import com.decimatepvp.functions.harvester.HarvesterManager;
 import com.decimatepvp.functions.spectate.SpectateCommand;
 import com.decimatepvp.functions.spectate.SpectateManager;
+import com.decimatepvp.functions.staffchat.StaffChatManager;
 import com.decimatepvp.functions.tntfill.TntFillCommand;
 import com.decimatepvp.functions.tntfill.TntFillManager;
 import com.decimatepvp.functions.togglechat.ToggleChatCommand;
 import com.decimatepvp.functions.togglechat.ToggleChatManager;
+
+import net.milkbowl.vault.economy.Economy;
 
 public class DecimateCore extends JavaPlugin {
 	
@@ -38,7 +40,8 @@ public class DecimateCore extends JavaPlugin {
 	private TntFillManager tntFillManager;
 	private SpectateManager spectateManager;
 	private ToggleChatManager toggleChatManager;
-
+	private StaffChatManager staffChatManager;
+	private HarvesterManager harvesterManager;
 	
 	@Override
 	public void onEnable() {
@@ -49,10 +52,12 @@ public class DecimateCore extends JavaPlugin {
 		tntFillManager = new TntFillManager();
 		spectateManager = new SpectateManager();
 		toggleChatManager = new ToggleChatManager();
+		staffChatManager = new StaffChatManager();
+		harvesterManager = new HarvesterManager();
 		
 		setupEco();
 		loadCommands();
-		loadListeners(freezeManager, new PlayerBreakBlockListener(),
+		loadListeners(harvesterManager, staffChatManager, freezeManager, new PlayerBreakBlockListener(),
 				new EntityItemListener(), new ExplosionListener(), new PlayerUseItemListener(),
 				toggleChatManager, spectateManager);
 	}
@@ -106,6 +111,14 @@ public class DecimateCore extends JavaPlugin {
 	
 	public ToggleChatManager getToggleChatManager(){
 		return this.toggleChatManager;
+	}
+
+	public StaffChatManager getStaffChatManager() {
+		return staffChatManager;
+	}
+
+	public HarvesterManager getHarvesterManager() {
+		return harvesterManager;
 	}
 
 }
