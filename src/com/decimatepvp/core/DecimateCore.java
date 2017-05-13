@@ -13,9 +13,11 @@ import com.decimatepvp.core.listener.PlayerUseItemListener;
 import com.decimatepvp.core.utils.DecimateConfig;
 import com.decimatepvp.functions.freeze.FreezeCommand;
 import com.decimatepvp.functions.freeze.FreezeManager;
+import com.decimatepvp.functions.harvester.HarvesterCommand;
 import com.decimatepvp.functions.harvester.HarvesterManager;
 import com.decimatepvp.functions.spectate.SpectateCommand;
 import com.decimatepvp.functions.spectate.SpectateManager;
+import com.decimatepvp.functions.staffchat.StaffChatCommand;
 import com.decimatepvp.functions.staffchat.StaffChatManager;
 import com.decimatepvp.functions.tntfill.TntFillCommand;
 import com.decimatepvp.functions.tntfill.TntFillManager;
@@ -77,6 +79,8 @@ public class DecimateCore extends JavaPlugin {
 		getCommand("tntfill").setExecutor(new TntFillCommand(this));
 		getCommand("spectate").setExecutor(new SpectateCommand(this));
 		getCommand("togglechat").setExecutor(new ToggleChatCommand(this));
+		getCommand("staffchat").setExecutor(new StaffChatCommand());
+		getCommand("harvester").setExecutor(new HarvesterCommand());
 	}
 
 	public static DecimateCore getCore() {

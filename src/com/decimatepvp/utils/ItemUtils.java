@@ -20,12 +20,19 @@ public class ItemUtils {
 	public static void setLore(ItemStack item, String[] lore) {
 		ItemMeta meta = item.getItemMeta();
 		meta.setLore(Arrays.asList(lore));
+		item.setItemMeta(meta);
 	}
 
 	public static void setDisplayName(ItemStack item, String displayName) {
 		ItemMeta meta = item.getItemMeta();
 		meta.setDisplayName(ChatColor.translateAlternateColorCodes('&', displayName));
 		item.setItemMeta(meta);
+	}
+
+	public static boolean isItemCloned(ItemStack i1, ItemStack i2) {
+		return (i1 != null) && (i2 != null) &&
+				(i1.getItemMeta().getDisplayName().equals(i2.getItemMeta().getDisplayName())) &&
+				(i1.getType() == i2.getType());
 	}
 
 }

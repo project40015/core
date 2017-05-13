@@ -16,4 +16,8 @@ commands:
     description: Toggles chat.
   spectate:
     description: Toggle spectator mode.
+  staffchat:
+    description: Toggles staffchat.
+  harvester:
+    description: Gives you the Harvester item.
  
