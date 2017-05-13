@@ -1,9 +1,5 @@
 package com.decimatepvp.core;
 
-import org.bukkit.event.Listener;
-import org.bukkit.plugin.RegisteredServiceProvider;
-import org.bukkit.plugin.java.JavaPlugin;
-
 import com.decimatepvp.core.commands.CraftTntCommand;
 import com.decimatepvp.core.commands.FreezeCommand;
 import com.decimatepvp.core.commands.LogoutCommand;
@@ -16,9 +12,9 @@ import com.decimatepvp.core.listener.PlayerQuitListener;
 import com.decimatepvp.core.listener.PlayerUseItemListener;
 import com.decimatepvp.core.utils.DecimateConfig;
 
-import net.milkbowl.vault.economy.Economy;
-
 public class DecimateCore extends JavaPlugin {
+	
+	//Test
 	
 	private static DecimateCore core;
 	
