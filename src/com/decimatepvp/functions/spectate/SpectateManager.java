@@ -7,6 +7,7 @@ import java.util.List;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -14,6 +15,8 @@ import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerKickEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.potion.PotionEffect;
 
 import com.decimatepvp.core.Manager;
 
@@ -27,17 +30,26 @@ public class SpectateManager implements Listener, Manager {
 	}
 	
 	public void toggleSpectator(Player player){
-		if(!spectators.contains(player.getUniqueId().toString())){
+		if(!this.isSpectating(player)){
 			player.sendMessage(ChatColor.GREEN + "Enabled spectator mode!");
 			spectators.add(new Spectator(player));
 			player.setGameMode(GameMode.SPECTATOR);
 			player.getInventory().clear();
+			player.getInventory().setHelmet(new ItemStack(Material.AIR));
+			player.getInventory().setChestplate(new ItemStack(Material.AIR));
+			player.getInventory().setLeggings(new ItemStack(Material.AIR));
+			player.getInventory().setBoots(new ItemStack(Material.AIR));
 			player.setHealth(20);
 			player.setFoodLevel(20);
-			player.getActivePotionEffects().clear();
+			for(PotionEffect pe : player.getActivePotionEffects()){
+				player.removePotionEffect(pe.getType());
+			}
 			for(Player p : Bukkit.getServer().getOnlinePlayers()){
 				if(!p.equals(player)){
 					p.hidePlayer(player);
+					if(p.hasPermission("Decimate.spectate")){
+						p.sendMessage(ChatColor.GRAY + "Player " + ChatColor.WHITE + player.getName() + ChatColor.GRAY + " has started spectating.");
+					}
 				}
 			}
 		}else{
@@ -47,6 +59,9 @@ public class SpectateManager implements Listener, Manager {
 			for(Player p : Bukkit.getServer().getOnlinePlayers()){
 				if(!p.canSee(player)){
 					p.showPlayer(player);
+				}
+				if(p.hasPermission("Decimate.spectate")){
+					p.sendMessage(ChatColor.GRAY + "Player " + ChatColor.WHITE + player.getName() + ChatColor.GRAY + " has stopped spectating.");
 				}
 			}
 		}
@@ -86,7 +101,9 @@ public class SpectateManager implements Listener, Manager {
 	@EventHandler
 	public void onJoin(PlayerJoinEvent event){
 		for(Spectator sp : spectators){
-			event.getPlayer().hidePlayer(sp.getPlayer());
+			if(!sp.getPlayer().equals(event.getPlayer())){
+				event.getPlayer().hidePlayer(sp.getPlayer());
+			}
 		}
 	}
 	
@@ -103,7 +120,7 @@ public class SpectateManager implements Listener, Manager {
 	private void quit(Player player){
 		for(Spectator sp : spectators){
 			if(sp.getPlayer().equals(player)){
-				sp.getInventory().paste(sp.getPlayer());
+				this.toggleSpectator(sp.getPlayer());
 			}else{
 				player.showPlayer(sp.getPlayer());
 			}

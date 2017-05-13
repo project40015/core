@@ -22,18 +22,19 @@ public class SpectateCommand implements CommandExecutor {
 		
 		if(!(arg0 instanceof Player)){
 			arg0.sendMessage("Command only for players.");
-			return true;
+			return false;
 		}
 		
 		Player player = (Player) arg0;
 		
 		if(!player.hasPermission("Decimate.spectate")){
 			player.sendMessage(ChatColor.RED + "You do not have permission for this.");
-			return true;
+			return false;
 		}
 		
 		if(arg3.length < 1){
 			player.sendMessage(ChatColor.RED + "Invalid syntax, try " + ChatColor.YELLOW + "/spectate (toggle/tp)" + ChatColor.RED + "!");
+			return false;
 		}
 		
 		if(arg3[0].equalsIgnoreCase("tp")){
