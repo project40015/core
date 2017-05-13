@@ -1,20 +1,25 @@
 package com.decimatepvp.core;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import net.milkbowl.vault.economy.Economy;
+
+import org.bukkit.event.Listener;
+import org.bukkit.plugin.RegisteredServiceProvider;
+import org.bukkit.plugin.java.JavaPlugin;
+
 import com.decimatepvp.core.commands.CraftTntCommand;
-import com.decimatepvp.core.commands.FreezeCommand;
 import com.decimatepvp.core.commands.LogoutCommand;
 import com.decimatepvp.core.listener.EntityItemListener;
 import com.decimatepvp.core.listener.ExplosionListener;
 import com.decimatepvp.core.listener.PlayerBreakBlockListener;
-import com.decimatepvp.core.listener.PlayerDamageListener;
-import com.decimatepvp.core.listener.PlayerMoveListener;
-import com.decimatepvp.core.listener.PlayerQuitListener;
 import com.decimatepvp.core.listener.PlayerUseItemListener;
 import com.decimatepvp.core.utils.DecimateConfig;
+import com.decimatepvp.functions.freeze.FreezeCommand;
+import com.decimatepvp.functions.freeze.FreezeManager;
 
 public class DecimateCore extends JavaPlugin {
-	
-	//Test
 	
 	private static DecimateCore core;
 	
@@ -24,19 +29,23 @@ public class DecimateCore extends JavaPlugin {
 	
 	//Command Classes
 	public CraftTntCommand craftTnt;
-	public FreezeCommand freeze;
 	public LogoutCommand logout;
+	
+	private FreezeManager freezeManager;
+	
+	private List<Manager> managers = new ArrayList<>();
 	
 	@Override
 	public void onEnable() {
 		core = this;
 		config = new DecimateConfig();
 
+		freezeManager = new FreezeManager(this);
+		
 		setupEco();
 		loadCommands();
-		loadListeners(new PlayerMoveListener(), new PlayerQuitListener(), new PlayerBreakBlockListener(),
-				new EntityItemListener(), new ExplosionListener(), new PlayerUseItemListener(),
-				new PlayerDamageListener());
+		loadListeners(freezeManager, new PlayerBreakBlockListener(),
+				new EntityItemListener(), new ExplosionListener(), new PlayerUseItemListener());
 	}
 
 	private void loadListeners(Listener... listeners) {
@@ -47,10 +56,9 @@ public class DecimateCore extends JavaPlugin {
 
 	private void loadCommands() {
 		craftTnt = new CraftTntCommand();
-		freeze = new FreezeCommand();
 		logout = new LogoutCommand();
 		getCommand("tnt").setExecutor(craftTnt);
-		getCommand("freeze").setExecutor(freeze);
+		getCommand("freeze").setExecutor(new FreezeCommand(this));
 		getCommand("logout").setExecutor(logout);
 	}
 
@@ -66,6 +74,10 @@ public class DecimateCore extends JavaPlugin {
         if(economyProvider != null) {
             eco = economyProvider.getProvider();
         }
+	}
+	
+	public FreezeManager getFreezeManager(){
+		return this.freezeManager;
 	}
 
 }

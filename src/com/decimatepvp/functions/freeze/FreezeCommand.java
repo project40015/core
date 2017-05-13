@@ -1,7 +1,4 @@
-package com.decimatepvp.core.commands;
-
-import java.util.ArrayList;
-import java.util.List;
+package com.decimatepvp.functions.freeze;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -11,14 +8,16 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-public class FreezeCommand implements CommandExecutor {
-	
-	public List<Player> frozen;
-	
-	public FreezeCommand() {
-		this.frozen = new ArrayList<>();
-	}
+import com.decimatepvp.core.DecimateCore;
 
+public class FreezeCommand implements CommandExecutor {
+
+	private DecimateCore core;
+	
+	public FreezeCommand(DecimateCore core){
+		this.core = core;
+	}
+	
 	@SuppressWarnings("deprecation")
 	@Override
 	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
@@ -34,18 +33,18 @@ public class FreezeCommand implements CommandExecutor {
 				}
 				
 				Player player = plyr.getPlayer();
-				if(!frozen.contains(player)) {
+				if(!core.getFreezeManager().isFrozen(player)) {
 					if(player.hasPermission("Decimate.command.freeze.protect") && (player.isOp() ? sender.isOp() : false)) {
 						sender.sendMessage(color("&6Player &c" + plyr.getName() + " &6cannot be frozen!"));
 						player.sendMessage(color("&6Player &c" + sender.getName() + " &6tried to freeze you!"));
 						return true;
 					}
 					
-					frozen.add(player);
+					core.getFreezeManager().freeze(player);
 					sender.sendMessage(color("&6Player &b" + plyr.getName() + " &6has been frozen!"));
 				}
 				else {
-					frozen.remove(player);
+					core.getFreezeManager().thaw(player);
 					sender.sendMessage(color("&6Player &b" + plyr.getName() + " &6has been thawed!"));
 				}
 			}
@@ -60,5 +59,6 @@ public class FreezeCommand implements CommandExecutor {
 	private String color(String textToTranslate) {
 		return ChatColor.translateAlternateColorCodes('&', textToTranslate);
 	}
+
 
 }
