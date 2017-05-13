@@ -1,0 +1,15 @@
+name: DecimateCore
+version: 1.0
+authors: [_Ug, xTheGamerPlayz]
+main: com.decimatepvp.core.DecimateCore
+description: Decimate core plugin
+commands:
+  tntfill:
+    description: Fill nearby dispensers with TNT!
+  tnt:
+    description: Craft TNT in your inventory!
+  freeze:
+    description: Freeze players.
+  logout:
+    description: Disconnect.
+ 

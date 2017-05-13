@@ -9,7 +9,8 @@ import com.google.common.collect.Maps;
 
 public class DecimateConfig {
 	
-	public double COST_OF_SAND = 50;
+	private double costOfSand = 50;
+	private int tntFillRange = 50;
 	
 	// Map<EntityID, Value>
 	public Map<Integer, Double> spawnerValues = Maps.newHashMap();
@@ -37,11 +38,23 @@ public class DecimateConfig {
 	}
 
 	private void craftTnt(FileConfiguration config) {
-		COST_OF_SAND = config.getDouble("CraftTnt.Sand-Cost");
+		costOfSand = config.getDouble("CraftTnt.Sand-Cost");
+	}
+	
+	public void getTntFillRange(FileConfiguration config){
+		tntFillRange = config.getInt("TntFill.Range");
 	}
 	
 	public double getValueForSpawner(int id) {
 		return spawnerValues.containsKey(id) ? spawnerValues.get(id) : 0.0D;
+	}
+	
+	public double getCostOfSand(){
+		return this.costOfSand;
+	}
+	
+	public int getTntFillRange(){
+		return this.tntFillRange;
 	}
 
 }

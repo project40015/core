@@ -32,7 +32,7 @@ public class PlayerBreakBlockListener implements Listener {
 		Block block = event.getBlock();
 		if(block.getType() == Material.MOB_SPAWNER) {
 			CreatureSpawner spawner = (CreatureSpawner) block.getState();
-			double cost = core.config.getValueForSpawner(spawner.getSpawnedType().getTypeId());
+			double cost = core.getDecimateConfig().getValueForSpawner(spawner.getSpawnedType().getTypeId());
 			
 			if(core.eco.has(player, cost) || player.getGameMode() == GameMode.CREATIVE) {
 				if(player.getGameMode() != GameMode.CREATIVE) {

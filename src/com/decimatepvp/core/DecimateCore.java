@@ -1,8 +1,5 @@
 package com.decimatepvp.core;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import net.milkbowl.vault.economy.Economy;
 
 import org.bukkit.event.Listener;
@@ -18,6 +15,8 @@ import com.decimatepvp.core.listener.PlayerUseItemListener;
 import com.decimatepvp.core.utils.DecimateConfig;
 import com.decimatepvp.functions.freeze.FreezeCommand;
 import com.decimatepvp.functions.freeze.FreezeManager;
+import com.decimatepvp.functions.tntfill.TntFillCommand;
+import com.decimatepvp.functions.tntfill.TntFillManager;
 
 public class DecimateCore extends JavaPlugin {
 	
@@ -25,15 +24,14 @@ public class DecimateCore extends JavaPlugin {
 	
 	public Economy eco;
 	
-	public DecimateConfig config;
+	private DecimateConfig config;
 	
 	//Command Classes
 	public CraftTntCommand craftTnt;
 	public LogoutCommand logout;
 	
 	private FreezeManager freezeManager;
-	
-	private List<Manager> managers = new ArrayList<>();
+	private TntFillManager tntFillManager;
 	
 	@Override
 	public void onEnable() {
@@ -41,6 +39,7 @@ public class DecimateCore extends JavaPlugin {
 		config = new DecimateConfig();
 
 		freezeManager = new FreezeManager(this);
+		tntFillManager = new TntFillManager();
 		
 		setupEco();
 		loadCommands();
@@ -60,6 +59,7 @@ public class DecimateCore extends JavaPlugin {
 		getCommand("tnt").setExecutor(craftTnt);
 		getCommand("freeze").setExecutor(new FreezeCommand(this));
 		getCommand("logout").setExecutor(logout);
+		getCommand("tntfill").setExecutor(new TntFillCommand(this));
 	}
 
 	public static DecimateCore getCore() {
@@ -76,8 +76,16 @@ public class DecimateCore extends JavaPlugin {
         }
 	}
 	
+	public DecimateConfig getDecimateConfig(){
+		return this.config;
+	}
+	
 	public FreezeManager getFreezeManager(){
 		return this.freezeManager;
+	}
+	
+	public TntFillManager getTntFillManager(){
+		return this.tntFillManager;
 	}
 
 }

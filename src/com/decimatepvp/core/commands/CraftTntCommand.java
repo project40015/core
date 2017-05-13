@@ -26,7 +26,7 @@ public class CraftTntCommand implements CommandExecutor {
 	public CraftTntCommand() {
 		this.core = DecimateCore.getCore();
 		this.df = new DecimalFormat("0.00");
-		this.cost = core.config.COST_OF_SAND;
+		this.cost = core.getDecimateConfig().getCostOfSand();
 	}
 
 	@Override
