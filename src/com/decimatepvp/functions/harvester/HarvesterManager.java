@@ -30,7 +30,11 @@ public class HarvesterManager implements Manager, Listener {
 	public void onSugarCaneBreak(BlockBreakEvent event) {
 		Player player = event.getPlayer();
 		ItemStack hand = player.getItemInHand();
+<<<<<<< HEAD
 		if((hand != null) && ItemUtils.isItemCloned(hand, harvesterItem)) {
+=======
+		if((hand != null) && (ItemUtils.isItemCloned(hand, harvesterItem))) {
+>>>>>>> origin/Random-Branch-2
 			Block block = event.getBlock();
 			if(block.getType() == Material.SUGAR_CANE_BLOCK) {
 				player.getLocation().setYaw(0);

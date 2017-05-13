@@ -12,6 +12,16 @@ import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 public class EntityItemListener implements Listener {
 	
 	@EventHandler
+	public void onSpawnerCombust(EntityDamageEvent event) {
+		if(event.getEntityType() == EntityType.DROPPED_ITEM) {
+			Item item = (Item) event.getEntity();
+			if(item.getType() == EntityType.MINECART_MOB_SPAWNER) {
+				event.setCancelled(true);
+			}
+		}
+	}
+	
+	@EventHandler
 	public void onLavaDestroySpawner(EntityDamageEvent event) {
 		try {
 			if(event.getEntityType() == EntityType.DROPPED_ITEM &&

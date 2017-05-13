@@ -86,9 +86,12 @@ public class DecimateCore extends JavaPlugin {
 		getCommand("togglechat").setExecutor(new ToggleChatCommand(this));
 		getCommand("staffchat").setExecutor(new StaffChatCommand());
 		getCommand("harvester").setExecutor(new HarvesterCommand());
+<<<<<<< HEAD
 		getCommand("colors").setExecutor(new ColorsCommand());
 		getCommand("nv").setExecutor(new NightVisionCommand());
 
+=======
+>>>>>>> origin/Random-Branch-2
 	}
 
 	public static DecimateCore getCore() {
