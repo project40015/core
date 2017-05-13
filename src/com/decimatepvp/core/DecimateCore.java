@@ -1,22 +1,19 @@
 package com.decimatepvp.core;
 
-import net.milkbowl.vault.economy.Economy;
-
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import com.decimatepvp.core.commands.CraftTntCommand;
 import com.decimatepvp.core.commands.LogoutCommand;
-import com.decimatepvp.core.listener.EntityItemListener;
-import com.decimatepvp.core.listener.ExplosionListener;
-import com.decimatepvp.core.listener.PlayerBreakBlockListener;
-import com.decimatepvp.core.listener.PlayerUseItemListener;
 import com.decimatepvp.core.utils.DecimateConfig;
+import com.decimatepvp.functions.factions.FactionCommandListener;
 import com.decimatepvp.functions.freeze.FreezeCommand;
 import com.decimatepvp.functions.freeze.FreezeManager;
 import com.decimatepvp.functions.tntfill.TntFillCommand;
 import com.decimatepvp.functions.tntfill.TntFillManager;
+
+import net.milkbowl.vault.economy.Economy;
 
 public class DecimateCore extends JavaPlugin {
 	
@@ -43,8 +40,7 @@ public class DecimateCore extends JavaPlugin {
 		
 		setupEco();
 		loadCommands();
-		loadListeners(freezeManager, new PlayerBreakBlockListener(),
-				new EntityItemListener(), new ExplosionListener(), new PlayerUseItemListener());
+		loadListeners(new FactionCommandListener());
 	}
 
 	private void loadListeners(Listener... listeners) {
