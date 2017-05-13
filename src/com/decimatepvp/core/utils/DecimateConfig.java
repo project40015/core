@@ -3,6 +3,7 @@ package com.decimatepvp.core.utils;
 import java.util.Map;
 
 import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.entity.Player;
 
 import com.decimatepvp.core.DecimateCore;
 import com.google.common.collect.Maps;
@@ -11,6 +12,8 @@ public class DecimateConfig {
 	
 	private double costOfSand = 50;
 	private int tntFillRange = 50;
+	
+	private String staffchatFormat = "&8&l[&c&lStaffChat&8&l]&r {DISPLAYNAME} >> {MESSAGE}";
 	
 	// Map<EntityID, Value>
 	public Map<Integer, Double> spawnerValues = Maps.newHashMap();
@@ -55,6 +58,10 @@ public class DecimateConfig {
 	
 	public int getTntFillRange(){
 		return this.tntFillRange;
+	}
+	
+	public String formatStaffChatMessage(Player player, String message) {
+		return String.format(staffchatFormat, "");
 	}
 
 }
