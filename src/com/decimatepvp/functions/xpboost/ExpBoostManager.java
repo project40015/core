@@ -52,7 +52,6 @@ public class ExpBoostManager implements Manager, Listener {
 			if(doesWeaponHaveEnchant(hand)) {
 				int exp = event.getDroppedExp() * 2;
 				event.setDroppedExp(exp);
-				Bukkit.broadcastMessage("" + exp);
 			}
 		}
 	}
