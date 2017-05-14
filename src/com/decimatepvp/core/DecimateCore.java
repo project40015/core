@@ -31,6 +31,10 @@ import com.decimatepvp.functions.togglechat.ToggleChatManager;
 
 public class DecimateCore extends JavaPlugin {
 	
+	/*
+	 * Commit Test...
+	 */
+	
 	private static DecimateCore core;
 	
 	public Economy eco;
