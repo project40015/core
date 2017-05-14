@@ -51,7 +51,7 @@ public class ExpBoostManager implements Manager, Listener {
 			ItemStack hand = killer.getItemInHand();
 			if(doesWeaponHaveEnchant(hand)) {
 				int exp = event.getDroppedExp() * 2;
-				event.setDroppedExp(exp);
+				event.setDroppedExp(exp); 
 			}
 		}
 	}
