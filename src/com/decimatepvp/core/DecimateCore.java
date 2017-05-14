@@ -1,7 +1,5 @@
 package com.decimatepvp.core;
 
-import net.milkbowl.vault.economy.Economy;
-
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -30,7 +28,13 @@ import com.decimatepvp.functions.tntfill.TntFillManager;
 import com.decimatepvp.functions.togglechat.ToggleChatCommand;
 import com.decimatepvp.functions.togglechat.ToggleChatManager;
 
+import net.milkbowl.vault.economy.Economy;
+
 public class DecimateCore extends JavaPlugin {
+	
+	/*
+	 * Commit Test In Master...
+	 */
 	
 	private static DecimateCore core;
 	
