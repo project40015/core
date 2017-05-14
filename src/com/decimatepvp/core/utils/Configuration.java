@@ -49,14 +49,20 @@ public class Configuration
 		}
 	}
   
-	public void createData()
-	{
+	public void createData() {
 		if (!getFile().exists())
 		{
 			if (!this.jp.getDataFolder().exists()) {
 				this.jp.getDataFolder().mkdirs();
 			}
-			this.jp.saveResource(this.fileName, false);
+			if(this.jp.getResource("") != null) {
+				this.jp.saveResource(this.fileName, false); 
+			}
+			else {
+				try {
+					this.file.createNewFile();
+				} catch (IOException e) { }
+			}
 		}
 	}
 }

@@ -18,6 +18,14 @@ public class FactionUtils {
 	private static FPlayers players = FPlayers.getInstance();
 	private static Board board = Board.getInstance();
 	
+	public static Faction getSafezone() {
+		return factions.getSafeZone();
+	}
+	
+	public static Faction getWarzone() {
+		return factions.getWarZone();
+	}
+	
 	public static boolean isAreaSafe(Player player) {
 		Faction fplyr = getFaction(player);
 		Faction area = getFactionByLoc(player.getLocation());

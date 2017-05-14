@@ -25,4 +25,7 @@ commands:
   staffchat:
     description: Toggles staffchat.
   harvester:
-    description: Gives you the Harvester item. 
+    description: Gives you the Harvester item.
+  bottleexp:
+    description: Bottles all the user's current exp!
+    aliases: [bottle]
