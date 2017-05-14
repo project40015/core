@@ -1,5 +1,7 @@
 package com.decimatepvp.core;
 
+import net.milkbowl.vault.economy.Economy;
+
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -33,8 +35,6 @@ import com.decimatepvp.functions.tntfill.TntFillManager;
 import com.decimatepvp.functions.togglechat.ToggleChatCommand;
 import com.decimatepvp.functions.togglechat.ToggleChatManager;
 import com.decimatepvp.minievents.MiniEvents;
-
-import net.milkbowl.vault.economy.Economy;
 
 public class DecimateCore extends JavaPlugin {
 	
@@ -78,12 +78,8 @@ public class DecimateCore extends JavaPlugin {
 		loadCommands();
 		loadListeners(harvesterManager, staffChatManager, freezeManager, new PlayerBreakBlockListener(),
 				new EntityItemListener(), new ExplosionListener(), new PlayerUseItemListener(),
-				toggleChatManager, spectateManager, itemCooldownManager, new GlitchPatchManager(),
-<<<<<<< HEAD
-				new BottleExpCommand());
-=======
+				toggleChatManager, spectateManager, itemCooldownManager, new GlitchPatchManager(), new BottleExpCommand(),
 				new AnvilDamageListener(), new BottleExpCommand(), new MiniEvents());
->>>>>>> origin/master
 	}
 	
 	@Override
@@ -113,14 +109,10 @@ public class DecimateCore extends JavaPlugin {
 		getCommand("colors").setExecutor(new ColorsCommand());
 		getCommand("nv").setExecutor(new NightVisionCommand());
 		getCommand("bottleexp").setExecutor(new BottleExpCommand());
-<<<<<<< HEAD
-=======
 		getCommand("who").setExecutor(new OnlineCommand());
 		MicroCommands mc = new MicroCommands();
 		getCommand("discord").setExecutor(mc);
 		getCommand("website").setExecutor(mc);
-
->>>>>>> origin/master
 	}
 
 	public static DecimateCore getCore() {
