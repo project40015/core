@@ -15,6 +15,7 @@ import com.decimatepvp.core.listener.PlayerUseItemListener;
 import com.decimatepvp.core.utils.DecimateConfig;
 import com.decimatepvp.functions.freeze.FreezeCommand;
 import com.decimatepvp.functions.freeze.FreezeManager;
+import com.decimatepvp.functions.glitchpatch.GlitchPatchManager;
 import com.decimatepvp.functions.harvester.HarvesterCommand;
 import com.decimatepvp.functions.harvester.HarvesterManager;
 import com.decimatepvp.functions.itemcooldown.ItemCooldownManager;
@@ -66,7 +67,7 @@ public class DecimateCore extends JavaPlugin {
 		loadCommands();
 		loadListeners(harvesterManager, staffChatManager, freezeManager, new PlayerBreakBlockListener(),
 				new EntityItemListener(), new ExplosionListener(), new PlayerUseItemListener(),
-				toggleChatManager, spectateManager, itemCooldownManager);
+				toggleChatManager, spectateManager, itemCooldownManager, new GlitchPatchManager());
 	}
 
 	private void loadListeners(Listener... listeners) {
