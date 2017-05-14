@@ -15,10 +15,11 @@ public class OnlineCommand implements CommandExecutor {
 	@Override
 	public boolean onCommand(CommandSender arg0, Command arg1, String arg2, String[] arg3) {
 		
-		List<String> owners, developers, moderators, helpers, donors, regular;
+		List<String> owners, developers, youtuber, moderators, helpers, donors, regular;
 		
 		owners = new ArrayList<>();
 		developers = new ArrayList<>();
+		youtuber = new ArrayList<>();
 		moderators = new ArrayList<>();
 		helpers = new ArrayList<>();
 		donors = new ArrayList<>();
@@ -28,6 +29,8 @@ public class OnlineCommand implements CommandExecutor {
 			if(player.hasPermission("Decimate.owner")){
 				owners.add(player.getName());
 			}else if(player.hasPermission("Decimate.developer")){
+				developers.add(player.getName());
+			}else if(player.hasPermission("Decimate.youtuber")){
 				developers.add(player.getName());
 			}else if(player.hasPermission("Decimate.moderator")){
 				moderators.add(player.getName());
@@ -45,8 +48,9 @@ public class OnlineCommand implements CommandExecutor {
 		arg0.sendMessage("      " + ChatColor.GRAY + "Total: " + ChatColor.WHITE +
 				"" + ChatColor.BOLD + Bukkit.getServer().getOnlinePlayers().size());
 		arg0.sendMessage("");
-		arg0.sendMessage("      " + ChatColor.GRAY + "Owners: " + formatList(owners, ChatColor.RED));
+		arg0.sendMessage("      " + ChatColor.GRAY + "Owners: " + formatList(owners, ChatColor.DARK_RED));
 		arg0.sendMessage("      " + ChatColor.GRAY + "Developers: " + formatList(developers, ChatColor.DARK_GREEN));
+		arg0.sendMessage("      " + ChatColor.GRAY + "Youtubers: " + formatList(youtuber, ChatColor.RED));
 		arg0.sendMessage("      " + ChatColor.GRAY + "Moderators: " + formatList(moderators, ChatColor.BLUE));
 		arg0.sendMessage("      " + ChatColor.GRAY + "Helpers: " + formatList(helpers, ChatColor.GREEN));
 		arg0.sendMessage("      " + ChatColor.GRAY + "Donors: " + formatList(donors, ChatColor.GOLD));
