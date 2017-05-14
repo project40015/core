@@ -7,6 +7,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import com.decimatepvp.core.commands.BottleExpCommand;
 import com.decimatepvp.core.commands.CraftTntCommand;
 import com.decimatepvp.core.commands.LogoutCommand;
+import com.decimatepvp.core.listener.AnvilDamageListener;
 import com.decimatepvp.core.listener.EntityItemListener;
 import com.decimatepvp.core.listener.ExplosionListener;
 import com.decimatepvp.core.listener.PlayerBreakBlockListener;
@@ -19,15 +20,19 @@ import com.decimatepvp.functions.harvester.HarvesterCommand;
 import com.decimatepvp.functions.harvester.HarvesterManager;
 import com.decimatepvp.functions.itemcooldown.ItemCooldownManager;
 import com.decimatepvp.functions.minicommands.ColorsCommand;
+import com.decimatepvp.functions.minicommands.MicroCommands;
 import com.decimatepvp.functions.minicommands.NightVisionCommand;
+import com.decimatepvp.functions.minicommands.OnlineCommand;
 import com.decimatepvp.functions.spectate.SpectateCommand;
 import com.decimatepvp.functions.spectate.SpectateManager;
 import com.decimatepvp.functions.staffchat.StaffChatCommand;
 import com.decimatepvp.functions.staffchat.StaffChatManager;
+import com.decimatepvp.functions.stafflog.StaffCommandsManager;
 import com.decimatepvp.functions.tntfill.TntFillCommand;
 import com.decimatepvp.functions.tntfill.TntFillManager;
 import com.decimatepvp.functions.togglechat.ToggleChatCommand;
 import com.decimatepvp.functions.togglechat.ToggleChatManager;
+import com.decimatepvp.minievents.MiniEvents;
 
 import net.milkbowl.vault.economy.Economy;
 
@@ -50,8 +55,9 @@ public class DecimateCore extends JavaPlugin {
 	private StaffChatManager staffChatManager;
 	private HarvesterManager harvesterManager;
 	private ItemCooldownManager itemCooldownManager;
+	private StaffCommandsManager staffCommandsManager;
 	
-	private Manager[] managers = new Manager[7];
+	private Manager[] managers = new Manager[8];
 	
 	@Override
 	public void onEnable() {
@@ -66,13 +72,18 @@ public class DecimateCore extends JavaPlugin {
 		managers[n++] = staffChatManager = new StaffChatManager();
 		managers[n++] = harvesterManager = new HarvesterManager();
 		managers[n++] = itemCooldownManager = new ItemCooldownManager();
+		managers[n++] = staffCommandsManager = new StaffCommandsManager();
 				
 		setupEco();
 		loadCommands();
 		loadListeners(harvesterManager, staffChatManager, freezeManager, new PlayerBreakBlockListener(),
 				new EntityItemListener(), new ExplosionListener(), new PlayerUseItemListener(),
 				toggleChatManager, spectateManager, itemCooldownManager, new GlitchPatchManager(),
+<<<<<<< HEAD
 				new BottleExpCommand());
+=======
+				new AnvilDamageListener(), new BottleExpCommand(), new MiniEvents());
+>>>>>>> origin/master
 	}
 	
 	@Override
@@ -102,6 +113,14 @@ public class DecimateCore extends JavaPlugin {
 		getCommand("colors").setExecutor(new ColorsCommand());
 		getCommand("nv").setExecutor(new NightVisionCommand());
 		getCommand("bottleexp").setExecutor(new BottleExpCommand());
+<<<<<<< HEAD
+=======
+		getCommand("who").setExecutor(new OnlineCommand());
+		MicroCommands mc = new MicroCommands();
+		getCommand("discord").setExecutor(mc);
+		getCommand("website").setExecutor(mc);
+
+>>>>>>> origin/master
 	}
 
 	public static DecimateCore getCore() {
@@ -148,6 +167,10 @@ public class DecimateCore extends JavaPlugin {
 	
 	public ItemCooldownManager getItemCooldownManager() {
 		return itemCooldownManager;
+	}
+	
+	public StaffCommandsManager getStaffCommandsManager() {
+		return this.staffCommandsManager;
 	}
 
 }

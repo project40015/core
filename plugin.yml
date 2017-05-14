@@ -16,16 +16,24 @@ commands:
     description: Toggles chat.
   spectate:
     description: Toggle spectator mode.
-  staffchat:
-    description: Enable staff chat.
   colors:
     description: View colors.
   nv:
     description: Toggle night vision.
+    aliases: [nightvision]
   staffchat:
-    description: Toggles staffchat.
+    description: Toggles staff chat.
+    aliases: [sc]
   harvester:
     description: Gives you the Harvester item.
   bottleexp:
     description: Bottles all the user's current exp!
     aliases: [bottle]
+  who:
+    description: Show online players
+    aliases: [list, online]
+  website:
+    description: Get website link.
+    aliases: [forum]
+  discord:
+    description: Get discord link.
