@@ -1,35 +1,32 @@
 package com.decimatepvp.core.commands;
 
-import java.util.Map;
-
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.Projectile;
+import org.bukkit.entity.ThrownExpBottle;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.ExpBottleEvent;
-import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.entity.ProjectileLaunchEvent;
 import org.bukkit.inventory.ItemStack;
 
+import com.decimatepvp.utils.ExperienceUtils;
 import com.decimatepvp.utils.ItemUtils;
-import com.google.common.collect.Maps;
 
 public class BottleExpCommand implements CommandExecutor, Listener {
-	
-	private Map<String, Integer> thrower = Maps.newHashMap();
 
 	@Override
 	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
 		if(sender instanceof Player) {
 			Player player = (Player) sender;
 			if(player.hasPermission("Decimate.misc.bottle")) {
-				int exp = (int) player.getExp();
-				ItemStack bottleExp = bottleExp(player);
+				int exp = ExperienceUtils.getTotalExperience(player);
+				ItemStack bottleExp = bottleExp(player, exp);
 				
 				if(player.getInventory().firstEmpty() == -1) {
 					player.getWorld().dropItem(player.getLocation(), bottleExp);
@@ -51,15 +48,24 @@ public class BottleExpCommand implements CommandExecutor, Listener {
 		return false;
 	}
 	
-	@EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
-	public void getExpInBottle(PlayerInteractEvent event) {
-		if((event.getAction() == Action.RIGHT_CLICK_AIR) ||
-				(event.getAction() == Action.RIGHT_CLICK_BLOCK)) {
-			Player player = event.getPlayer();
-			ItemStack hand = event.getItem();
-			
-			if((hand != null) && (hand.getType() == Material.EXP_BOTTLE)) {
-				thrower.put(player.getName(), getExpFromItemStack(hand));
+	@EventHandler(priority = EventPriority.LOW)
+	public void onBottleThrow(ProjectileLaunchEvent event) {
+		Projectile proj = event.getEntity();
+		if((proj.getShooter() != null) &&
+				(proj.getShooter() instanceof Player)) {
+			Player player = (Player) proj.getShooter();
+			int exp = getExpFromItemStack(player.getItemInHand());
+			proj.setCustomName("" + exp);
+		}
+	}
+
+	@EventHandler(priority = EventPriority.LOW)
+	public void onBottleCrash(ExpBottleEvent event) {
+		ThrownExpBottle bottle = event.getEntity();
+		if((bottle.getShooter() != null) &&
+				(bottle.getShooter() instanceof Player)) {
+			if(bottle.getCustomName() != null) {
+				event.setExperience(Integer.parseInt(bottle.getCustomName()));
 			}
 		}
 	}
@@ -71,22 +77,16 @@ public class BottleExpCommand implements CommandExecutor, Listener {
 					.replace("Throwing this bottle will release ", "").replace(" exp!", ""));
 		}
 		catch(Exception e) { }
+		
 		return exp;
 	}
 
-	@EventHandler
-	public void bottleEvent(ExpBottleEvent event) {
-		event.setExperience(getExpFromBottle((Player) event.getEntity().getShooter()));
-	}
-	
-	private int getExpFromBottle(Player player) {
-		return thrower.get(player.getName());
-	}
-
-	private ItemStack bottleExp(Player player) {
-		ItemStack bottle = ItemUtils.createItem(Material.EXP_BOTTLE, 1, (byte) 0, "&6lBottled EXP",
-				"&bThrowing this bottle will release &a&l" + player.getExp() + " &bexp!");
+	private ItemStack bottleExp(Player player, int exp) {
+		ItemStack bottle = ItemUtils.createItem(Material.EXP_BOTTLE, 1, (byte) 0, "&6&lBottled EXP",
+				"&bThrowing this bottle will release &a&l" + exp + " &bexp!");
+		player.setLevel(0);
 		player.setExp(0);
+		player.setTotalExperience(0);
 		
 		return bottle;
 	}

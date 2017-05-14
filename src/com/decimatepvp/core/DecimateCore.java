@@ -4,6 +4,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import com.decimatepvp.core.commands.BottleExpCommand;
 import com.decimatepvp.core.commands.CraftTntCommand;
 import com.decimatepvp.core.commands.LogoutCommand;
 import com.decimatepvp.core.listener.EntityItemListener;
@@ -31,10 +32,6 @@ import com.decimatepvp.functions.togglechat.ToggleChatManager;
 import net.milkbowl.vault.economy.Economy;
 
 public class DecimateCore extends JavaPlugin {
-	
-	/*
-	 * Commit Test In Master...
-	 */
 	
 	private static DecimateCore core;
 	
@@ -74,7 +71,8 @@ public class DecimateCore extends JavaPlugin {
 		loadCommands();
 		loadListeners(harvesterManager, staffChatManager, freezeManager, new PlayerBreakBlockListener(),
 				new EntityItemListener(), new ExplosionListener(), new PlayerUseItemListener(),
-				toggleChatManager, spectateManager, itemCooldownManager, new GlitchPatchManager());
+				toggleChatManager, spectateManager, itemCooldownManager, new GlitchPatchManager(),
+				new BottleExpCommand());
 	}
 	
 	@Override
@@ -103,7 +101,7 @@ public class DecimateCore extends JavaPlugin {
 		getCommand("harvester").setExecutor(new HarvesterCommand());
 		getCommand("colors").setExecutor(new ColorsCommand());
 		getCommand("nv").setExecutor(new NightVisionCommand());
-
+		getCommand("bottleexp").setExecutor(new BottleExpCommand());
 	}
 
 	public static DecimateCore getCore() {

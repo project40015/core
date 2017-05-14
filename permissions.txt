@@ -1,1 +1,3 @@
 StaffChat: Decimate.staff.chat
+
+bottleExp: Decimate.misc.bottle
