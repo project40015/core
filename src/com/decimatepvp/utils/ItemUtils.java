@@ -36,7 +36,9 @@ public class ItemUtils {
 	}
 
 	public static boolean isItemCloned(ItemStack i1, ItemStack i2) {
-		return (i1 != null) && (i2 != null) && (i1.getItemMeta().hasDisplayName()) && (i2.getItemMeta().hasDisplayName()) &&
+		return (i1 != null) && (i2 != null) &&
+				(i1.hasItemMeta()) && (i2.hasItemMeta()) &&
+				(i1.getItemMeta().hasDisplayName()) && (i2.getItemMeta().hasDisplayName()) &&
 				(i1.getItemMeta().getDisplayName().equals(i2.getItemMeta().getDisplayName())) &&
 				(i1.getType() == i2.getType());
 	}
