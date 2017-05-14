@@ -67,7 +67,7 @@ public class HarvesterManager implements Manager, Listener {
 				loc.setPitch(0);
 				List<Block> line = new ArrayList<>();
 				for(int i = 1; i <= 6; i++){
-					if(!line.contains(loc.clone().add(loc.getDirection().multiply(i)).getBlock())){
+					if(!line.contains(loc.clone().add(loc.getDirection().normalize().multiply(i).toLocation(loc.getWorld())).getBlock())){
 						line.add(loc.clone().add(loc.getDirection()).getBlock());
 					}
 				}
