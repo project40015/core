@@ -1,6 +1,5 @@
 package com.decimatepvp.functions.stafflog;
 
-import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Calendar;
@@ -33,12 +32,12 @@ public class StaffCommandsManager implements Manager, Listener {
 		Player player = event.getPlayer();
 		if(player.hasPermission("Decimate.staff.log")) {
 			if(!isAllowed(event.getMessage().toLowerCase())) {
+				
 				if(commands.containsKey(player)) {
-					commands.get(player.getUniqueId()).add(event.getMessage());
+					commands.get(player).add(event.getMessage());
 				}
 				else {
 					commands.put(player, Lists.newArrayList());
-					
 					commands.get(player).add(event.getMessage());
 				}
 			}
@@ -57,7 +56,7 @@ public class StaffCommandsManager implements Manager, Listener {
 	@Override
 	public void disable() {
 		String name = createFileNameFromDate();
-		Configuration cfg = new Configuration(DecimateCore.getCore(), name);
+		Configuration cfg = new Configuration(DecimateCore.getCore(), name + ".yml");
 		FileConfiguration config = cfg.getData();
 		
 		for(Entry<OfflinePlayer, List<String>> set : commands.entrySet()) {
@@ -71,9 +70,14 @@ public class StaffCommandsManager implements Manager, Listener {
 	}
 
 	private String createFileNameFromDate() {
-		DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd_HH:mm");
-		Calendar cal = Calendar.getInstance();
-		return dateFormat.format(cal);
+		   String dateString = null;
+		   SimpleDateFormat sdfr = new SimpleDateFormat("yyyy-MM-dd_HH:mm");
+		   try{
+			dateString = sdfr.format(Calendar.getInstance().getTime());
+		   }catch (Exception ex ){
+			System.out.println(ex);
+		   }
+		   return dateString;
 	}
 	
 }

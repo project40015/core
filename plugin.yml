@@ -37,3 +37,5 @@ commands:
     aliases: [forum]
   discord:
     description: Get discord link.
+  expboost: 
+    description: Gives you an Xp Boost book!
