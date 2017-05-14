@@ -21,7 +21,7 @@ import com.decimatepvp.utils.ItemUtils;
 public class BottleExpCommand implements CommandExecutor, Listener {
 
 	@Override
-	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
+	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) { 
 		if(sender instanceof Player) {
 			Player player = (Player) sender;
 			if(player.hasPermission("Decimate.misc.bottle")) {

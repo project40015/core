@@ -69,7 +69,7 @@ public class ExperienceUtils {
 	       player.setExp(experience);     
 	   }
 	   else { //Level 31 and greater
-	       //Calculate Everything
+	       //Calculate Everything 
 	       double a = 4.5; double b = -162.5; int c = -xp + 2220;
 	       double dLevel = (-b + Math.sqrt(Math.pow(b, 2) - (4 * a * c))) / (2 * a);
 	       int level = (int) Math.floor(dLevel);
