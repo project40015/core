@@ -25,17 +25,21 @@ public class BottleExpCommand implements CommandExecutor, Listener {
 		if(sender instanceof Player) {
 			Player player = (Player) sender;
 			if(player.hasPermission("Decimate.misc.bottle")) {
-				int exp = ExperienceUtils.getTotalExperience(player);
-				ItemStack bottleExp = bottleExp(player, exp);
+				if(player.getLevel() >= 1){
+					int exp = ExperienceUtils.getTotalExperience(player);
+					ItemStack bottleExp = bottleExp(player, exp);
 				
-				if(player.getInventory().firstEmpty() == -1) {
-					player.getWorld().dropItem(player.getLocation(), bottleExp);
-				}
-				else {
-					player.getInventory().addItem(bottleExp);
-				}
+					if(player.getInventory().firstEmpty() == -1) {
+						player.getWorld().dropItem(player.getLocation(), bottleExp);
+					}
+					else {
+						player.getInventory().addItem(bottleExp);
+					}
 				
-				sender.sendMessage(ChatColor.GREEN + "You have bottled " + exp + " exp!");
+					sender.sendMessage(ChatColor.GREEN + "You have bottled " + exp + " exp!");
+				}else{
+					player.sendMessage(ChatColor.RED + "You do not have the minimum 1 level to bottle!");
+				}
 			}
 			else {
 				sender.sendMessage(ChatColor.RED + "You do not have the proper permissions to use this.");
@@ -82,7 +86,7 @@ public class BottleExpCommand implements CommandExecutor, Listener {
 	}
 
 	private ItemStack bottleExp(Player player, int exp) {
-		ItemStack bottle = ItemUtils.createItem(Material.EXP_BOTTLE, 1, (byte) 0, "&6lBottled EXP",
+		ItemStack bottle = ItemUtils.createItem(Material.EXP_BOTTLE, 1, (byte) 0, "&6Bottled EXP",
 				"&bThrowing this bottle will release &a&l" + exp + " &bexp!");
 		player.setLevel(0);
 		player.setExp(0);
