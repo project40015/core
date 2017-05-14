@@ -1,13 +1,13 @@
 package com.decimatepvp.functions.harvester;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 import java.util.TreeMap;
 
 import org.bukkit.ChatColor;
+import org.bukkit.Effect;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Sound;
@@ -26,6 +26,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import com.decimatepvp.core.DecimateCore;
 import com.decimatepvp.core.Manager;
 import com.decimatepvp.utils.ItemUtils;
+import com.decimatepvp.utils.PlayerUtils;
 
 public class HarvesterManager implements Manager, Listener {
 	
@@ -45,10 +46,11 @@ public class HarvesterManager implements Manager, Listener {
 		if(ItemUtils.isItemCloned(event.getPlayer().getItemInHand(), harvesterItem)) {
 			if(event.getAction().equals(Action.RIGHT_CLICK_AIR) || event.getAction().equals(Action.RIGHT_CLICK_BLOCK)){
 				if(event.getPlayer().getItemInHand().getItemMeta().getLore().get(0).contains("SELL")){
-					event.getPlayer().setItemInHand(getHarvesterItem(false));
+					event.getPlayer().sendMessage(ChatColor.GRAY + "Harvester mode: " + ChatColor.GREEN + "GATHER");
 				}else{
-					event.getPlayer().setItemInHand(getHarvesterItem(true));
+					event.getPlayer().sendMessage(ChatColor.GRAY + "Harvester mode: " + ChatColor.GOLD + "SELL");
 				}
+				event.getPlayer().setItemInHand(updateWand(event.getPlayer().getItemInHand(), 0, true));
 				event.getPlayer().playSound(event.getPlayer().getLocation(), Sound.WOOD_CLICK, 1, 1);
 				event.setCancelled(true);
 			}
@@ -60,6 +62,7 @@ public class HarvesterManager implements Manager, Listener {
 		Player player = event.getPlayer();
 		ItemStack hand = player.getItemInHand();
 		if(ItemUtils.isItemCloned(hand, harvesterItem)) {
+			event.getPlayer().playSound(event.getPlayer().getLocation(), Sound.PIG_WALK, 1, 1);
 			Block block = event.getBlock();
 			if(block.getType() == Material.SUGAR_CANE_BLOCK) {	
 				event.setCancelled(true);
@@ -68,7 +71,7 @@ public class HarvesterManager implements Manager, Listener {
 				List<Block> line = new ArrayList<>();
 				for(int i = 1; i <= 6; i++){
 					if(!line.contains(loc.clone().add(loc.getDirection().normalize().multiply(i).toLocation(loc.getWorld())).getBlock())){
-						line.add(loc.clone().add(loc.getDirection()).getBlock());
+						line.add(loc.clone().add(loc.getDirection().normalize().multiply(i).toLocation(loc.getWorld())).getBlock());
 					}
 				}
 				
@@ -93,7 +96,7 @@ public class HarvesterManager implements Manager, Listener {
 				
 				List<Block> toAdd = new ArrayList<>();
 				
-				for(int i = 0; i < 2; i++) {
+				for(int i = 0; i < 3; i++) {
 					for(Block b : new ArrayList<>(line)) {
 						Block up = b.getLocation().clone().add(0, i+1, 0).getBlock();
 						
@@ -117,11 +120,16 @@ public class HarvesterManager implements Manager, Listener {
 				}
 
 				int amount = breakStalks(line);
+				ItemStack updated = updateWand(hand, amount, false);
+				event.getPlayer().setItemInHand(updated);
 				if(amount > 0) {
 					if(hand.getItemMeta().getLore().get(0).contains("GATHER")){
 						ItemStack sugarcane = new ItemStack(Material.SUGAR_CANE, amount);
 						player.getInventory().addItem(sugarcane);
 					}else{
+						String str = ChatColor.stripColor(updated.getItemMeta().getLore().get(1).split(" ")[2]);
+						str = str.substring(1);
+						PlayerUtils.sendActionbar(event.getPlayer(), ChatColor.GREEN + "+$" + (amount*Double.parseDouble(str)));
 						DecimateCore.getCore().eco.depositPlayer(event.getPlayer(), amount*DecimateCore.getCore().getDecimateConfig().getCostOfSugarcane());
 					}
 				}
@@ -142,12 +150,43 @@ public class HarvesterManager implements Manager, Listener {
 		}
 		
 		for(double d : tree.keySet()) {
-			tree.get(d).setType(Material.AIR);
+			Block bl = tree.get(d);
+			bl.getLocation().getWorld().playEffect(bl.getLocation().add(0.5, 0.5, 0.5), Effect.HAPPY_VILLAGER, 0);
+			bl.setType(Material.AIR);
 		}
 		
 		return amountBroken;
 	}
 
+	private ItemStack updateWand(ItemStack wand, int mined, boolean flop){
+		List<String> lore = wand.getItemMeta().getLore();
+		if(flop){
+			if(lore.get(0).contains("SELL")){
+				lore.set(0, ChatColor.GRAY + "Mode: " + ChatColor.GREEN + "GATHER");
+			}else{
+				lore.set(0, ChatColor.GRAY + "Mode: " + ChatColor.GOLD + "SELL");
+			}
+		}
+		if(lore.size()>=3){
+			int totalMined = (Integer.parseInt(ChatColor.stripColor(lore.get(2).split(" ")[2])) + mined);
+			double value = (((int)((totalMined > 500000 ? 500000 : totalMined)/500.0)))/500.0;
+			value = value*100;
+			value = Math.round(value);
+			value = value/100;
+			lore.set(1, ChatColor.GRAY + "Sugarcane Value:" + ChatColor.GOLD + " $" + (DecimateCore.getCore().getDecimateConfig().getCostOfSugarcane()+value) + ChatColor.GRAY + 
+					" (" + ChatColor.GREEN + "+$" + value + ChatColor.GRAY + ")");
+			lore.set(2, ChatColor.GRAY + "Sugarcane Harvested: " + ChatColor.YELLOW + totalMined);
+		}else{	
+			lore.add(1, ChatColor.GRAY + "Sugarcane Value:" + ChatColor.GOLD + " $" + DecimateCore.getCore().getDecimateConfig().getCostOfSugarcane() + ChatColor.GRAY + 
+					" (" + ChatColor.GREEN + "+$0.00" + ChatColor.GRAY + ")");
+			lore.add(2, ChatColor.GRAY + "Sugarcane Harvested: " + ChatColor.YELLOW + "0");
+		}
+		ItemMeta im = wand.getItemMeta();
+		im.setLore(lore);
+		wand.setItemMeta(im);
+		return wand;
+	}
+	
 	public void giveHarvester(Player player) {
 		if(player.getInventory().firstEmpty() != -1){
 			player.getInventory().addItem(harvesterItem);
@@ -156,16 +195,9 @@ public class HarvesterManager implements Manager, Listener {
 			player.sendMessage(ChatColor.YELLOW + "Inventory full. Harvester Item dropped beneath you.");
 		}
 	}
-	
+
 	public ItemStack getHarvesterItem(boolean sell) {
-		if(sell){
-			return harvesterItem.clone();
-		}
-		ItemStack copy = harvesterItem.clone();
-		ItemMeta im = copy.getItemMeta();
-		im.setLore(Arrays.asList(ChatColor.GRAY + "Mode: " + ChatColor.GREEN + "GATHER"));
-		copy.setItemMeta(im);
-		return copy;
+		return updateWand(harvesterItem.clone(), 0, !sell);
 	}
 
 	@Override

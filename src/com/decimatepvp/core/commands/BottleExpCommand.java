@@ -7,12 +7,15 @@ import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.Projectile;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.ExpBottleEvent;
+import org.bukkit.event.entity.ProjectileLaunchEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 
@@ -22,13 +25,14 @@ import com.google.common.collect.Maps;
 public class BottleExpCommand implements CommandExecutor, Listener {
 	
 	private Map<String, Integer> thrower = Maps.newHashMap();
+	private Map<Integer, Integer> exp = Maps.newHashMap();
 
 	@Override
 	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
 		if(sender instanceof Player) {
 			Player player = (Player) sender;
 			if(player.hasPermission("Decimate.misc.bottle")) {
-				int exp = (int) player.getExp();
+				int exp = player.getTotalExperience();
 				ItemStack bottleExp = bottleExp(player);
 				
 				if(player.getInventory().firstEmpty() == -1) {
@@ -75,8 +79,29 @@ public class BottleExpCommand implements CommandExecutor, Listener {
 	}
 
 	@EventHandler
-	public void bottleEvent(ExpBottleEvent event) {
-		event.setExperience(getExpFromBottle((Player) event.getEntity().getShooter()));
+	public void bottleHitEvent(ExpBottleEvent event) {
+		Projectile entity = event.getEntity();
+		if((entity.getShooter() != null) &&
+				(entity.getShooter() instanceof Player)) {
+			if(exp.containsKey(entity.getEntityId())) {
+				event.setExperience(exp.get(entity.getEntityId()));
+				exp.remove(entity.getEntityId());
+			}
+		}
+	}
+
+	@EventHandler
+	public void bottleThrownEvent(ProjectileLaunchEvent event) {
+		Projectile entity = event.getEntity();
+		if((entity.getShooter() != null) &&
+				(entity.getType() == EntityType.THROWN_EXP_BOTTLE) &&
+				(entity.getShooter() instanceof Player)) {
+			Player player = (Player) entity.getShooter();
+			if(thrower.containsKey(player.getName())) {
+				exp.put(entity.getEntityId(), getExpFromBottle(player));
+				thrower.remove(player.getName());
+			}
+		}
 	}
 	
 	private int getExpFromBottle(Player player) {
@@ -85,7 +110,7 @@ public class BottleExpCommand implements CommandExecutor, Listener {
 
 	private ItemStack bottleExp(Player player) {
 		ItemStack bottle = ItemUtils.createItem(Material.EXP_BOTTLE, 1, (byte) 0, "&6lBottled EXP",
-				"&bThrowing this bottle will release &a&l" + player.getExp() + " &bexp!");
+				"&bThrowing this bottle will release &a&l" + player.getTotalExperience() + " &bexp!");
 		player.setExp(0);
 		
 		return bottle;
