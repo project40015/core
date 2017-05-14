@@ -1,5 +1,6 @@
 package com.decimatepvp.functions.harvester;
 
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -18,19 +19,27 @@ public class HarvesterCommand implements CommandExecutor {
 
 	@Override
 	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-		if(sender instanceof Player) {
-			Player player = (Player) sender;
-			if(player.hasPermission("Decimate.trench.hoe")) {
-				core.getHarvesterManager().giveHarvester(player);
-				player.sendMessage(ChatColor.GREEN + "You have been given a Harvester Hoe!");
+//		if(sender instanceof Player) {
+		if(sender.hasPermission("Decimate.trench.hoe")) {
+			if(args.length != 1){
+				sender.sendMessage(ChatColor.RED + "Must give a player argument.");
+				return false;
 			}
-			else {
-				sender.sendMessage(ChatColor.RED + "Only players may use this command.");
+			try{
+				Player player = Bukkit.getPlayer(args[0]);
+				core.getHarvesterManager().giveHarvester(player);
+				sender.sendMessage(ChatColor.GREEN + "You have given a Harvester Hoe!");
+				player.sendMessage(ChatColor.GREEN + "You have received a Harvester Hoe!");
+			}catch(Exception ex){
+				sender.sendMessage(ChatColor.RED + "Player not found.");
 			}
 		}
 		else {
 			sender.sendMessage(ChatColor.RED + "Only players may use this command.");
 		}
+//		else {
+//			sender.sendMessage(ChatColor.RED + "Only players may use this command.");
+//		}
 		
 		return false;
 	}

@@ -11,7 +11,7 @@ import com.google.common.collect.Maps;
 
 public class DecimateConfig {
 	
-	private double costOfSand = 50;
+	private double costOfSand = 250, costOfSugarcane = 7;
 	private int tntFillRange = 50;
 	
 	private String staffchatFormat = "&8&l[&c&lStaffChat&8&l]&r {PLAYER} &8>> &c{MESSAGE}";
@@ -28,6 +28,7 @@ public class DecimateConfig {
 		FileConfiguration config = cfg.getData();
 		
 		craftTnt(config);
+		sugarcaneCost(config);
 		spawnerValues(config);
 		
 	}
@@ -45,6 +46,10 @@ public class DecimateConfig {
 		costOfSand = config.getDouble("CraftTnt.Sand-Cost");
 	}
 	
+	private void sugarcaneCost(FileConfiguration config) {
+		costOfSugarcane = config.getDouble("Harvester.Sugarcane-Cost");
+	}
+	
 	public void getTntFillRange(FileConfiguration config){
 		tntFillRange = config.getInt("TntFill.Range");
 	}
@@ -55,6 +60,10 @@ public class DecimateConfig {
 	
 	public double getCostOfSand(){
 		return this.costOfSand;
+	}
+	
+	public double getCostOfSugarcane(){
+		return this.costOfSugarcane;
 	}
 	
 	public int getTntFillRange(){

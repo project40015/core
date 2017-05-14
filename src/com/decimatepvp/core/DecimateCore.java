@@ -50,24 +50,34 @@ public class DecimateCore extends JavaPlugin {
 	private HarvesterManager harvesterManager;
 	private ItemCooldownManager itemCooldownManager;
 	
+	private Manager[] managers = new Manager[7];
+	
 	@Override
 	public void onEnable() {
 		core = this;
 		config = new DecimateConfig();
 
-		freezeManager = new FreezeManager(this);
-		tntFillManager = new TntFillManager();
-		spectateManager = new SpectateManager();
-		toggleChatManager = new ToggleChatManager();
-		staffChatManager = new StaffChatManager();
-		harvesterManager = new HarvesterManager();
-		itemCooldownManager = new ItemCooldownManager();
-		
+		int n = 0;
+		managers[n++] = freezeManager = new FreezeManager(this);
+		managers[n++] = tntFillManager = new TntFillManager();
+		managers[n++] = spectateManager = new SpectateManager();
+		managers[n++] = toggleChatManager = new ToggleChatManager();
+		managers[n++] = staffChatManager = new StaffChatManager();
+		managers[n++] = harvesterManager = new HarvesterManager();
+		managers[n++] = itemCooldownManager = new ItemCooldownManager();
+				
 		setupEco();
 		loadCommands();
 		loadListeners(harvesterManager, staffChatManager, freezeManager, new PlayerBreakBlockListener(),
 				new EntityItemListener(), new ExplosionListener(), new PlayerUseItemListener(),
 				toggleChatManager, spectateManager, itemCooldownManager, new GlitchPatchManager());
+	}
+	
+	@Override
+	public void onDisable(){
+		for(Manager manager : managers){
+			manager.disable();
+		}
 	}
 
 	private void loadListeners(Listener... listeners) {
