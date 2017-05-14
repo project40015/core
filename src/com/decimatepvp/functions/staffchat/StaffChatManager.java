@@ -32,7 +32,11 @@ public class StaffChatManager implements Manager, Listener {
 	}
 
 	private void broadcastMessage(Player player, String message) {
-		Bukkit.broadcast(core.getDecimateConfig().formatStaffChatMessage(player, message), "Decimate.staff.chat");
+		for(Player plyr : Bukkit.getOnlinePlayers()) {
+			if(plyr.hasPermission("Decimate.staff.chat")) {
+				plyr.sendMessage(core.getDecimateConfig().formatStaffChatMessage(player, message));
+			}
+		}
 	}
 
 	private boolean isInAdminChat(Player player) {
@@ -41,10 +45,12 @@ public class StaffChatManager implements Manager, Listener {
 	
 	public boolean togglePlayer(Player player) {
 		if(isInAdminChat(player)) {
-			return removePlayer(player);
+			removePlayer(player);
+			return false;
 		}
 		
-		return addPlayer(player);
+		addPlayer(player);
+		return true;
 	}
 
 	public boolean addPlayer(Player player) {

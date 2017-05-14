@@ -21,8 +21,12 @@ public class StaffChatCommand implements CommandExecutor {
 		if(sender instanceof Player) {
 			Player player = (Player) sender;
 			if(player.hasPermission("Decimate.staff.chat")) {
-				core.getStaffChatManager().togglePlayer(player);
-				player.sendMessage(ChatColor.GREEN + "You have toggled StaffChat!");
+				if(core.getStaffChatManager().togglePlayer(player)) {
+					player.sendMessage(ChatColor.GREEN + "You have toggled StaffChat!");
+				}
+				else {
+					player.sendMessage(ChatColor.RED + "You have toggled StaffChat!");
+				}
 			}
 			else {
 				sender.sendMessage(ChatColor.RED + "Only players may use this command.");
