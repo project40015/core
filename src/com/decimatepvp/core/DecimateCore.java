@@ -15,6 +15,8 @@ import com.decimatepvp.core.listener.ExplosionListener;
 import com.decimatepvp.core.listener.PlayerBreakBlockListener;
 import com.decimatepvp.core.listener.PlayerUseItemListener;
 import com.decimatepvp.core.utils.DecimateConfig;
+import com.decimatepvp.functions.factions.FactionCommandListener;
+import com.decimatepvp.functions.factions.FactionDamageListener;
 import com.decimatepvp.functions.freeze.FreezeCommand;
 import com.decimatepvp.functions.freeze.FreezeManager;
 import com.decimatepvp.functions.glitchpatch.GlitchPatchManager;
@@ -79,7 +81,8 @@ public class DecimateCore extends JavaPlugin {
 		loadListeners(harvesterManager, staffChatManager, freezeManager, new PlayerBreakBlockListener(),
 				new EntityItemListener(), new ExplosionListener(), new PlayerUseItemListener(),
 				toggleChatManager, spectateManager, itemCooldownManager, new GlitchPatchManager(), new BottleExpCommand(),
-				new AnvilDamageListener(), new BottleExpCommand(), new MiniEvents());
+				new AnvilDamageListener(), new BottleExpCommand(), new MiniEvents(), new FactionCommandListener(),
+				new FactionDamageListener());
 	}
 	
 	@Override
