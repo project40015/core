@@ -2,9 +2,11 @@ package com.decimatepvp.minievents;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
+import org.bukkit.entity.Creeper;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.InventoryOpenEvent;
@@ -67,6 +69,15 @@ public class MiniEvents implements Listener {
 					event.setCancelled(true);
 					return;
 				}
+			}
+		}
+	}
+	
+	@EventHandler
+	public void onHit(EntityDamageByEntityEvent event){
+		if(event.getEntity() instanceof Creeper){
+			if(event.getEntity().getLocation().clone().add(0,1,0).getBlock().getType().isSolid()){
+				event.getEntity().setVelocity(event.getEntity().getVelocity().setY(-1));
 			}
 		}
 	}
