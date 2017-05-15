@@ -1,7 +1,6 @@
 package com.decimatepvp.core.listener;
 
 import java.util.HashMap;
-import java.util.Random;
 
 import org.bukkit.entity.EntityType;
 import org.bukkit.event.EventHandler;
@@ -14,7 +13,7 @@ import com.google.common.collect.Maps;
 
 public class ExplosionListener implements Listener {
 	
-	private Random random = new Random();
+//	private Random random = new Random();
 	private HashMap<Integer, Float> entityPowerMap = Maps.newHashMap();
 	
 	@EventHandler(priority=EventPriority.HIGHEST)
@@ -33,7 +32,6 @@ public class ExplosionListener implements Listener {
 	    }
 	}
 	
-	@SuppressWarnings("deprecation")
 	private void correctExplosion(EntityExplodeEvent event, float power) {
 //		org.bukkit.World world = event.getEntity().getWorld();
 //	    event.blockList().clear();

@@ -1,7 +1,5 @@
 package com.decimatepvp.core;
 
-import net.milkbowl.vault.economy.Economy;
-
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -15,6 +13,7 @@ import com.decimatepvp.core.listener.ExplosionListener;
 import com.decimatepvp.core.listener.PlayerBreakBlockListener;
 import com.decimatepvp.core.listener.PlayerUseItemListener;
 import com.decimatepvp.core.utils.DecimateConfig;
+import com.decimatepvp.functions.enchants.AnvilManager;
 import com.decimatepvp.functions.factions.FactionCommandListener;
 import com.decimatepvp.functions.factions.FactionDamageListener;
 import com.decimatepvp.functions.freeze.FreezeCommand;
@@ -40,6 +39,8 @@ import com.decimatepvp.functions.xpboost.ExpBoostCommand;
 import com.decimatepvp.functions.xpboost.ExpBoostManager;
 import com.decimatepvp.minievents.MiniEvents;
 
+import net.milkbowl.vault.economy.Economy;
+
 public class DecimateCore extends JavaPlugin {
 	
 	private static DecimateCore core;
@@ -61,8 +62,9 @@ public class DecimateCore extends JavaPlugin {
 	private ItemCooldownManager itemCooldownManager;
 	private StaffCommandsManager staffCommandsManager;
 	private ExpBoostManager expBoostManager;
+	private AnvilManager anvilManager;
 	
-	private Manager[] managers = new Manager[9];
+	private Manager[] managers = new Manager[10];
 	
 	@Override
 	public void onEnable() {
@@ -79,6 +81,7 @@ public class DecimateCore extends JavaPlugin {
 		managers[n++] = itemCooldownManager = new ItemCooldownManager();
 		managers[n++] = staffCommandsManager = new StaffCommandsManager();
 		managers[n++] = expBoostManager = new ExpBoostManager();
+		managers[n++] = anvilManager = new AnvilManager();
 				
 		setupEco();
 		loadCommands();
@@ -86,7 +89,7 @@ public class DecimateCore extends JavaPlugin {
 				new EntityItemListener(), new ExplosionListener(), new PlayerUseItemListener(),
 				toggleChatManager, spectateManager, itemCooldownManager, new GlitchPatchManager(), new BottleExpCommand(),
 				new AnvilDamageListener(), new BottleExpCommand(), new MiniEvents(), new FactionCommandListener(),
-				new FactionDamageListener(), new ExpBoostManager(), staffCommandsManager);
+				new FactionDamageListener(), new ExpBoostManager(), staffCommandsManager, anvilManager);
 	}
 	
 	@Override

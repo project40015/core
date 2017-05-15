@@ -14,7 +14,8 @@ import com.decimatepvp.utils.FactionUtils;
 public class FactionCommandListener implements Listener {
 	
 	public static final List<String> ALLOWED_COMMANDS = 
-			Arrays.asList("spawn", "f show", "home", "feed", "echest");
+			Arrays.asList("spawn", "f show", "home", "feed", "echest",
+					"bal", "f c", "spectate", "f top", "msg", "r", "shop");
 
 	@EventHandler
 	public void onCommandUse(PlayerCommandPreprocessEvent event) {
