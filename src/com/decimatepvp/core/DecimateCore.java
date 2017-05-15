@@ -116,6 +116,7 @@ public class DecimateCore extends JavaPlugin {
 		MicroCommands mc = new MicroCommands();
 		getCommand("discord").setExecutor(mc);
 		getCommand("website").setExecutor(mc);
+		getCommand("ping").setExecutor(mc);
 	}
 
 	public static DecimateCore getCore() {
