@@ -25,7 +25,7 @@ public class AnvilUpdateTask extends BukkitRunnable {
 	public ContainerAnvil anvil;
 	public int repaircost;
 	
-	public int task;
+	public int task; 
   
 	public AnvilUpdateTask(Player p, Inventory anvilinventory)
 	{

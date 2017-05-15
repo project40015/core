@@ -32,7 +32,7 @@ public class AnvilManager implements Manager, Listener {
 	@SuppressWarnings("deprecation")
 	@EventHandler(ignoreCancelled = true)
 	public void onHandleAnvil(InventoryClickEvent event) {
-		if (event.getInventory().getType() != InventoryType.ANVIL) {
+		if (event.getInventory().getType() != InventoryType.ANVIL) { 
 			return;
 		}
 		AnvilInventory anvilinv = (AnvilInventory) event.getInventory();
