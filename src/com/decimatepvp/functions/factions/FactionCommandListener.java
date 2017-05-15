@@ -15,20 +15,19 @@ public class FactionCommandListener implements Listener {
 	
 	public static final List<String> ALLOWED_COMMANDS = 
 			Arrays.asList("spawn", "f show", "home", "feed", "echest",
-					"bal", "f c", "spectate", "f top", "msg", "r", "shop");
-
+					"bal", "f c", "spectate", "f top", "msg", "r", "shop", "ah", "who", "f map");
 	@EventHandler
 	public void onCommandUse(PlayerCommandPreprocessEvent event) {
 		Player player = event.getPlayer();
 		if(!FactionUtils.isAreaSafe(player)) {
-//			if(!player.hasPermission("Decimate.factions.commandbypass")) {
+			if(!player.hasPermission("Decimate.factions.commandbypass")) {
 				String command = event.getMessage().substring(1, event.getMessage().length()).toLowerCase();
 				
 				if(!isCommandAllowed(command)) {
 					player.sendMessage(ChatColor.RED + "You cannot use this in this area!");
 					event.setCancelled(true);
 				}
-//			}
+			}
 		}
 	}
 
