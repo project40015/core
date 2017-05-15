@@ -2,6 +2,7 @@ package com.decimatepvp.minievents;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -53,9 +54,19 @@ public class MiniEvents implements Listener {
 	@EventHandler
 	public void onClick(InventoryClickEvent event){
 		if(event.getInventory().getType().equals(InventoryType.ENCHANTING)){
-			if(event.getSlot() == 1 || (event.getInventory().getItem(event.getSlot()) != null &&
-					event.getInventory().getItem(event.getSlot()).getType().equals(Material.INK_SACK))){
+			if(event.getSlot() == 1){
 				event.setCancelled(true);
+				return;
+			}
+		}
+		if(event.getWhoClicked() instanceof Player){
+			Player player = (Player) event.getWhoClicked();
+			if(player.getOpenInventory().getType().equals(InventoryType.ENCHANTING)){
+				if((event.getInventory().getItem(event.getSlot()) != null &&
+						event.getInventory().getItem(event.getSlot()).getType().equals(Material.INK_SACK))){
+					event.setCancelled(true);
+					return;
+				}
 			}
 		}
 	}
