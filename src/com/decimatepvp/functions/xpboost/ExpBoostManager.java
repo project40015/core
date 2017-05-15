@@ -2,6 +2,7 @@ package com.decimatepvp.functions.xpboost;
 
 import java.util.List;
 
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.LivingEntity;
@@ -9,6 +10,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDeathEvent;
+import org.bukkit.event.inventory.ClickType;
+import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
@@ -29,18 +32,18 @@ public class ExpBoostManager implements Manager, Listener {
 				"&bwill double the exp given!");
 	}
 	
-//	@SuppressWarnings("deprecation")
-//	@EventHandler
-//	public void onBookDrag(InventoryClickEvent event) {
-//		if(event.getAction() == InventoryAction.SWAP_WITH_CURSOR) {
-//			ItemStack dragged = event.getCursor();
-//			if(ItemUtils.isItemCloned(dragged, xpBook)) {
-//				ItemStack item = event.getCurrentItem();
-//				event.setCursor(null);
-//				addToWeapon(item);
-//			}
-//		}
-//	}
+	@SuppressWarnings("deprecation")
+	@EventHandler
+	public void onBookDrag(InventoryClickEvent event) {
+		if(event.getClick() == ClickType.MIDDLE) {
+			ItemStack dragged = event.getCursor();
+			if(ItemUtils.isItemCloned(dragged, this.xpBook)) {
+				ItemStack item = event.getCurrentItem();
+				event.setCursor(null);
+				addToWeapon(item);
+			}
+		}
+	}
 	
 	@EventHandler
 	public void onEntityDeath(EntityDeathEvent event) {

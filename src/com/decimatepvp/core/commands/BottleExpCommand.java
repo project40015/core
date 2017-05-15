@@ -1,5 +1,6 @@
 package com.decimatepvp.core.commands;
 
+import org.apache.commons.lang3.StringUtils;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.command.Command;
@@ -59,7 +60,9 @@ public class BottleExpCommand implements CommandExecutor, Listener {
 				(proj.getShooter() instanceof Player)) {
 			Player player = (Player) proj.getShooter();
 			int exp = getExpFromItemStack(player.getItemInHand());
-			proj.setCustomName("" + exp);
+			if(exp >= 0) {
+				proj.setCustomName("" + exp);
+			}
 		}
 	}
 
@@ -68,14 +71,19 @@ public class BottleExpCommand implements CommandExecutor, Listener {
 		ThrownExpBottle bottle = event.getEntity();
 		if((bottle.getShooter() != null) &&
 				(bottle.getShooter() instanceof Player)) {
-			if(bottle.getCustomName() != null) {
+			if((bottle.getCustomName() != null) &&
+					(isNumeric(bottle.getCustomName()))) {
 				event.setExperience(Integer.parseInt(bottle.getCustomName()));
 			}
 		}
 	}
 	
+	public boolean isNumeric(String s) {  
+	    return s != null && s.matches("[-+]?\\d*\\.?\\d+");  
+	}  
+	
 	private Integer getExpFromItemStack(ItemStack hand) {
-		int exp = 0;
+		int exp = -1;
 		try {
 			exp = Integer.parseInt(ChatColor.stripColor(hand.getItemMeta().getLore().get(0))
 					.replace("Throwing this bottle will release ", "").replace(" exp!", ""));
