@@ -40,3 +40,6 @@ commands:
   ping:
     description: View your ping
     aliases: [ms]
+  expboost: 
+    description: Gives you an Xp Boost book!
+    aliases: [xpboost]

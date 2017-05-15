@@ -36,6 +36,8 @@ import com.decimatepvp.functions.tntfill.TntFillCommand;
 import com.decimatepvp.functions.tntfill.TntFillManager;
 import com.decimatepvp.functions.togglechat.ToggleChatCommand;
 import com.decimatepvp.functions.togglechat.ToggleChatManager;
+import com.decimatepvp.functions.xpboost.ExpBoostCommand;
+import com.decimatepvp.functions.xpboost.ExpBoostManager;
 import com.decimatepvp.minievents.MiniEvents;
 
 public class DecimateCore extends JavaPlugin {
@@ -58,8 +60,9 @@ public class DecimateCore extends JavaPlugin {
 	private HarvesterManager harvesterManager;
 	private ItemCooldownManager itemCooldownManager;
 	private StaffCommandsManager staffCommandsManager;
+	private ExpBoostManager expBoostManager;
 	
-	private Manager[] managers = new Manager[8];
+	private Manager[] managers = new Manager[9];
 	
 	@Override
 	public void onEnable() {
@@ -75,6 +78,7 @@ public class DecimateCore extends JavaPlugin {
 		managers[n++] = harvesterManager = new HarvesterManager();
 		managers[n++] = itemCooldownManager = new ItemCooldownManager();
 		managers[n++] = staffCommandsManager = new StaffCommandsManager();
+		managers[n++] = expBoostManager = new ExpBoostManager();
 				
 		setupEco();
 		loadCommands();
@@ -82,7 +86,7 @@ public class DecimateCore extends JavaPlugin {
 				new EntityItemListener(), new ExplosionListener(), new PlayerUseItemListener(),
 				toggleChatManager, spectateManager, itemCooldownManager, new GlitchPatchManager(), new BottleExpCommand(),
 				new AnvilDamageListener(), new BottleExpCommand(), new MiniEvents(), new FactionCommandListener(),
-				new FactionDamageListener());
+				new FactionDamageListener(), new ExpBoostManager(), staffCommandsManager);
 	}
 	
 	@Override
@@ -117,6 +121,7 @@ public class DecimateCore extends JavaPlugin {
 		getCommand("discord").setExecutor(mc);
 		getCommand("website").setExecutor(mc);
 		getCommand("ping").setExecutor(mc);
+		getCommand("expboost").setExecutor(new ExpBoostCommand());
 	}
 
 	public static DecimateCore getCore() {
@@ -167,6 +172,10 @@ public class DecimateCore extends JavaPlugin {
 	
 	public StaffCommandsManager getStaffCommandsManager() {
 		return this.staffCommandsManager;
+	}
+
+	public ExpBoostManager getExpBoostManager() {
+		return expBoostManager;
 	}
 
 }
