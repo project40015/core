@@ -43,3 +43,7 @@ commands:
   expboost: 
     description: Gives you an Xp Boost book!
     aliases: [xpboost]
+  blacklist:
+    description: Permanently bans the player with no chance of being redeemed.
+  blacklistpardon: 
+    description: Removes a player from the blacklist.

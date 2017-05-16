@@ -22,6 +22,7 @@ import com.decimatepvp.functions.glitchpatch.GlitchPatchManager;
 import com.decimatepvp.functions.harvester.HarvesterCommand;
 import com.decimatepvp.functions.harvester.HarvesterManager;
 import com.decimatepvp.functions.itemcooldown.ItemCooldownManager;
+import com.decimatepvp.functions.minicommands.BlacklistManager;
 import com.decimatepvp.functions.minicommands.ColorsCommand;
 import com.decimatepvp.functions.minicommands.MicroCommands;
 import com.decimatepvp.functions.minicommands.NightVisionCommand;
@@ -64,8 +65,9 @@ public class DecimateCore extends JavaPlugin {
 	private ExpBoostManager expBoostManager;
 //	private AnvilManager anvilManager;
 	private EnderDelayManager enderDelayManager;
+	private BlacklistManager blacklistManager;
 	
-	private Manager[] managers = new Manager[10];
+	private Manager[] managers = new Manager[11];
 	
 	@Override
 	public void onEnable() {
@@ -84,6 +86,7 @@ public class DecimateCore extends JavaPlugin {
 		managers[n++] = expBoostManager = new ExpBoostManager();
 //		managers[n++] = anvilManager = new AnvilManager();
 		managers[n++] = enderDelayManager = new EnderDelayManager();
+		managers[n++] = blacklistManager = new BlacklistManager();
 				
 		setupEco();
 		loadCommands();
@@ -128,6 +131,8 @@ public class DecimateCore extends JavaPlugin {
 		getCommand("website").setExecutor(mc);
 		getCommand("ping").setExecutor(mc);
 		getCommand("expboost").setExecutor(new ExpBoostCommand());
+		getCommand("blacklist").setExecutor(blacklistManager);
+		getCommand("blacklistpardon").setExecutor(blacklistManager);
 	}
 
 	public static DecimateCore getCore() {

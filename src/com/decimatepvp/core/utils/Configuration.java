@@ -13,16 +13,30 @@ public class Configuration
 	private JavaPlugin jp;
 	private File file;
 	private FileConfiguration fc;
-  
+	private String path;
+	  
 	public Configuration(JavaPlugin jp, String name)
 	{
 		this.jp = jp;
 		this.fileName = name;
+		this.path = "";
+	}
+	  
+	public Configuration(JavaPlugin jp, String path, String name)
+	{
+		this.jp = jp;
+		this.fileName = name;
+		this.path = path;
 	}
 	
 	public File getFile()
 	{
-		this.file = new File(this.jp.getDataFolder(), this.fileName);
+		if(this.path != "") {
+			this.file = new File(this.jp.getDataFolder().getPath() + path, this.fileName);
+		}
+		else {
+			this.file = new File(this.jp.getDataFolder(), this.fileName);
+		}
 		return this.file;
 	}
   
@@ -64,5 +78,11 @@ public class Configuration
 				} catch (IOException e) { }
 			}
 		}
+	}
+
+	public void reset() {
+		File file = getFile();
+		file.delete();
+		createData();
 	}
 }

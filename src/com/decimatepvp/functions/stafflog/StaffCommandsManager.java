@@ -56,7 +56,7 @@ public class StaffCommandsManager implements Manager, Listener {
 	@Override
 	public void disable() {
 		String name = createFileNameFromDate();
-		Configuration cfg = new Configuration(DecimateCore.getCore(), name + ".yml");
+		Configuration cfg = new Configuration(DecimateCore.getCore(), "/stafflogs", name + ".yml");
 		FileConfiguration config = cfg.getData();
 		
 		for(Entry<OfflinePlayer, List<String>> set : commands.entrySet()) {
