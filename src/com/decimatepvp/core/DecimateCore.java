@@ -13,6 +13,7 @@ import com.decimatepvp.core.listener.ExplosionListener;
 import com.decimatepvp.core.listener.PlayerBreakBlockListener;
 import com.decimatepvp.core.listener.PlayerUseItemListener;
 import com.decimatepvp.core.utils.DecimateConfig;
+import com.decimatepvp.functions.antitnt.AntiTntManager;
 import com.decimatepvp.functions.enderpearl.EnderDelayManager;
 import com.decimatepvp.functions.factions.FactionCommandListener;
 import com.decimatepvp.functions.factions.FactionDamageListener;
@@ -66,8 +67,9 @@ public class DecimateCore extends JavaPlugin {
 //	private AnvilManager anvilManager;
 	private EnderDelayManager enderDelayManager;
 	private BlacklistManager blacklistManager;
+	private AntiTntManager antiTntManager;
 	
-	private Manager[] managers = new Manager[11];
+	private Manager[] managers = new Manager[12];
 	
 	@Override
 	public void onEnable() {
@@ -86,7 +88,7 @@ public class DecimateCore extends JavaPlugin {
 		managers[n++] = expBoostManager = new ExpBoostManager();
 //		managers[n++] = anvilManager = new AnvilManager();
 		managers[n++] = enderDelayManager = new EnderDelayManager();
-		managers[n++] = blacklistManager = new BlacklistManager();
+		managers[n++] = antiTntManager = new AntiTntManager();
 				
 		setupEco();
 		loadCommands();
@@ -95,7 +97,7 @@ public class DecimateCore extends JavaPlugin {
 				toggleChatManager, spectateManager, itemCooldownManager, new GlitchPatchManager(), new BottleExpCommand(),
 				new AnvilDamageListener(), new BottleExpCommand(), new MiniEvents(), new FactionCommandListener(),
 				new FactionDamageListener(), new ExpBoostManager(), staffCommandsManager, expBoostManager,
-				enderDelayManager);
+				enderDelayManager, antiTntManager);
 	}
 	
 	@Override
@@ -130,6 +132,7 @@ public class DecimateCore extends JavaPlugin {
 		getCommand("discord").setExecutor(mc);
 		getCommand("website").setExecutor(mc);
 		getCommand("ping").setExecutor(mc);
+		getCommand("antitnt").setExecutor(mc);
 		getCommand("expboost").setExecutor(new ExpBoostCommand());
 		getCommand("blacklist").setExecutor(blacklistManager);
 		getCommand("blacklistpardon").setExecutor(blacklistManager);
@@ -187,6 +190,10 @@ public class DecimateCore extends JavaPlugin {
 
 	public ExpBoostManager getExpBoostManager() {
 		return expBoostManager;
+	}
+
+	public AntiTntManager getAntiTntManager() {
+		return antiTntManager;
 	}
 
 }

@@ -1,39 +1,23 @@
 package com.decimatepvp.utils;
 
 import org.bukkit.ChatColor;
-import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
-import com.google.common.collect.Lists;
-
 import net.minecraft.server.v1_8_R3.IChatBaseComponent;
 import net.minecraft.server.v1_8_R3.IChatBaseComponent.ChatSerializer;
+import net.minecraft.server.v1_8_R3.Packet;
 import net.minecraft.server.v1_8_R3.PacketPlayOutChat;
-import net.minecraft.server.v1_8_R3.PacketPlayOutExplosion;
 import net.minecraft.server.v1_8_R3.PacketPlayOutTitle;
 import net.minecraft.server.v1_8_R3.PacketPlayOutTitle.EnumTitleAction;
-import net.minecraft.server.v1_8_R3.Vec3D;
 
 public class PlayerUtils {
 	
-	public static void sendFakeExplosion(Player player, Location location) {
-		double d0 = location.getX();
-		double d1 = location.getY();
-		double d2 = location.getZ();
-		PacketPlayOutExplosion explosion = 
-        		new PacketPlayOutExplosion(d0, d1, d2, 5.0f, Lists.newArrayList(), new Vec3D(0, 0, 0));
-        
-//        WorldServer world = ((CraftWorld) location.getWorld()).getHandle();
-//        EntityTNTPrimed primedTnt = new EntityTNTPrimed(location, world);
-//        primedTnt.setLocation(d0, d1, d2, 0, 0);
-//        PacketPlayOutSpawnEntity entity = new PacketPlayOutSpawnEntity(primedTnt, 1);
-		
-//        ((CraftPlayer) player).getHandle().playerConnection.sendPacket(entity);
-        ((CraftPlayer) player).getHandle().playerConnection.sendPacket(explosion);
+	public static void sendPacket(Player player, Packet<?> packet) {
+		((CraftPlayer) player).getHandle().playerConnection.sendPacket(packet);
 	}
 
 	public static int getTotal(Inventory inv, Material material) {
