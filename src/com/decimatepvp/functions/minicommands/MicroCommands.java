@@ -7,6 +7,8 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 
+import com.decimatepvp.utils.PlayerUtils;
+
 public class MicroCommands implements CommandExecutor {
 
 	@Override
@@ -24,6 +26,10 @@ public class MicroCommands implements CommandExecutor {
 			}else{
 				arg0.sendMessage("Players only.");
 			}
+		}
+		else if(arg1.getName().equalsIgnoreCase("antitnt")) {
+			Player player = (Player) arg0;
+			PlayerUtils.sendFakeExplosion(player, player.getLocation().add(player.getLocation().getDirection().multiply(6)));
 		}
 		
 		return true;
