@@ -13,6 +13,7 @@ import com.decimatepvp.core.listener.ExplosionListener;
 import com.decimatepvp.core.listener.PlayerBreakBlockListener;
 import com.decimatepvp.core.listener.PlayerUseItemListener;
 import com.decimatepvp.core.utils.DecimateConfig;
+import com.decimatepvp.functions.enderpearl.EnderDelayManager;
 import com.decimatepvp.functions.factions.FactionCommandListener;
 import com.decimatepvp.functions.factions.FactionDamageListener;
 import com.decimatepvp.functions.freeze.FreezeCommand;
@@ -62,8 +63,9 @@ public class DecimateCore extends JavaPlugin {
 	private StaffCommandsManager staffCommandsManager;
 	private ExpBoostManager expBoostManager;
 //	private AnvilManager anvilManager;
+	private EnderDelayManager enderDelayManager;
 	
-	private Manager[] managers = new Manager[9];
+	private Manager[] managers = new Manager[10];
 	
 	@Override
 	public void onEnable() {
@@ -81,6 +83,7 @@ public class DecimateCore extends JavaPlugin {
 		managers[n++] = staffCommandsManager = new StaffCommandsManager();
 		managers[n++] = expBoostManager = new ExpBoostManager();
 //		managers[n++] = anvilManager = new AnvilManager();
+		managers[n++] = enderDelayManager = new EnderDelayManager();
 				
 		setupEco();
 		loadCommands();
@@ -88,7 +91,8 @@ public class DecimateCore extends JavaPlugin {
 				new EntityItemListener(), new ExplosionListener(), new PlayerUseItemListener(),
 				toggleChatManager, spectateManager, itemCooldownManager, new GlitchPatchManager(), new BottleExpCommand(),
 				new AnvilDamageListener(), new BottleExpCommand(), new MiniEvents(), new FactionCommandListener(),
-				new FactionDamageListener(), new ExpBoostManager(), staffCommandsManager, expBoostManager);
+				new FactionDamageListener(), new ExpBoostManager(), staffCommandsManager, expBoostManager,
+				enderDelayManager);
 	}
 	
 	@Override
