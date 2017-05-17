@@ -7,8 +7,6 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 
-import com.decimatepvp.core.DecimateCore;
-
 public class MicroCommands implements CommandExecutor {
 
 	@Override
@@ -26,10 +24,6 @@ public class MicroCommands implements CommandExecutor {
 			}else{
 				arg0.sendMessage("Players only.");
 			}
-		}
-		else if(arg1.getName().equalsIgnoreCase("antitnt")) {
-			Player player = (Player) arg0;
-			DecimateCore.getCore().getAntiTntManager().antiTntPlayer(player);
 		}
 		
 		return true;

@@ -14,6 +14,7 @@ import com.decimatepvp.core.listener.PlayerBreakBlockListener;
 import com.decimatepvp.core.listener.PlayerUseItemListener;
 import com.decimatepvp.core.utils.DecimateConfig;
 import com.decimatepvp.functions.antitnt.AntiTntManager;
+import com.decimatepvp.functions.border.WorldBorderManager;
 import com.decimatepvp.functions.enderpearl.EnderDelayManager;
 import com.decimatepvp.functions.factions.FactionCommandListener;
 import com.decimatepvp.functions.factions.FactionDamageListener;
@@ -69,12 +70,16 @@ public class DecimateCore extends JavaPlugin {
 	private BlacklistManager blacklistManager;
 	private AntiTntManager antiTntManager;
 	
+	private WorldBorderManager worldBorder;
+	
 	private Manager[] managers = new Manager[12];
 	
 	@Override
 	public void onEnable() {
 		core = this;
 		config = new DecimateConfig();
+		
+		worldBorder = new WorldBorderManager(); // Not a Real Manager
 
 		int n = 0;
 		managers[n++] = freezeManager = new FreezeManager(this);
@@ -194,6 +199,10 @@ public class DecimateCore extends JavaPlugin {
 
 	public AntiTntManager getAntiTntManager() {
 		return antiTntManager;
+	}
+
+	public WorldBorderManager getWorldBorder() {
+		return worldBorder;
 	}
 
 }
