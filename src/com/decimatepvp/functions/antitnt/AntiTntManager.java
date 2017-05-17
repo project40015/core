@@ -4,7 +4,6 @@ import java.util.List;
 
 import org.bukkit.Effect;
 import org.bukkit.Location;
-import org.bukkit.craftbukkit.v1_8_R3.CraftWorld;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
@@ -13,15 +12,10 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityExplodeEvent;
-import org.bukkit.scheduler.BukkitRunnable;
 
-import com.decimatepvp.core.DecimateCore;
 import com.decimatepvp.core.Manager;
-import com.decimatepvp.utils.PlayerUtils;
+import com.decimatepvp.utils.DecimateUtils;
 import com.google.common.collect.Lists;
-
-import net.minecraft.server.v1_8_R3.EntityTNTPrimed;
-import net.minecraft.server.v1_8_R3.PacketPlayOutSpawnEntity;
 
 public class AntiTntManager implements Manager, Listener {
 	
@@ -42,27 +36,27 @@ public class AntiTntManager implements Manager, Listener {
 	}
 	
 	public void antiTntPlayer(Player player) {
-//		Location area = player.getLocation().add(generateRandomLocation(64, 64, 64));
-		Location area = player.getLocation().add(player.getLocation().getDirection().multiply(8));
+		Location loc = DecimateUtils.generateRandomLocation(64, 64, 64);
+		double d = loc.distance(player.getLocation());
+		if(d < 4.00D) {
+			if((int) d % 2 == 0) {
+				loc.setX(loc.getX()*2);
+			}
+			else {
+				loc.setZ(loc.getZ()*2);
+			}
+		}
+		Location area = player.getLocation().add(loc);
+		
 //		sendFakeExplosion(player, area);
 		sendFakeEntityPrimedTnt(player, area);
 	}
 
 	private void sendFakeEntityPrimedTnt(Player player, Location area) {
-//		TNTPrimed primed = (TNTPrimed) area.getWorld().spawnEntity(area, EntityType.PRIMED_TNT);
-//		primed.setYield(0.0f);
-//		primed.setCustomName("EntityTnt");
-//		primedTNT.add(primed);
-		
-		EntityTNTPrimed tnt = new EntityTNTPrimed(area, ((CraftWorld) area.getWorld()).getHandle());
-		PacketPlayOutSpawnEntity packet = new PacketPlayOutSpawnEntity(tnt, tnt.getId());
-		new BukkitRunnable() {
-			
-			@Override
-			public void run() {
-				PlayerUtils.sendPacket(player, packet);
-			}
-		}.runTaskTimer(DecimateCore.getCore(), 0, 1l);
+		TNTPrimed primed = (TNTPrimed) area.getWorld().spawnEntity(area, EntityType.PRIMED_TNT);
+		primed.setYield(0.0f);
+		primed.setCustomName("EntityTnt");
+		primedTNT.add(primed);
 	}
 
 //	private static void sendFakeExplosion(Player player, Location location) {
