@@ -2,11 +2,15 @@ package com.decimatepvp.minievents;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
+import org.bukkit.entity.Chicken;
 import org.bukkit.entity.Creeper;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.entity.EntityDeathEvent;
+import org.bukkit.event.inventory.InventoryAction;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.InventoryOpenEvent;
@@ -61,14 +65,10 @@ public class MiniEvents implements Listener {
 				return;
 			}
 		}
-		if(event.getWhoClicked() instanceof Player){
-			Player player = (Player) event.getWhoClicked();
-			if(player.getOpenInventory().getType().equals(InventoryType.ENCHANTING)){
-				if((event.getInventory().getItem(event.getSlot()) != null &&
-						event.getInventory().getItem(event.getSlot()).getType().equals(Material.INK_SACK))){
-					event.setCancelled(true);
-					return;
-				}
+		if(event.getCurrentItem() != null && event.getCurrentItem().getType().equals(Material.INK_SACK)){
+			if(event.getAction().equals(InventoryAction.COLLECT_TO_CURSOR) ||
+					event.getAction().equals(InventoryAction.MOVE_TO_OTHER_INVENTORY)){
+				event.setCancelled(true);
 			}
 		}
 	}
@@ -94,6 +94,17 @@ public class MiniEvents implements Listener {
 			}
 			if(event.getPlayer().getAllowFlight()){
 				event.getPlayer().setAllowFlight(false);
+			}
+		}
+	}
+	
+	@EventHandler
+	public void onDeath(EntityDeathEvent event){
+		if(event.getEntity() instanceof Chicken){
+			event.getDrops().add(new ItemStack(Material.EGG));
+		}else if(event.getEntity() instanceof Creeper){
+			if(Math.random() < 0.25){
+				event.getDrops().add(new ItemStack(Material.TNT));
 			}
 		}
 	}

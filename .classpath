@@ -2,8 +2,8 @@
 <classpath>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry kind="lib" path="C:/Users/xTheGamerPlayz/Desktop/My Resources/src/Factions.jar"/>
-	<classpathentry kind="lib" path="C:/Users/xTheGamerPlayz/Documents/MinecraftJars/Vault ALL.jar"/>
-	<classpathentry kind="lib" path="C:/Users/xTheGamerPlayz/Documents/MinecraftJars/Spigot/PaperSpigot-1.8.8.jar"/>
+	<classpathentry kind="lib" path="/Users/liamlutton/Desktop/mh-dev/jars/Factions.jar"/>
+	<classpathentry kind="lib" path="/Users/liamlutton/Desktop/mh-dev/jars/PaperSpigot-1.8.8.jar"/>
+	<classpathentry kind="lib" path="/Users/liamlutton/Desktop/mh-dev/jars/Vault.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

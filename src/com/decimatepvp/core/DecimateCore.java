@@ -9,7 +9,6 @@ import com.decimatepvp.core.commands.CraftTntCommand;
 import com.decimatepvp.core.commands.LogoutCommand;
 import com.decimatepvp.core.listener.AnvilDamageListener;
 import com.decimatepvp.core.listener.EntityItemListener;
-import com.decimatepvp.core.listener.ExplosionListener;
 import com.decimatepvp.core.listener.PlayerBreakBlockListener;
 import com.decimatepvp.core.listener.PlayerUseItemListener;
 import com.decimatepvp.core.utils.DecimateConfig;
@@ -43,6 +42,7 @@ import com.decimatepvp.functions.xpboost.ExpBoostManager;
 import com.decimatepvp.minievents.MiniEvents;
 
 import net.milkbowl.vault.economy.Economy;
+import net.minecraft.server.v1_8_R3.Block;
 
 public class DecimateCore extends JavaPlugin {
 	
@@ -72,7 +72,7 @@ public class DecimateCore extends JavaPlugin {
 	
 	private WorldBorderManager worldBorder;
 	
-	private Manager[] managers = new Manager[12];
+	private Manager[] managers = new Manager[11];
 	
 	@Override
 	public void onEnable() {
@@ -98,11 +98,11 @@ public class DecimateCore extends JavaPlugin {
 		setupEco();
 		loadCommands();
 		loadListeners(harvesterManager, staffChatManager, freezeManager, new PlayerBreakBlockListener(),
-				new EntityItemListener(), new ExplosionListener(), new PlayerUseItemListener(),
+				new EntityItemListener(), new PlayerUseItemListener(),
 				toggleChatManager, spectateManager, itemCooldownManager, new GlitchPatchManager(), new BottleExpCommand(),
 				new AnvilDamageListener(), new BottleExpCommand(), new MiniEvents(), new FactionCommandListener(),
 				new FactionDamageListener(), new ExpBoostManager(), staffCommandsManager, expBoostManager,
-				enderDelayManager, antiTntManager);
+				enderDelayManager, antiTntManager);		
 	}
 	
 	@Override
