@@ -52,7 +52,7 @@ public class FreezeManager implements Manager, Listener {
 		}
 		Location from = event.getFrom();
 		Location to = event.getTo();
-		if(from.getX() != to.getX() || from.getY() != to.getY() || from.getZ() != to.getZ()) {
+		if(from.getX() != to.getX() || (from.getY() < to.getY()) || from.getZ() != to.getZ()) {
 			from.setYaw(to.getYaw());
 			from.setPitch(to.getPitch());
 			event.setTo(from);
