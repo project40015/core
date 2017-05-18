@@ -1,8 +1,13 @@
 package com.decimatepvp.functions.mcips;
 
 import java.net.InetAddress;
+import java.text.SimpleDateFormat;
+import java.util.GregorianCalendar;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
+import java.util.Map.Entry;
+import java.util.TimeZone;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -12,6 +17,7 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 
@@ -33,23 +39,30 @@ public class AccountIPManager implements Listener, CommandExecutor {
 			if(args.length == 0) {
 				sender.sendMessage(ChatColor.GOLD + "Proper Usage: /iplist [player]");
 			}
-			else {
-				OfflinePlayer plyr = Bukkit.getOfflinePlayer(args[0]);
-				if(plyr.isOnline()) {
-					Player player = plyr.getPlayer();
-					List<OfflinePlayer> list = getAccountsOnIP(player.getAddress().getAddress());
-					sender.sendMessage(ChatColor.GOLD + "-------------------------------");
-					sender.sendMessage(ChatColor.RED + "Accounts on IP: " +
-							ChatColor.GOLD + player.getAddress().getAddress().toString() + ChatColor.RED + ": ");
-					for(OfflinePlayer offp : list) {
-						sender.sendMessage(ChatColor.GREEN + offp.getName() + ":");
-						sender.sendMessage(ChatColor.YELLOW + "    UUID: " + offp.getUniqueId().toString());
-						if(offp.isOnline()) {
-							sender.sendMessage(ChatColor.AQUA + "    Display: " + offp.getPlayer().getDisplayName());
-						}
+			OfflinePlayer plyr = Bukkit.getOfflinePlayer(args[0]);
+			InetAddress ip = plyr.isOnline() ? plyr.getPlayer().getAddress().getAddress() : getPlayerAddress(plyr);
+			if(ip != null) {
+				List<OfflinePlayer> list = getAccountsOnIP(ip);
+				sender.sendMessage(ChatColor.GOLD + "-------------------------------");
+				sender.sendMessage(ChatColor.RED + "Accounts on IP: " +
+						ChatColor.GOLD + ip.toString() + ChatColor.RED + ": ");
+				for(OfflinePlayer offp : list) {
+					sender.sendMessage(ChatColor.GREEN + offp.getName() + ":");
+					sender.sendMessage(ChatColor.YELLOW + "    UUID: " + ChatColor.GREEN + offp.getUniqueId().toString());
+					if(offp.isOnline()) {
+						sender.sendMessage(ChatColor.YELLOW + "    Display: " + offp.getPlayer().getDisplayName());
+						sender.sendMessage(ChatColor.YELLOW + "    Online: " + ChatColor.GREEN + "True");
 					}
-					sender.sendMessage(ChatColor.GOLD + "-------------------------------");
+					else {
+						sender.sendMessage(
+								ChatColor.YELLOW + "    Last Online: "  + ChatColor.AQUA + longToDate(offp.getLastPlayed()));
+						sender.sendMessage(ChatColor.YELLOW + "    Online: " + ChatColor.RED + "False");
+					}
 				}
+				sender.sendMessage(ChatColor.GOLD + "-------------------------------");
+			}
+			else {
+				sender.sendMessage(ChatColor.RED + "This player has not joined.");
 			}
 		}
 		else {
@@ -59,14 +72,15 @@ public class AccountIPManager implements Listener, CommandExecutor {
 		return false;
 	}
 	
-	@EventHandler
-	public void onJoin(PlayerJoinEvent event) {
-		Player player = event.getPlayer();
-		if(!isInList(player)) {
-			addPlayerToList(player);
+	private InetAddress getPlayerAddress(OfflinePlayer plyr) {
+		for(Entry<InetAddress, List<OfflinePlayer>> set : sharedIps.entrySet()) {
+			if(set.getValue().contains(plyr)) {
+				return set.getKey();
+			}
 		}
+		return null;
 	}
-	
+
 	private void loadOnlinePlayers() {
 		for(Player player : Bukkit.getOnlinePlayers()) {
 			if(!isInList(player)) {
@@ -78,10 +92,20 @@ public class AccountIPManager implements Listener, CommandExecutor {
 	public List<OfflinePlayer> getAccountsOnIP(InetAddress ip) {
 		return sharedIps.get(ip);
 	}
+	
+	@EventHandler(priority = EventPriority.LOWEST)
+	public void onJoin(PlayerJoinEvent event) {
+		Player player = event.getPlayer();
+		if(!isInList(player)) {
+			addPlayerToList(player);
+		}
+	}
 
 	private void addPlayerToList(Player player) {
 		if(sharedIps.containsKey(player.getAddress().getAddress())) {
-			sharedIps.get(player.getAddress().getAddress()).add(player);
+			if(sharedIps.get(player.getAddress().getAddress()).contains(player)) {
+				sharedIps.get(player.getAddress().getAddress()).add(player);
+			}
 		}
 		else {
 			List<OfflinePlayer> list = Lists.newArrayList();
@@ -91,13 +115,19 @@ public class AccountIPManager implements Listener, CommandExecutor {
 	}
 	
 	private boolean isInList(Player player) {
-		for(List<OfflinePlayer> list : sharedIps.values()) {
-			if(list.contains(player)) {
-				return true;
-			}
+		if(sharedIps.containsKey(player.getAddress().getAddress())) {
+			return true;
 		}
 		return false;
 	}
 	
+	private String longToDate(long time) {
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm",Locale.US);
+
+		GregorianCalendar calendar = new GregorianCalendar(TimeZone.getTimeZone("UTC"));
+		calendar.setTimeInMillis(time);
+		
+		return sdf.format(calendar.getTime());
+	}
 	
 }

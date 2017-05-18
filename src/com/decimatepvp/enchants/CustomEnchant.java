@@ -40,7 +40,7 @@ public class CustomEnchant {
 	}
 
 	public enum ItemType {
-		SWORD, AXE, HOE, SPADE, PICKAXE, HELMET, CHESTPLATE, LEGGINGS, BOOTS;
+		SWORD, AXE, HOE, SPADE, PICKAXE, HELMET, CHESTPLATE, LEGGINGS, BOOTS, BOW;
 		
 		public boolean isItemOfType(ItemStack item) {
 			return item.getType().toString().contains("_" + this.toString());
