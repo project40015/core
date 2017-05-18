@@ -80,7 +80,6 @@ public class AccountIPManager implements Listener, CommandExecutor {
 	}
 
 	private void addPlayerToList(Player player) {
-		Bukkit.broadcastMessage(player.getAddress().getAddress().toString());
 		if(sharedIps.containsKey(player.getAddress().getAddress())) {
 			sharedIps.get(player.getAddress().getAddress()).add(player);
 		}
