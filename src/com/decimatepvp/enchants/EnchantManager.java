@@ -1,4 +1,4 @@
-package com.decimatepvp.functions.enchants;
+package com.decimatepvp.enchants;
 
 import java.util.List;
 import java.util.Map;
@@ -6,8 +6,10 @@ import java.util.Map;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
-import com.decimatepvp.enchants.CustomEnchant;
 import com.decimatepvp.enchants.enchants.ExtinguishEnchant;
+import com.decimatepvp.enchants.enchants.FishEnchant;
+import com.decimatepvp.enchants.enchants.SwiftnessEnchant;
+import com.decimatepvp.enchants.enchants.WarriorEnchant;
 import com.decimatepvp.utils.DecimateUtils;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
@@ -19,10 +21,15 @@ public class EnchantManager {
 	private Map<String, CustomEnchant> customEnchants = Maps.newHashMap();
 	
 	public EnchantManager() {
-		ExtinguishEnchant extinguish = new ExtinguishEnchant();
-		customEnchants.put(extinguish.getEnchantName(), extinguish);
+		registerEnchants(new ExtinguishEnchant(), new SwiftnessEnchant(), new FishEnchant(), new WarriorEnchant());
 	}
 	
+	private void registerEnchants(CustomEnchant... enchantments) {
+		for(CustomEnchant enchantment : enchantments) {
+			customEnchants.put(enchantment.getEnchantName(), enchantment);
+		}
+	}
+
 	public List<CustomEnchant> getEnchantsOnItem(ItemStack item) {
 		List<CustomEnchant> enchantments = Lists.newArrayList();
 		if((item != null) && (item.hasItemMeta()) && (item.getItemMeta().hasLore())) {
