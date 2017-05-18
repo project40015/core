@@ -12,24 +12,29 @@ import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 public class EntityItemListener implements Listener {
 	
 	private Material[] allow = {Material.LADDER, Material.SIGN, Material.SIGN_POST, Material.LAVA, Material.WATER, Material.AIR};
-
 	
 	@EventHandler
 	public void onLavaDestroySpawner(EntityDamageEvent event) {
 		try {
 			if(event.getEntityType() == EntityType.DROPPED_ITEM &&
 					(event.getCause() == DamageCause.ENTITY_EXPLOSION ||
-					event.getCause() == DamageCause.LAVA || event.getCause() == DamageCause.FIRE)) {
+					event.getCause() == DamageCause.LAVA || event.getCause() == DamageCause.FIRE) ||
+					event.getCause() == DamageCause.FIRE_TICK) {
 				Item item = (Item) event.getEntity();
 				// This is needed as otherwise the item will jump upwards afterwards making it stay in the air/
 				if(item.getItemStack().getType() == Material.MOB_SPAWNER) {
 					Material mat = item.getLocation().clone().add(0,-1,0).getBlock().getType();
-					if(!contains(mat)){
+					if(event.getCause() == DamageCause.FIRE_TICK){
+						item.setFireTicks(0);
+						event.setCancelled(true);
+					}
+					if(!contains(mat) && event.getCause() == DamageCause.LAVA){
 						return;
 					}
 					if(event.getCause() == DamageCause.LAVA){
 						net.minecraft.server.v1_8_R3.Entity nms = ((CraftItem) item).getHandle();
 						nms.motY -= 1;
+						nms.fireTicks = 0;
 						nms.move(nms.motX, nms.motY, nms.motZ);
 					}
 					event.setCancelled(true);
