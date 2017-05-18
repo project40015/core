@@ -23,6 +23,28 @@ import org.bukkit.inventory.ItemStack;
 import com.decimatepvp.utils.PlayerUtils;
 
 public class MiniEvents implements Listener {
+	
+//	@EventHandler
+//	public void removeFireResistance(PotionSplashEvent event) {
+//		for(PotionEffect pe : Lists.newArrayList(event.getPotion().getEffects())) {
+//			if(pe.getType() == PotionEffectType.FIRE_RESISTANCE) {
+//				event.getPotion().getEffects().remove(pe);
+//			}
+//		}
+//	}
+//	
+//	@EventHandler
+//	public void removeFireResistance(PlayerItemConsumeEvent event) {
+//		ItemStack item = event.getItem();
+//		if(item.getType() == Material.POTION) {
+//			Potion potion = Potion.fromItemStack(item);
+//			for(PotionEffect pe : Lists.newArrayList(potion.getEffects())) {
+//				if(pe.getType() == PotionEffectType.FIRE_RESISTANCE) {
+//					potion.getEffects().remove(pe);
+//				}
+//			}
+//		}
+//	}
 
 	@EventHandler
 	public void onJoin(PlayerJoinEvent event){

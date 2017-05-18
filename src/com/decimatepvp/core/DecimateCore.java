@@ -12,8 +12,10 @@ import com.decimatepvp.core.listener.EntityItemListener;
 import com.decimatepvp.core.listener.PlayerBreakBlockListener;
 import com.decimatepvp.core.listener.PlayerUseItemListener;
 import com.decimatepvp.core.utils.DecimateConfig;
+import com.decimatepvp.enchants.EnchantCommand;
 import com.decimatepvp.functions.antitnt.AntiTntManager;
 import com.decimatepvp.functions.border.WorldBorderManager;
+import com.decimatepvp.functions.enchants.EnchantManager;
 import com.decimatepvp.functions.enderpearl.EnderDelayManager;
 import com.decimatepvp.functions.factions.FactionCommandListener;
 import com.decimatepvp.functions.factions.FactionDamageListener;
@@ -72,6 +74,7 @@ public class DecimateCore extends JavaPlugin {
 	
 	private WorldBorderManager worldBorder;
 	private AccountIPManager accountIpManager;
+	private EnchantManager enchantManager;
 	
 	private Manager[] managers = new Manager[12];
 	
@@ -82,6 +85,7 @@ public class DecimateCore extends JavaPlugin {
 		
 		worldBorder = new WorldBorderManager(); // Not a Real Manager
 		accountIpManager = new AccountIPManager();
+		enchantManager = new EnchantManager();
 
 		int n = 0;
 		managers[n++] = freezeManager = new FreezeManager(this);
@@ -143,6 +147,7 @@ public class DecimateCore extends JavaPlugin {
 		getCommand("blacklist").setExecutor(blacklistManager);
 		getCommand("blacklistpardon").setExecutor(blacklistManager);
 		getCommand("iplist").setExecutor(accountIpManager);
+		getCommand("applyenchant").setExecutor(new EnchantCommand());
 	}
 
 	public static DecimateCore getCore() {
@@ -205,6 +210,10 @@ public class DecimateCore extends JavaPlugin {
 
 	public WorldBorderManager getWorldBorder() {
 		return worldBorder;
+	}
+
+	public EnchantManager getEnchantManager() {
+		return enchantManager;
 	}
 
 }
