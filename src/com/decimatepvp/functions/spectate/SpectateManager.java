@@ -21,6 +21,9 @@ import org.bukkit.potion.PotionEffect;
 import com.decimatepvp.core.Manager;
 
 public class SpectateManager implements Listener, Manager {
+	
+	private final List<String> allowed =
+			Arrays.asList("warp", "spawn", "spectate", "tp", "ban", "tempban", "mute", "pardon", "r", "msg", "whois");
 
 	private List<Spectator> spectators = new ArrayList<>();
 	
@@ -87,13 +90,15 @@ public class SpectateManager implements Listener, Manager {
 	
 	@EventHandler
 	public void onCommand(PlayerCommandPreprocessEvent event){
-		if(isSpectating(event.getPlayer())){
-			String str = event.getMessage().toLowerCase().replaceAll("/", "").split(" ")[0];
-			List<String> allowed = Arrays.asList("warp", "spawn", "spectate", "tp", "ban", "tempban", "mute", "pardon", "r", "msg");
-			if(!allowed.contains(str)){
-				event.getPlayer().sendMessage(ChatColor.RED + "You cannot use this command while spectating. Exit spectator mode using "
-						+ ChatColor.YELLOW + "/spectate toggle" + ChatColor.RED + "!");
-				event.setCancelled(true);
+		if(!event.getPlayer().hasPermission("Decimate.factions.commandbypass")) {
+			if(isSpectating(event.getPlayer())){
+				String str = event.getMessage().toLowerCase().replaceAll("/", "").split(" ")[0];
+				
+				if(!this.allowed.contains(str)){
+					event.getPlayer().sendMessage(ChatColor.RED + "You cannot use this command while spectating. Exit spectator mode using "
+							+ ChatColor.YELLOW + "/spectate toggle" + ChatColor.RED + "!");
+					event.setCancelled(true);
+				}
 			}
 		}
 	}

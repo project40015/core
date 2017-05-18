@@ -28,17 +28,17 @@ public class FactionCommandListener implements Listener {
 
 		if(!player.hasPermission("Decimate.factions.commandbypass")) {
 			if(isCommandAllyOnly(command)) {
-					if(!FactionUtils.isInAllyTerritory(player)) {
-						player.sendMessage(ChatColor.RED + "You can only use this in Ally territory!");
-						event.setCancelled(true);
-					}
+				if(!FactionUtils.isInAllyTerritory(player)) {
+					player.sendMessage(ChatColor.RED + "You can only use this in Ally territory!");
+					event.setCancelled(true);
+				}
 			}
 			else if(!FactionUtils.isAreaSafe(player)) {
 					
-					if(!isCommandAllowed(command)) {
-						player.sendMessage(ChatColor.RED + "You cannot use this in this area!");
-						event.setCancelled(true);
-					}
+				if(!isCommandAllowed(command)) {
+					player.sendMessage(ChatColor.RED + "You cannot use this in this area!");
+					event.setCancelled(true);
+				}
 			}
 		}
 	}
