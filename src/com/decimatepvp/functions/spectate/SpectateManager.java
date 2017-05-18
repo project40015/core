@@ -90,8 +90,8 @@ public class SpectateManager implements Listener, Manager {
 	
 	@EventHandler
 	public void onCommand(PlayerCommandPreprocessEvent event){
-		if(!event.getPlayer().hasPermission("Decimate.factions.commandbypass")) {
-			if(isSpectating(event.getPlayer())){
+		if(isSpectating(event.getPlayer())){
+			if(!event.getPlayer().hasPermission("Decimate.factions.commandbypass")) {
 				String str = event.getMessage().toLowerCase().replaceAll("/", "").split(" ")[0];
 				
 				if(!this.allowed.contains(str)){
