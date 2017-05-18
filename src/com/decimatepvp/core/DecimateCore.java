@@ -23,6 +23,7 @@ import com.decimatepvp.functions.glitchpatch.GlitchPatchManager;
 import com.decimatepvp.functions.harvester.HarvesterCommand;
 import com.decimatepvp.functions.harvester.HarvesterManager;
 import com.decimatepvp.functions.itemcooldown.ItemCooldownManager;
+import com.decimatepvp.functions.mcips.AccountIPManager;
 import com.decimatepvp.functions.minicommands.BlacklistManager;
 import com.decimatepvp.functions.minicommands.ColorsCommand;
 import com.decimatepvp.functions.minicommands.MicroCommands;
@@ -42,7 +43,6 @@ import com.decimatepvp.functions.xpboost.ExpBoostManager;
 import com.decimatepvp.minievents.MiniEvents;
 
 import net.milkbowl.vault.economy.Economy;
-import net.minecraft.server.v1_8_R3.Block;
 
 public class DecimateCore extends JavaPlugin {
 	
@@ -71,8 +71,9 @@ public class DecimateCore extends JavaPlugin {
 	private AntiTntManager antiTntManager;
 	
 	private WorldBorderManager worldBorder;
+	private AccountIPManager accountIpManager;
 	
-	private Manager[] managers = new Manager[11];
+	private Manager[] managers = new Manager[12];
 	
 	@Override
 	public void onEnable() {
@@ -80,6 +81,7 @@ public class DecimateCore extends JavaPlugin {
 		config = new DecimateConfig();
 		
 		worldBorder = new WorldBorderManager(); // Not a Real Manager
+		accountIpManager = new AccountIPManager();
 
 		int n = 0;
 		managers[n++] = freezeManager = new FreezeManager(this);
@@ -102,7 +104,7 @@ public class DecimateCore extends JavaPlugin {
 				toggleChatManager, spectateManager, itemCooldownManager, new GlitchPatchManager(), new BottleExpCommand(),
 				new AnvilDamageListener(), new BottleExpCommand(), new MiniEvents(), new FactionCommandListener(),
 				new FactionDamageListener(), new ExpBoostManager(), staffCommandsManager, expBoostManager,
-				enderDelayManager, antiTntManager);		
+				enderDelayManager, antiTntManager, worldBorder, accountIpManager);		
 	}
 	
 	@Override
@@ -137,10 +139,10 @@ public class DecimateCore extends JavaPlugin {
 		getCommand("discord").setExecutor(mc);
 		getCommand("website").setExecutor(mc);
 		getCommand("ping").setExecutor(mc);
-		getCommand("antitnt").setExecutor(mc);
 		getCommand("expboost").setExecutor(new ExpBoostCommand());
 		getCommand("blacklist").setExecutor(blacklistManager);
 		getCommand("blacklistpardon").setExecutor(blacklistManager);
+		getCommand("iplist").setExecutor(accountIpManager);
 	}
 
 	public static DecimateCore getCore() {

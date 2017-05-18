@@ -25,6 +25,18 @@ public class FactionUtils {
 	public static Faction getWarzone() {
 		return factions.getWarZone();
 	}
+
+	public static boolean isInAllyTerritory(Player player) {
+		Faction fplyr = getFaction(player);
+		Faction area = getFactionByLoc(player.getLocation());
+		
+		Relation rel = area.getRelationTo(fplyr);
+		if((rel == Relation.MEMBER) || (rel == Relation.ALLY)) {
+			return true;
+		}
+		
+		return false;
+	}
 	
 	public static boolean isAreaSafe(Player player) {
 		Faction fplyr = getFaction(player);

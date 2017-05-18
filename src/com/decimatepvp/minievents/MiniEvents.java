@@ -4,10 +4,8 @@ import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Chicken;
 import org.bukkit.entity.Creeper;
-import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.inventory.InventoryAction;
@@ -103,7 +101,7 @@ public class MiniEvents implements Listener {
 		if(event.getEntity() instanceof Chicken){
 			event.getDrops().add(new ItemStack(Material.EGG));
 		}else if(event.getEntity() instanceof Creeper){
-			if(Math.random() < 0.25){
+			if(Math.random() <= 0.25){
 				event.getDrops().add(new ItemStack(Material.TNT));
 			}
 		}

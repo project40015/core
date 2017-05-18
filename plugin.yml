@@ -47,5 +47,5 @@ commands:
     description: Permanently bans the player with no chance of being redeemed.
   blacklistpardon: 
     description: Removes a player from the blacklist.
-  antitnt:
-    description: Temp command.
+  iplist:
+    description: Lists players on a single IP.
