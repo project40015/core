@@ -6,6 +6,7 @@ import java.util.Map;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
+import com.decimatepvp.enchants.enchants.ExpEnchant;
 import com.decimatepvp.enchants.enchants.ExtinguishEnchant;
 import com.decimatepvp.enchants.enchants.FishEnchant;
 import com.decimatepvp.enchants.enchants.SwiftnessEnchant;
@@ -22,7 +23,8 @@ public class EnchantManager {
 	private Map<String, CustomEnchant> customEnchants = Maps.newHashMap();
 	
 	public EnchantManager() {
-		registerEnchants(new ExtinguishEnchant(), new SwiftnessEnchant(), new FishEnchant(), new WarriorEnchant());
+		registerEnchants(new ExtinguishEnchant(), new SwiftnessEnchant(), new FishEnchant(), new WarriorEnchant(),
+				new ExpEnchant());
 	}
 	
 	private void registerEnchants(CustomEnchant... enchantments) {

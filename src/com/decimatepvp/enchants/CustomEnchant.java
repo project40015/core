@@ -1,8 +1,12 @@
 package com.decimatepvp.enchants;
 
+import java.util.Random;
+
 import org.bukkit.inventory.ItemStack;
 
 public class CustomEnchant {
+	
+	protected final Random random;
 	
 	private String enchantName;
 	
@@ -15,6 +19,8 @@ public class CustomEnchant {
 		this.enchantName = enchantName;
 		this.enchantMaxLevel = enchantMaxLevel;
 		this.types = types;
+		
+		this.random = new Random();
 	}
 
 	public String getEnchantName() {

@@ -44,8 +44,8 @@ public class AccountIPManager implements Listener, CommandExecutor {
 			if(ip != null) {
 				List<OfflinePlayer> list = getAccountsOnIP(ip);
 				sender.sendMessage(ChatColor.GOLD + "-------------------------------");
-				sender.sendMessage(ChatColor.RED + "Accounts on IP: " +
-						ChatColor.GOLD + ip.toString() + ChatColor.RED + ": ");
+				sender.sendMessage(ChatColor.RED + "IP: " + ChatColor.GOLD + ip.toString() + ChatColor.RED + ": ");
+				sender.sendMessage(ChatColor.RED + "Accounts on IP: " + ChatColor.GOLD + list.size());
 				for(OfflinePlayer offp : list) {
 					sender.sendMessage(ChatColor.GREEN + offp.getName() + ":");
 					sender.sendMessage(ChatColor.YELLOW + "    UUID: " + ChatColor.GREEN + offp.getUniqueId().toString());
@@ -110,6 +110,7 @@ public class AccountIPManager implements Listener, CommandExecutor {
 		else {
 			List<OfflinePlayer> list = Lists.newArrayList();
 			list.add(player);
+//			list.add(Bukkit.getOfflinePlayer("Notch"));
 			sharedIps.put(player.getAddress().getAddress(), list);
 		}
 	}
