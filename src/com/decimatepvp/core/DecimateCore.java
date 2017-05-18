@@ -13,6 +13,7 @@ import com.decimatepvp.core.listener.PlayerBreakBlockListener;
 import com.decimatepvp.core.listener.PlayerUseItemListener;
 import com.decimatepvp.core.utils.DecimateConfig;
 import com.decimatepvp.enchants.EnchantCommand;
+import com.decimatepvp.enchants.EnchantListener;
 import com.decimatepvp.functions.antitnt.AntiTntManager;
 import com.decimatepvp.functions.border.WorldBorderManager;
 import com.decimatepvp.functions.enchants.EnchantManager;
@@ -52,11 +53,19 @@ public class DecimateCore extends JavaPlugin {
 	
 	public Economy eco;
 	
+	//Config
 	private DecimateConfig config;
 	
-	//Command Classes
+	/*
+	 * Commands
+	 */
 	public CraftTntCommand craftTnt;
 	public LogoutCommand logout;
+	
+	/*
+	 * Managers
+	 */
+	private Manager[] managers = new Manager[11];
 	
 	private FreezeManager freezeManager;
 	private TntFillManager tntFillManager;
@@ -72,11 +81,12 @@ public class DecimateCore extends JavaPlugin {
 	private BlacklistManager blacklistManager;
 	private AntiTntManager antiTntManager;
 	
+	/*
+	 * Other
+	 */
 	private WorldBorderManager worldBorder;
 	private AccountIPManager accountIpManager;
 	private EnchantManager enchantManager;
-	
-	private Manager[] managers = new Manager[12];
 	
 	@Override
 	public void onEnable() {
@@ -97,7 +107,6 @@ public class DecimateCore extends JavaPlugin {
 		managers[n++] = itemCooldownManager = new ItemCooldownManager();
 		managers[n++] = staffCommandsManager = new StaffCommandsManager();
 		managers[n++] = expBoostManager = new ExpBoostManager();
-//		managers[n++] = anvilManager = new AnvilManager();
 		managers[n++] = enderDelayManager = new EnderDelayManager();
 		managers[n++] = antiTntManager = new AntiTntManager();
 				
@@ -108,7 +117,7 @@ public class DecimateCore extends JavaPlugin {
 				toggleChatManager, spectateManager, itemCooldownManager, new GlitchPatchManager(), new BottleExpCommand(),
 				new AnvilDamageListener(), new BottleExpCommand(), new MiniEvents(), new FactionCommandListener(),
 				new FactionDamageListener(), new ExpBoostManager(), staffCommandsManager, expBoostManager,
-				enderDelayManager, antiTntManager, worldBorder, accountIpManager);		
+				enderDelayManager, antiTntManager, worldBorder, accountIpManager,  new EnchantListener());		
 	}
 	
 	@Override

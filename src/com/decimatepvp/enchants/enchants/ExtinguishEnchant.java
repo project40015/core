@@ -5,9 +5,9 @@ import org.bukkit.event.entity.EntityDamageEvent;
 
 import com.decimatepvp.enchants.types.CustomDamagedEnchant;
 
-public class Extinguish extends CustomDamagedEnchant {
+public class ExtinguishEnchant extends CustomDamagedEnchant {
 
-	public Extinguish() {
+	public ExtinguishEnchant() {
 		super("Extinguish", 1, ItemType.HELMET, ItemType.CHESTPLATE, ItemType.LEGGINGS, ItemType.BOOTS);
 	}
 

@@ -49,3 +49,5 @@ commands:
     description: Removes a player from the blacklist.
   iplist:
     description: Lists players on a single IP.
+  applyenchant:
+    description: Applies enchant to current held item.
