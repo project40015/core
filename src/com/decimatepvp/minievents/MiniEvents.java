@@ -121,10 +121,10 @@ public class MiniEvents implements Listener {
 	@EventHandler
 	public void onDeath(EntityDeathEvent event){
 		if(event.getEntity() instanceof Chicken){
-			event.getDrops().add(new ItemStack(Material.EGG));
+			event.getDrops().add(new ItemStack(Material.EGG, event.getDrops().size()/2));
 		}else if(event.getEntity() instanceof Creeper){
 			if(Math.random() <= 0.25){
-				event.getDrops().add(new ItemStack(Material.TNT));
+				event.getDrops().add(new ItemStack(Material.TNT, event.getDrops().size()/2));
 			}
 		}
 	}
