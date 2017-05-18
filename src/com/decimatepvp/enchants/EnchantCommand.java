@@ -54,6 +54,7 @@ public class EnchantCommand implements CommandExecutor, TabCompleter {
 								int level = (int) Double.parseDouble(args[1]);
 								if(core.getEnchantManager().addEnchantToItem(hand, enchant, level)) {
 									sender.sendMessage(ChatColor.GOLD + "Item successfully enchanted!");
+									player.updateInventory();
 								}
 								else {
 									sender.sendMessage(ChatColor.RED + "This enchantment cannot be set on this item!");

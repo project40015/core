@@ -1,6 +1,5 @@
 package com.decimatepvp.enchants.types;
 
-import org.bukkit.entity.LivingEntity;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 
 import com.decimatepvp.enchants.CustomEnchant;
