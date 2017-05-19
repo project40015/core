@@ -1,8 +1,12 @@
 package com.decimatepvp.enchants;
 
+import java.util.Random;
+
 import org.bukkit.inventory.ItemStack;
 
 public class CustomEnchant {
+	
+	protected final Random random;
 	
 	private String enchantName;
 	
@@ -15,6 +19,8 @@ public class CustomEnchant {
 		this.enchantName = enchantName;
 		this.enchantMaxLevel = enchantMaxLevel;
 		this.types = types;
+		
+		this.random = new Random();
 	}
 
 	public String getEnchantName() {
@@ -40,7 +46,7 @@ public class CustomEnchant {
 	}
 
 	public enum ItemType {
-		SWORD, AXE, HOE, SPADE, PICKAXE, HELMET, CHESTPLATE, LEGGINGS, BOOTS;
+		SWORD, AXE, HOE, SPADE, PICKAXE, HELMET, CHESTPLATE, LEGGINGS, BOOTS, BOW;
 		
 		public boolean isItemOfType(ItemStack item) {
 			return item.getType().toString().contains("_" + this.toString());

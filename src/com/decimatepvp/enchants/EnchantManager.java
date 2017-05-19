@@ -1,4 +1,4 @@
-package com.decimatepvp.functions.enchants;
+package com.decimatepvp.enchants;
 
 import java.util.List;
 import java.util.Map;
@@ -6,9 +6,13 @@ import java.util.Map;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
-import com.decimatepvp.enchants.CustomEnchant;
+import com.decimatepvp.enchants.enchants.ExpEnchant;
 import com.decimatepvp.enchants.enchants.ExtinguishEnchant;
+import com.decimatepvp.enchants.enchants.FishEnchant;
+import com.decimatepvp.enchants.enchants.SwiftnessEnchant;
+import com.decimatepvp.enchants.enchants.WarriorEnchant;
 import com.decimatepvp.utils.DecimateUtils;
+import com.decimatepvp.utils.RomanNumeralUtils;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
@@ -19,10 +23,16 @@ public class EnchantManager {
 	private Map<String, CustomEnchant> customEnchants = Maps.newHashMap();
 	
 	public EnchantManager() {
-		ExtinguishEnchant extinguish = new ExtinguishEnchant();
-		customEnchants.put(extinguish.getEnchantName(), extinguish);
+		registerEnchants(new ExtinguishEnchant(), new SwiftnessEnchant(), new FishEnchant(), new WarriorEnchant(),
+				new ExpEnchant());
 	}
 	
+	private void registerEnchants(CustomEnchant... enchantments) {
+		for(CustomEnchant enchantment : enchantments) {
+			customEnchants.put(enchantment.getEnchantName(), enchantment);
+		}
+	}
+
 	public List<CustomEnchant> getEnchantsOnItem(ItemStack item) {
 		List<CustomEnchant> enchantments = Lists.newArrayList();
 		if((item != null) && (item.hasItemMeta()) && (item.getItemMeta().hasLore())) {
@@ -46,7 +56,7 @@ public class EnchantManager {
 			if(!doesWeaponHaveEnchant(enchant, item)) {
 				ItemMeta meta = item.getItemMeta();
 				List<String> lore = Lists.newArrayList();
-				lore.add(DecimateUtils.color("&2&l" + enchantment.getEnchantName() + " " + level));
+				lore.add(DecimateUtils.color("&2&l" + enchantment.getEnchantName() + " " + toRoman(level)));
 				if(meta.hasLore()) {
 					lore.addAll(meta.getLore());
 				}
@@ -58,7 +68,7 @@ public class EnchantManager {
 		
 		return false;
 	}
-	
+
 	public boolean isEnchant(String enchant) {
 		return customEnchants.containsKey(enchant);
 	}
@@ -86,12 +96,20 @@ public class EnchantManager {
 		if((item != null) && (item.getItemMeta().hasLore()) && (enchantment != null)) {
 			for(String lore : item.getItemMeta().getLore()) {
 				if(lore.split(" ")[0].equals(enchantment.getEnchantName())) {
-					return Integer.parseInt(lore.split(" ")[1]);
+					return fromRoman(lore.split(" ")[1]);
 				}
 			}
 		}
 		
 		return -1;
+	}
+	
+	private int fromRoman(String roman) {
+		return RomanNumeralUtils.valueOf(roman);
+	}
+	
+	private String toRoman(int number) {
+		return RomanNumeralUtils.convertToRoman(number);
 	}
 
 }

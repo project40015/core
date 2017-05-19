@@ -24,6 +24,27 @@ import com.decimatepvp.utils.PlayerUtils;
 
 public class MiniEvents implements Listener {
 	
+//	@SuppressWarnings("deprecation")
+//	@EventHandler(priority = EventPriority.HIGHEST)
+//	public void onMobSpawn(PlayerInteractEvent event) {
+//		if(event.getAction() == Action.RIGHT_CLICK_BLOCK) {
+//			Player player = event.getPlayer();
+//			ItemStack hand = player.getItemInHand();
+//			if((hand != null) && (true)) { //hand.getType() == Material.MONSTER_EGG
+//				Block eventBlock = event.getClickedBlock().getRelative(event.getBlockFace());
+//				Block actualBlock = player.getLastTwoTargetBlocks((HashSet<Byte>) null, 10).get(1)
+//						.getRelative(PlayerUtils.getBlockFace(player));
+//				if(!eventBlock.equals(actualBlock)) {
+//					Bukkit.broadcastMessage("Cancelled!");
+//					event.setCancelled(true);
+//				}
+//				else {
+//					Bukkit.broadcastMessage("Not Cancelled!");
+//				}
+//			}
+//		}
+//	}
+	
 //	@EventHandler
 //	public void removeFireResistance(PotionSplashEvent event) {
 //		for(PotionEffect pe : Lists.newArrayList(event.getPotion().getEffects())) {

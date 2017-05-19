@@ -14,9 +14,10 @@ import com.decimatepvp.core.listener.PlayerUseItemListener;
 import com.decimatepvp.core.utils.DecimateConfig;
 import com.decimatepvp.enchants.EnchantCommand;
 import com.decimatepvp.enchants.EnchantListener;
+import com.decimatepvp.enchants.EnchantManager;
+import com.decimatepvp.events.CustomEventCaller;
 import com.decimatepvp.functions.antitnt.AntiTntManager;
 import com.decimatepvp.functions.border.WorldBorderManager;
-import com.decimatepvp.functions.enchants.EnchantManager;
 import com.decimatepvp.functions.enderpearl.EnderDelayManager;
 import com.decimatepvp.functions.factions.FactionCommandListener;
 import com.decimatepvp.functions.factions.FactionDamageListener;
@@ -117,7 +118,8 @@ public class DecimateCore extends JavaPlugin {
 				toggleChatManager, spectateManager, itemCooldownManager, new GlitchPatchManager(), new BottleExpCommand(),
 				new AnvilDamageListener(), new BottleExpCommand(), new MiniEvents(), new FactionCommandListener(),
 				new FactionDamageListener(), new ExpBoostManager(), staffCommandsManager, expBoostManager,
-				enderDelayManager, antiTntManager, worldBorder, accountIpManager,  new EnchantListener());		
+				enderDelayManager, antiTntManager, worldBorder, accountIpManager,  new EnchantListener(),
+				new CustomEventCaller());
 	}
 	
 	@Override
