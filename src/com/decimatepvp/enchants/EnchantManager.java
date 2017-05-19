@@ -56,7 +56,7 @@ public class EnchantManager {
 			if(!doesWeaponHaveEnchant(enchant, item)) {
 				ItemMeta meta = item.getItemMeta();
 				List<String> lore = Lists.newArrayList();
-				lore.add(DecimateUtils.color("&2&l" + enchantment.getEnchantName() + " " + toRoman(level)));
+				lore.add(DecimateUtils.color("&7" + enchantment.getEnchantName() + " " + toRoman(level)));
 				if(meta.hasLore()) {
 					lore.addAll(meta.getLore());
 				}
