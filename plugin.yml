@@ -40,9 +40,6 @@ commands:
   ping:
     description: View your ping
     aliases: [ms]
-  expboost: 
-    description: Gives you an Xp Boost book!
-    aliases: [xpboost]
   blacklist:
     description: Permanently bans the player with no chance of being redeemed.
   blacklistpardon: 

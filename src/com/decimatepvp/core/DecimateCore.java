@@ -17,33 +17,31 @@ import com.decimatepvp.enchants.EnchantListener;
 import com.decimatepvp.enchants.EnchantManager;
 import com.decimatepvp.events.CustomEventCaller;
 import com.decimatepvp.functions.antitnt.AntiTntManager;
-import com.decimatepvp.functions.border.WorldBorderManager;
-import com.decimatepvp.functions.enderpearl.EnderDelayManager;
-import com.decimatepvp.functions.factions.FactionCommandListener;
-import com.decimatepvp.functions.factions.FactionDamageListener;
-import com.decimatepvp.functions.freeze.FreezeCommand;
-import com.decimatepvp.functions.freeze.FreezeManager;
-import com.decimatepvp.functions.glitchpatch.GlitchPatchManager;
-import com.decimatepvp.functions.harvester.HarvesterCommand;
-import com.decimatepvp.functions.harvester.HarvesterManager;
-import com.decimatepvp.functions.itemcooldown.ItemCooldownManager;
-import com.decimatepvp.functions.mcips.AccountIPManager;
-import com.decimatepvp.functions.minicommands.BlacklistManager;
-import com.decimatepvp.functions.minicommands.ColorsCommand;
-import com.decimatepvp.functions.minicommands.MicroCommands;
-import com.decimatepvp.functions.minicommands.NightVisionCommand;
-import com.decimatepvp.functions.minicommands.OnlineCommand;
-import com.decimatepvp.functions.spectate.SpectateCommand;
-import com.decimatepvp.functions.spectate.SpectateManager;
-import com.decimatepvp.functions.staffchat.StaffChatCommand;
-import com.decimatepvp.functions.staffchat.StaffChatManager;
-import com.decimatepvp.functions.stafflog.StaffCommandsManager;
+import com.decimatepvp.functions.misc.harvester.HarvesterCommand;
+import com.decimatepvp.functions.misc.harvester.HarvesterManager;
+import com.decimatepvp.functions.misc.itemcooldown.ItemCooldownManager;
+import com.decimatepvp.functions.misc.minicommands.BlacklistManager;
+import com.decimatepvp.functions.misc.minicommands.ColorsCommand;
+import com.decimatepvp.functions.misc.minicommands.MicroCommands;
+import com.decimatepvp.functions.misc.minicommands.NightVisionCommand;
+import com.decimatepvp.functions.misc.minicommands.OnlineCommand;
+import com.decimatepvp.functions.patch.border.WorldBorderManager;
+import com.decimatepvp.functions.patch.enderpearl.EnderDelayManager;
+import com.decimatepvp.functions.patch.glitchpatch.GlitchPatchManager;
+import com.decimatepvp.functions.staff.factions.FactionCommandListener;
+import com.decimatepvp.functions.staff.factions.FactionDamageListener;
+import com.decimatepvp.functions.staff.freeze.FreezeCommand;
+import com.decimatepvp.functions.staff.freeze.FreezeManager;
+import com.decimatepvp.functions.staff.mcips.AccountIPManager;
+import com.decimatepvp.functions.staff.spectate.SpectateCommand;
+import com.decimatepvp.functions.staff.spectate.SpectateManager;
+import com.decimatepvp.functions.staff.staffchat.StaffChatCommand;
+import com.decimatepvp.functions.staff.staffchat.StaffChatManager;
+import com.decimatepvp.functions.staff.stafflog.StaffCommandsManager;
+import com.decimatepvp.functions.staff.togglechat.ToggleChatCommand;
+import com.decimatepvp.functions.staff.togglechat.ToggleChatManager;
 import com.decimatepvp.functions.tntfill.TntFillCommand;
 import com.decimatepvp.functions.tntfill.TntFillManager;
-import com.decimatepvp.functions.togglechat.ToggleChatCommand;
-import com.decimatepvp.functions.togglechat.ToggleChatManager;
-import com.decimatepvp.functions.xpboost.ExpBoostCommand;
-import com.decimatepvp.functions.xpboost.ExpBoostManager;
 import com.decimatepvp.minievents.MiniEvents;
 
 import net.milkbowl.vault.economy.Economy;
@@ -66,7 +64,7 @@ public class DecimateCore extends JavaPlugin {
 	/*
 	 * Managers
 	 */
-	private Manager[] managers = new Manager[11];
+	private Manager[] managers = new Manager[10];
 	
 	private FreezeManager freezeManager;
 	private TntFillManager tntFillManager;
@@ -76,7 +74,6 @@ public class DecimateCore extends JavaPlugin {
 	private HarvesterManager harvesterManager;
 	private ItemCooldownManager itemCooldownManager;
 	private StaffCommandsManager staffCommandsManager;
-	private ExpBoostManager expBoostManager;
 //	private AnvilManager anvilManager;
 	private EnderDelayManager enderDelayManager;
 	private BlacklistManager blacklistManager;
@@ -107,7 +104,6 @@ public class DecimateCore extends JavaPlugin {
 		managers[n++] = harvesterManager = new HarvesterManager();
 		managers[n++] = itemCooldownManager = new ItemCooldownManager();
 		managers[n++] = staffCommandsManager = new StaffCommandsManager();
-		managers[n++] = expBoostManager = new ExpBoostManager();
 		managers[n++] = enderDelayManager = new EnderDelayManager();
 		managers[n++] = antiTntManager = new AntiTntManager();
 				
@@ -117,7 +113,7 @@ public class DecimateCore extends JavaPlugin {
 				new EntityItemListener(), new PlayerUseItemListener(),
 				toggleChatManager, spectateManager, itemCooldownManager, new GlitchPatchManager(), new BottleExpCommand(),
 				new AnvilDamageListener(), new BottleExpCommand(), new MiniEvents(), new FactionCommandListener(),
-				new FactionDamageListener(), new ExpBoostManager(), staffCommandsManager, expBoostManager,
+				new FactionDamageListener(), staffCommandsManager,
 				enderDelayManager, antiTntManager, worldBorder, accountIpManager,  new EnchantListener(),
 				new CustomEventCaller());
 	}
@@ -154,7 +150,6 @@ public class DecimateCore extends JavaPlugin {
 		getCommand("discord").setExecutor(mc);
 		getCommand("website").setExecutor(mc);
 		getCommand("ping").setExecutor(mc);
-		getCommand("expboost").setExecutor(new ExpBoostCommand());
 		getCommand("blacklist").setExecutor(blacklistManager);
 		getCommand("blacklistpardon").setExecutor(blacklistManager);
 		getCommand("iplist").setExecutor(accountIpManager);
@@ -209,10 +204,6 @@ public class DecimateCore extends JavaPlugin {
 	
 	public StaffCommandsManager getStaffCommandsManager() {
 		return this.staffCommandsManager;
-	}
-
-	public ExpBoostManager getExpBoostManager() {
-		return expBoostManager;
 	}
 
 	public AntiTntManager getAntiTntManager() {
