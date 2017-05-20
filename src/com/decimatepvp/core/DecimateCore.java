@@ -28,6 +28,7 @@ import com.decimatepvp.functions.misc.minicommands.OnlineCommand;
 import com.decimatepvp.functions.patch.border.WorldBorderManager;
 import com.decimatepvp.functions.patch.enderpearl.EnderDelayManager;
 import com.decimatepvp.functions.patch.glitchpatch.GlitchPatchManager;
+import com.decimatepvp.functions.potions.PotionAbilityManager;
 import com.decimatepvp.functions.staff.factions.FactionCommandListener;
 import com.decimatepvp.functions.staff.factions.FactionDamageListener;
 import com.decimatepvp.functions.staff.freeze.FreezeCommand;
@@ -85,6 +86,7 @@ public class DecimateCore extends JavaPlugin {
 	private WorldBorderManager worldBorder;
 	private AccountIPManager accountIpManager;
 	private EnchantManager enchantManager;
+	private PotionAbilityManager potionManager;
 	
 	@Override
 	public void onEnable() {
@@ -94,6 +96,7 @@ public class DecimateCore extends JavaPlugin {
 		worldBorder = new WorldBorderManager(); // Not a Real Manager
 		accountIpManager = new AccountIPManager();
 		enchantManager = new EnchantManager();
+		potionManager = new PotionAbilityManager();
 
 		int n = 0;
 		managers[n++] = freezeManager = new FreezeManager(this);
@@ -113,9 +116,8 @@ public class DecimateCore extends JavaPlugin {
 				new EntityItemListener(), new PlayerUseItemListener(),
 				toggleChatManager, spectateManager, itemCooldownManager, new GlitchPatchManager(), new BottleExpCommand(),
 				new AnvilDamageListener(), new BottleExpCommand(), new MiniEvents(), new FactionCommandListener(),
-				new FactionDamageListener(), staffCommandsManager,
-				enderDelayManager, antiTntManager, worldBorder, accountIpManager,  new EnchantListener(),
-				new CustomEventCaller());
+				new FactionDamageListener(), staffCommandsManager, enderDelayManager, antiTntManager, worldBorder,
+				accountIpManager,  new EnchantListener(), new CustomEventCaller(), potionManager);
 	}
 	
 	@Override
@@ -146,14 +148,16 @@ public class DecimateCore extends JavaPlugin {
 		getCommand("nv").setExecutor(new NightVisionCommand());
 		getCommand("bottleexp").setExecutor(new BottleExpCommand());
 		getCommand("who").setExecutor(new OnlineCommand());
-		MicroCommands mc = new MicroCommands();
-		getCommand("discord").setExecutor(mc);
-		getCommand("website").setExecutor(mc);
-		getCommand("ping").setExecutor(mc);
 		getCommand("blacklist").setExecutor(blacklistManager);
 		getCommand("blacklistpardon").setExecutor(blacklistManager);
 		getCommand("iplist").setExecutor(accountIpManager);
 		getCommand("applyenchant").setExecutor(new EnchantCommand());
+		getCommand("potionability").setExecutor(potionManager);
+		
+		MicroCommands mc = new MicroCommands();
+		getCommand("discord").setExecutor(mc);
+		getCommand("website").setExecutor(mc);
+		getCommand("ping").setExecutor(mc);
 	}
 
 	public static DecimateCore getCore() {

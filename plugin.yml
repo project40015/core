@@ -48,3 +48,6 @@ commands:
     description: Lists players on a single IP.
   applyenchant:
     description: Applies enchant to current held item.
+  potionability:
+    description: Gives the player a potion with a binded ability.
+    aliases: [potiona, pa]

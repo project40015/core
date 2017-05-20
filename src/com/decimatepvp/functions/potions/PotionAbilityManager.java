@@ -1,5 +1,6 @@
 package com.decimatepvp.functions.potions;
 
+import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang.math.NumberUtils;
@@ -10,6 +11,7 @@ import org.bukkit.OfflinePlayer;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.TabCompleter;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
@@ -22,9 +24,10 @@ import org.bukkit.inventory.ItemStack;
 
 import com.decimatepvp.abilities.AbstractPotionAbility;
 import com.decimatepvp.abilities.ShockwavePotion;
+import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
-public class PotionAbilityManager implements Listener, CommandExecutor {
+public class PotionAbilityManager implements Listener, CommandExecutor, TabCompleter {
 	
 	private Map<String, AbstractPotionAbility> potionsString = Maps.newHashMap();
 	
@@ -42,8 +45,8 @@ public class PotionAbilityManager implements Listener, CommandExecutor {
 			Player player = (Player) proj.getShooter();
 			ItemStack hand = player.getItemInHand();
 			if((hand != null) && (hand.getType() == Material.POTION)) {
-				if(hand.containsEnchantment(Enchantment.ARROW_DAMAGE)) {
-					int id = hand.getEnchantmentLevel(Enchantment.ARROW_DAMAGE);
+				if(hand.containsEnchantment(Enchantment.ARROW_INFINITE)) {
+					int id = hand.getEnchantmentLevel(Enchantment.ARROW_INFINITE);
 					proj.setCustomName("Custom Effect Id: " + id);
 				}
 			}
@@ -65,6 +68,27 @@ public class PotionAbilityManager implements Listener, CommandExecutor {
 				}
 			}
 		}
+	}
+
+	@Override
+	public List<String> onTabComplete(CommandSender sender, Command command, String label, String[] args) {
+		List<String> potions = Lists.newArrayList(potionsString.keySet());
+		List<String> completer = Lists.newArrayList();
+		if(args.length == 1) {
+			String arg = args[0].toLowerCase();
+			for(String start : potions) {
+				if(start.toLowerCase().startsWith(arg.toLowerCase())) {
+					completer.add(start);
+				}
+			}
+			
+			return completer;
+		}
+		else if(args.length == 0) {
+			return potions;
+		}
+		
+		return null;
 	}
 
 	@SuppressWarnings("deprecation")
@@ -101,7 +125,10 @@ public class PotionAbilityManager implements Listener, CommandExecutor {
 				return true;
 			}
 		}
-		return false;
+		else {
+			sender.sendMessage(ChatColor.RED + "You do not have the proper permissions.");
+			return true;
+		}
 	}
 	
 	public AbstractPotionAbility getPotion(String string) {

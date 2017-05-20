@@ -13,9 +13,9 @@ public abstract class AbstractPotionAbility extends Potion {
 	private final String name;
 	private final int itemId;
 
-	@SuppressWarnings("deprecation")
 	public AbstractPotionAbility(String name, int itemId) {
-		super(PotionType.WATER, Tier.ONE, true);
+		super(PotionType.WATER_BREATHING);
+		setSplash(true);
 		
 		this.name = name;
 		this.itemId = itemId;
@@ -34,12 +34,12 @@ public abstract class AbstractPotionAbility extends Potion {
 	@Override
 	public ItemStack toItemStack(int amount) {
 		ItemStack potion = super.toItemStack(amount);
+		potion.addUnsafeEnchantment(Enchantment.ARROW_INFINITE, itemId);
 		PotionMeta meta = (PotionMeta) potion.getItemMeta();
-			meta.addEnchant(Enchantment.ARROW_DAMAGE, itemId, true);
-			meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
+			meta.addItemFlags(ItemFlag.HIDE_ENCHANTS, ItemFlag.HIDE_POTION_EFFECTS);
 		potion.setItemMeta(meta);
 			
-		return super.toItemStack(amount);
+		return potion;
 	}
 
 }
