@@ -10,6 +10,9 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import com.decimatepvp.core.DecimateCore;
+import com.decimatepvp.utils.PlayerUtils;
+
 public class OnlineCommand implements CommandExecutor {
 
 	@Override
@@ -25,18 +28,24 @@ public class OnlineCommand implements CommandExecutor {
 		donors = new ArrayList<>();
 		regular = new ArrayList<>();
 		
+		int specs = 0;
+		
 		for(Player player : Bukkit.getServer().getOnlinePlayers()){
-			if(player.hasPermission("Decimate.owner")){
+			if(DecimateCore.getCore().getSpectateManager().isSpectating(player)){
+				specs++;
+				continue;
+			}
+			if(PlayerUtils.hasPermission(player, "Decimate.owner")){
 				owners.add(player.getName());
-			}else if(player.hasPermission("Decimate.developer")){
+			}else if(PlayerUtils.hasPermission(player, "Decimate.developer")){
 				developers.add(player.getName());
-			}else if(player.hasPermission("Decimate.youtuber")){
+			}else if(PlayerUtils.hasPermission(player, "Decimate.youtuber")){
 				developers.add(player.getName());
-			}else if(player.hasPermission("Decimate.moderator")){
+			}else if(PlayerUtils.hasPermission(player, "Decimate.moderator")){
 				moderators.add(player.getName());
-			}else if(player.hasPermission("Decimate.helper")){
+			}else if(PlayerUtils.hasPermission(player, "Decimate.helper")){
 				helpers.add(player.getName());
-			}else if(player.hasPermission("Decimate.donor")){
+			}else if(PlayerUtils.hasPermission(player, "Decimate.donor")){
 				donors.add(player.getName());
 			}else{
 				regular.add(player.getName());
@@ -46,7 +55,7 @@ public class OnlineCommand implements CommandExecutor {
 		arg0.sendMessage(ChatColor.GRAY + "Players online " + ChatColor.LIGHT_PURPLE + "DecimatePVP" + ChatColor.GRAY + ":");
 		arg0.sendMessage("");
 		arg0.sendMessage("      " + ChatColor.GRAY + "Total: " + ChatColor.WHITE +
-				"" + ChatColor.BOLD + Bukkit.getServer().getOnlinePlayers().size());
+				"" + ChatColor.BOLD + (Bukkit.getServer().getOnlinePlayers().size() - specs));
 		arg0.sendMessage("");
 		arg0.sendMessage("      " + ChatColor.GRAY + "Owners: " + formatList(owners, ChatColor.DARK_RED));
 		arg0.sendMessage("      " + ChatColor.GRAY + "Developers: " + formatList(developers, ChatColor.DARK_GREEN));

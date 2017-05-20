@@ -4,6 +4,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Chicken;
 import org.bukkit.entity.Creeper;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
@@ -70,7 +71,24 @@ public class MiniEvents implements Listener {
 	@EventHandler
 	public void onJoin(PlayerJoinEvent event){
 		event.setJoinMessage("");
-		PlayerUtils.sendTitle(event.getPlayer(), "DECIMATEPVP", 1*20, 2*20, 1*20, ChatColor.LIGHT_PURPLE);
+		Player player = event.getPlayer();
+		PlayerUtils.sendTitle(player, "DECIMATEPVP", 1*20, 2*20, 1*20, ChatColor.LIGHT_PURPLE);
+		
+		if(PlayerUtils.hasPermission(player, "Decimate.owner")){
+			player.setPlayerListName(ChatColor.DARK_RED + player.getName());
+		}else if(PlayerUtils.hasPermission(player, "Decimate.developer")){
+			player.setPlayerListName(ChatColor.DARK_GREEN + player.getName());
+		}else if(PlayerUtils.hasPermission(player, "Decimate.youtuber")){
+			player.setPlayerListName(ChatColor.RED + player.getName());
+		}else if(PlayerUtils.hasPermission(player, "Decimate.moderator")){
+			player.setPlayerListName(ChatColor.BLUE + player.getName());
+		}else if(PlayerUtils.hasPermission(player, "Decimate.helper")){
+			player.setPlayerListName(ChatColor.GREEN + player.getName());
+		}else if(PlayerUtils.hasPermission(player, "Decimate.donor")){
+			player.setPlayerListName(ChatColor.GOLD + player.getName());
+		}else{
+			player.setPlayerListName(ChatColor.GRAY + player.getName());
+		}
 	}
 	
 	@EventHandler
