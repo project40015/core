@@ -14,13 +14,17 @@ import org.bukkit.util.Vector;
 import com.decimatepvp.utils.DecimateUtils;
 
 public class ShockwavePotion extends AbstractPotionAbility {
-	
+
 	private final String name = "&e&lShockwave";
 	private final List<String> lore = Arrays.asList(
 			DecimateUtils.color("&2This potion throws all nearby entities back.")
 	);
 	
 	private final int radius = 4;
+	
+	public ShockwavePotion() {
+		super("Shockwave", 1);
+	}
 
 	@Override
 	public void onCrash(PotionSplashEvent event) {
