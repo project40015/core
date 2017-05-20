@@ -2,7 +2,7 @@ package com.decimatepvp.functions.potions;
 
 import java.util.Map;
 
-import org.apache.commons.lang.NumberUtils;
+import org.apache.commons.lang.math.NumberUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -81,6 +81,7 @@ public class PotionAbilityManager implements Listener, CommandExecutor {
 				}
 				else {
 					sender.sendMessage(ChatColor.RED + "That is not a valid potion.");
+					return true;
 				}
 				
 				OfflinePlayer plyr = Bukkit.getOfflinePlayer(args[1]);
@@ -88,13 +89,16 @@ public class PotionAbilityManager implements Listener, CommandExecutor {
 					plyr.getPlayer().getInventory().addItem(potion.toItemStack(1));
 					sender.sendMessage(ChatColor.GREEN + "Potion " + ChatColor.GOLD + potion.getName() +
 							ChatColor.GREEN + " has been received!");
+					return true;
 				}
 				else {
 					sender.sendMessage(ChatColor.RED + "Player is not online.");
+					return true;
 				}
 			}
 			else {
 				sender.sendMessage(ChatColor.GOLD + "Proper Usage: /potionability [potion] [player]");
+				return true;
 			}
 		}
 		return false;
