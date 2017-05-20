@@ -9,16 +9,21 @@ import org.bukkit.Chunk;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
+import org.bukkit.block.Hopper;
 import org.bukkit.entity.Item;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.entity.EntitySpawnEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
-public class CropHopperManager implements Listener {
+import com.decimatepvp.core.Manager;
+
+public class CropHopperManager implements Listener, Manager {
 
 	private List<CropHopper> hoppers = new ArrayList<>();
 	
@@ -63,6 +68,15 @@ public class CropHopperManager implements Listener {
 		return false;
 	}
 	
+	public CropHopper getCropHopper(Chunk chunk){
+		for(CropHopper hopper : hoppers){
+			if(hopper.getLocation().getChunk().equals(chunk)){
+				return hopper;
+			}
+		}
+		return null;
+	}
+	
 	private void createStack(){
 		ItemStack stack = new ItemStack(Material.HOPPER);
 		ItemMeta sm = stack.getItemMeta();
@@ -76,12 +90,38 @@ public class CropHopperManager implements Listener {
 		return stack;
 	}
 	
+	public void giveCropHopper(Player player){
+		if(player.getInventory().firstEmpty() == -1){
+			player.getLocation().getWorld().dropItemNaturally(player.getLocation(), stack);
+		}else{
+			player.getInventory().addItem(stack);
+		}
+	}
+	
+	@EventHandler
+	public void onPlace(BlockPlaceEvent event){
+		if(event.getItemInHand().equals(stack)){
+			CropHopper hopper = new CropHopper(event.getBlock().getLocation());
+			this.addHopper(hopper);
+			event.getPlayer().sendMessage(ChatColor.YELLOW + "You placed a crop hopper!");
+		}
+	}
+	
 	@EventHandler
 	public void onSpawn(EntitySpawnEvent event){
 		if(event.getEntity() instanceof Item){
 			Item i = (Item) event.getEntity();
 			if(i.getItemStack().getType() == Material.CACTUS){
-				
+				if(this.isCropHopper(i.getLocation().getChunk())){
+					CropHopper ch = this.getCropHopper(i.getLocation().getChunk()); 
+					Block b = ch.getLocation().getBlock();
+					if(b.getState() instanceof Hopper){
+						Hopper h = (Hopper) b;
+						h.getInventory().addItem(new ItemStack(Material.CACTUS));
+					}else{
+						this.removeHopper(ch);
+					}
+				}
 			}
 		}
 	}
@@ -111,6 +151,11 @@ public class CropHopperManager implements Listener {
 				event.setCancelled(true);
 			}
 		}
+	}
+
+	@Override
+	public void disable() {
+		//TODO save all hoppers
 	}
 	
 }

@@ -1,5 +1,7 @@
 package com.decimatepvp.core;
 
+import net.milkbowl.vault.economy.Economy;
+
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -17,6 +19,8 @@ import com.decimatepvp.enchants.EnchantListener;
 import com.decimatepvp.enchants.EnchantManager;
 import com.decimatepvp.events.CustomEventCaller;
 import com.decimatepvp.functions.antitnt.AntiTntManager;
+import com.decimatepvp.functions.misc.crophopper.CropHopperCommand;
+import com.decimatepvp.functions.misc.crophopper.CropHopperManager;
 import com.decimatepvp.functions.misc.harvester.HarvesterCommand;
 import com.decimatepvp.functions.misc.harvester.HarvesterManager;
 import com.decimatepvp.functions.misc.itemcooldown.ItemCooldownManager;
@@ -45,8 +49,6 @@ import com.decimatepvp.functions.tntfill.TntFillCommand;
 import com.decimatepvp.functions.tntfill.TntFillManager;
 import com.decimatepvp.minievents.MiniEvents;
 
-import net.milkbowl.vault.economy.Economy;
-
 public class DecimateCore extends JavaPlugin {
 	
 	private static DecimateCore core;
@@ -65,7 +67,7 @@ public class DecimateCore extends JavaPlugin {
 	/*
 	 * Managers
 	 */
-	private Manager[] managers = new Manager[10];
+	private Manager[] managers = new Manager[11];
 	
 	private FreezeManager freezeManager;
 	private TntFillManager tntFillManager;
@@ -79,6 +81,7 @@ public class DecimateCore extends JavaPlugin {
 	private EnderDelayManager enderDelayManager;
 	private BlacklistManager blacklistManager;
 	private AntiTntManager antiTntManager;
+	private CropHopperManager cropHopperManager;
 	
 	/*
 	 * Other
@@ -109,6 +112,7 @@ public class DecimateCore extends JavaPlugin {
 		managers[n++] = staffCommandsManager = new StaffCommandsManager();
 		managers[n++] = enderDelayManager = new EnderDelayManager();
 		managers[n++] = antiTntManager = new AntiTntManager();
+		managers[n++] = cropHopperManager = new CropHopperManager();
 				
 		setupEco();
 		loadCommands();
@@ -117,7 +121,7 @@ public class DecimateCore extends JavaPlugin {
 				toggleChatManager, spectateManager, itemCooldownManager, new GlitchPatchManager(), new BottleExpCommand(),
 				new AnvilDamageListener(), new BottleExpCommand(), new MiniEvents(), new FactionCommandListener(),
 				new FactionDamageListener(), staffCommandsManager, enderDelayManager, antiTntManager, worldBorder,
-				accountIpManager,  new EnchantListener(), new CustomEventCaller(), potionManager);
+				accountIpManager,  new EnchantListener(), new CustomEventCaller(), cropHopperManager, potionManager);
 	}
 	
 	@Override
@@ -152,6 +156,7 @@ public class DecimateCore extends JavaPlugin {
 		getCommand("blacklistpardon").setExecutor(blacklistManager);
 		getCommand("iplist").setExecutor(accountIpManager);
 		getCommand("applyenchant").setExecutor(new EnchantCommand());
+		getCommand("crophopper").setExecutor(new CropHopperCommand());
 		getCommand("potionability").setExecutor(potionManager);
 		
 		MicroCommands mc = new MicroCommands();
@@ -220,6 +225,10 @@ public class DecimateCore extends JavaPlugin {
 
 	public EnchantManager getEnchantManager() {
 		return enchantManager;
+	}
+	
+	public CropHopperManager getCropHopperManager(){
+		return cropHopperManager;
 	}
 
 }
