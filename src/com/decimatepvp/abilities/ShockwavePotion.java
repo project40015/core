@@ -33,7 +33,7 @@ public class ShockwavePotion extends AbstractPotionAbility {
 
 	private void applyEffect(Vector center, LivingEntity entity, double effectiveness) {
 		Vector direction = entity.getLocation().toVector().subtract(center);
-		entity.setVelocity(direction.multiply(1.5D).multiply(effectiveness));
+		entity.setVelocity(direction.multiply(3.0D).multiply(effectiveness));
 	}
 	
 	@Override
