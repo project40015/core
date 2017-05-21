@@ -26,7 +26,7 @@ public class CropHopperCommand implements CommandExecutor {
 			}
 			try{
 				Player player = Bukkit.getPlayer(args[0]);
-				core.getCropHopperManager().giveCropHopper(player);
+				core.getCropHopperManager().giveCropHopper(player, true);
 				sender.sendMessage(ChatColor.GREEN + "You have given a crop hopper!");
 				player.sendMessage(ChatColor.GREEN + "You have received a crop hopper!");
 			}catch(Exception ex){

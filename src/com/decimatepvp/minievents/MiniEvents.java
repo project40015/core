@@ -72,23 +72,7 @@ public class MiniEvents implements Listener {
 	public void onJoin(PlayerJoinEvent event){
 		event.setJoinMessage("");
 		Player player = event.getPlayer();
-		PlayerUtils.sendTitle(player, "DECIMATEPVP", 1*20, 2*20, 1*20, ChatColor.LIGHT_PURPLE);
-		
-		if(PlayerUtils.hasPermission(player, "Decimate.owner")){
-			player.setPlayerListName(ChatColor.DARK_RED + player.getName());
-		}else if(PlayerUtils.hasPermission(player, "Decimate.developer")){
-			player.setPlayerListName(ChatColor.DARK_GREEN + player.getName());
-		}else if(PlayerUtils.hasPermission(player, "Decimate.youtuber")){
-			player.setPlayerListName(ChatColor.RED + player.getName());
-		}else if(PlayerUtils.hasPermission(player, "Decimate.moderator")){
-			player.setPlayerListName(ChatColor.BLUE + player.getName());
-		}else if(PlayerUtils.hasPermission(player, "Decimate.helper")){
-			player.setPlayerListName(ChatColor.GREEN + player.getName());
-		}else if(PlayerUtils.hasPermission(player, "Decimate.donor")){
-			player.setPlayerListName(ChatColor.GOLD + player.getName());
-		}else{
-			player.setPlayerListName(ChatColor.GRAY + player.getName());
-		}
+		PlayerUtils.sendTitle(player, "DECIMATEPVP", 1*10, 2*10, 1*10, ChatColor.LIGHT_PURPLE);
 	}
 	
 	@EventHandler

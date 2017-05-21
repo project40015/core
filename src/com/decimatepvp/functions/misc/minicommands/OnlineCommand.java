@@ -18,14 +18,11 @@ public class OnlineCommand implements CommandExecutor {
 	@Override
 	public boolean onCommand(CommandSender arg0, Command arg1, String arg2, String[] arg3) {
 		
-		List<String> owners, developers, youtuber, moderators, helpers, donors, regular;
+		List<String> staff, donors, youtuber, regular;
 		
-		owners = new ArrayList<>();
-		developers = new ArrayList<>();
-		youtuber = new ArrayList<>();
-		moderators = new ArrayList<>();
-		helpers = new ArrayList<>();
+		staff = new ArrayList<>();
 		donors = new ArrayList<>();
+		youtuber = new ArrayList<>();
 		regular = new ArrayList<>();
 		
 		int specs = 0;
@@ -36,36 +33,48 @@ public class OnlineCommand implements CommandExecutor {
 				continue;
 			}
 			if(PlayerUtils.hasPermission(player, "Decimate.owner")){
-				owners.add(player.getName());
+				staff.add(player.getName());
 			}else if(PlayerUtils.hasPermission(player, "Decimate.developer")){
-				developers.add(player.getName());
+				staff.add(player.getName());
 			}else if(PlayerUtils.hasPermission(player, "Decimate.youtuber")){
-				developers.add(player.getName());
+				youtuber.add(player.getName());
 			}else if(PlayerUtils.hasPermission(player, "Decimate.moderator")){
-				moderators.add(player.getName());
+				staff.add(player.getName());
 			}else if(PlayerUtils.hasPermission(player, "Decimate.helper")){
-				helpers.add(player.getName());
+				staff.add(player.getName());
 			}else if(PlayerUtils.hasPermission(player, "Decimate.donor")){
 				donors.add(player.getName());
 			}else{
 				regular.add(player.getName());
 			}
 		}
-		
-		arg0.sendMessage(ChatColor.GRAY + "Players online " + ChatColor.LIGHT_PURPLE + "DecimatePVP" + ChatColor.GRAY + ":");
-		arg0.sendMessage("");
-		arg0.sendMessage("      " + ChatColor.GRAY + "Total: " + ChatColor.WHITE +
-				"" + ChatColor.BOLD + (Bukkit.getServer().getOnlinePlayers().size() - specs));
-		arg0.sendMessage("");
-		arg0.sendMessage("      " + ChatColor.GRAY + "Owners: " + formatList(owners, ChatColor.DARK_RED));
-		arg0.sendMessage("      " + ChatColor.GRAY + "Developers: " + formatList(developers, ChatColor.DARK_GREEN));
-		arg0.sendMessage("      " + ChatColor.GRAY + "Youtubers: " + formatList(youtuber, ChatColor.RED));
-		arg0.sendMessage("      " + ChatColor.GRAY + "Moderators: " + formatList(moderators, ChatColor.BLUE));
-		arg0.sendMessage("      " + ChatColor.GRAY + "Helpers: " + formatList(helpers, ChatColor.GREEN));
-		arg0.sendMessage("      " + ChatColor.GRAY + "Donors: " + formatList(donors, ChatColor.GOLD));
 
+		//_Ug's clean version:
+		
+//		arg0.sendMessage(ChatColor.DARK_GRAY.toString() + ChatColor.STRIKETHROUGH + "----------------" + ChatColor.LIGHT_PURPLE + " DecimatePVP " 
+//		+ ChatColor.GRAY + "(" + ChatColor.WHITE + (Bukkit.getServer().getOnlinePlayers().size() - specs) + ChatColor.GRAY + ") " + ChatColor.DARK_GRAY.toString() + ChatColor.STRIKETHROUGH + "----------------");
+//		arg0.sendMessage("");
+//		arg0.sendMessage(" " + ChatColor.GRAY + "Staff: " + formatList(staff, ChatColor.YELLOW));
+//		arg0.sendMessage(" " + ChatColor.GRAY + "Youtubers: " + formatList(youtuber, ChatColor.RED));
+//		arg0.sendMessage(" " + ChatColor.GRAY + "Donors: " + formatList(donors, ChatColor.GOLD));
+//		arg0.sendMessage(" " + ChatColor.GRAY + "Players: " + formatList(regular, ChatColor.WHITE));
+		
+		//Farm's ugly version:
+		
+		send(arg0, "&8==============&c&lD&6&lE&e&lC&a&lI&b&lM&9&lA&5&lT&c&lE&F&lP&f&lV&f&lP&8[&a" + (Bukkit.getServer().getOnlinePlayers().size() - specs) + "&7/&a400&8]&8==============");
+		send(arg0, "");
+		send(arg0, "&aStaff&8 >> " + formatList(staff, ChatColor.DARK_RED));
+		send(arg0, "&4You&fTubers&8 >> " + formatList(youtuber, ChatColor.RED));
+		send(arg0, "&7Donors&8 >> " + formatList(donors, ChatColor.GOLD));
+		send(arg0, "&7Players&8 >> " + formatList(regular, ChatColor.GRAY));
+		send(arg0, "");
+		send(arg0, "&8===============================================");
 		
 		return false;
+	}
+	
+	private void send(CommandSender sender, String message){
+		sender.sendMessage(ChatColor.translateAlternateColorCodes('&', message));
 	}
 
 	private String formatList(List<String> strings, ChatColor color){
@@ -75,7 +84,7 @@ public class OnlineCommand implements CommandExecutor {
 			int num = 1;
 			String result = color + strings.get(0);
 			while(strings.size() > num){
-				result += ChatColor.GRAY + ", " + color + strings.get(num++);
+				result += ChatColor.DARK_GRAY + ", " + color + strings.get(num++);
 			}
 			return result;
 		}
