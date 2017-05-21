@@ -1,7 +1,5 @@
 package com.decimatepvp.core;
 
-import net.milkbowl.vault.economy.Economy;
-
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -33,6 +31,7 @@ import com.decimatepvp.functions.patch.border.WorldBorderManager;
 import com.decimatepvp.functions.patch.enderpearl.EnderDelayManager;
 import com.decimatepvp.functions.patch.glitchpatch.GlitchPatchManager;
 import com.decimatepvp.functions.potions.PotionAbilityManager;
+import com.decimatepvp.functions.staff.bans.BanManager;
 import com.decimatepvp.functions.staff.factions.FactionCommandListener;
 import com.decimatepvp.functions.staff.factions.FactionDamageListener;
 import com.decimatepvp.functions.staff.freeze.FreezeCommand;
@@ -48,6 +47,8 @@ import com.decimatepvp.functions.staff.togglechat.ToggleChatManager;
 import com.decimatepvp.functions.tntfill.TntFillCommand;
 import com.decimatepvp.functions.tntfill.TntFillManager;
 import com.decimatepvp.minievents.MiniEvents;
+
+import net.milkbowl.vault.economy.Economy;
 
 public class DecimateCore extends JavaPlugin {
 	
@@ -67,7 +68,7 @@ public class DecimateCore extends JavaPlugin {
 	/*
 	 * Managers
 	 */
-	private Manager[] managers = new Manager[11];
+	private Manager[] managers = new Manager[12];
 	
 	private FreezeManager freezeManager;
 	private TntFillManager tntFillManager;
@@ -82,6 +83,7 @@ public class DecimateCore extends JavaPlugin {
 	private BlacklistManager blacklistManager;
 	private AntiTntManager antiTntManager;
 	private CropHopperManager cropHopperManager;
+	private BanManager banManager;
 	
 	/*
 	 * Other
@@ -113,6 +115,7 @@ public class DecimateCore extends JavaPlugin {
 		managers[n++] = enderDelayManager = new EnderDelayManager();
 		managers[n++] = antiTntManager = new AntiTntManager();
 		managers[n++] = cropHopperManager = new CropHopperManager();
+		managers[n++] = banManager = new BanManager();
 				
 		setupEco();
 		loadCommands();
@@ -229,6 +232,10 @@ public class DecimateCore extends JavaPlugin {
 	
 	public CropHopperManager getCropHopperManager(){
 		return cropHopperManager;
+	}
+
+	public BanManager getBanManager() {
+		return banManager;
 	}
 
 }
