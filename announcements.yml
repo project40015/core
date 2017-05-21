@@ -1,0 +1,17 @@
+## In seconds
+Time-per-announcement: 180
+
+## Announcements are sent in order listed
+Announcements:
+  - '&8&l(&f&l!&8&l) &f&lLike the server? &a&lDonate &f&lNow with &c&l/buy!'
+  - '&8&l(&f&l!&8&l) &a&lVote &f&lfor the server for rewards /Vote'
+  - '&8&l(&f&l!&8&l) &f&lDo /Warp &c&linfo &f&lto learn about all the Features!'
+  - '&8&l(&f&l!&8&l) &a&lKoths &f&lEvery two hours with amazing prizes!'
+  - '&8&l(&f&l!&8&l) &f&lDo /Warp &c&lRules &f&lto learn the rules!'
+  - '&8&l(&f&l!&8&l) &f&lNeed to buy spawners? &f&l/spawnershop}'
+  - '&8&l(&f&l!&8&l) &f&lList the &c&lkoths &f&lwith /koths'
+  - '&8&l(&f&l!&8&l) &f&lWhat &4&lYou&f&ltubers &f&lplay &f&l[&c&lD&6&lE&e&lC&a&lI&b&lM&9&lA&5&lT&c&lE&f&lPVP]? &f&l/Youtubers'
+  - '&8&l(&f&l!&8&l) &f&lDo &c&l/Enchants &f&lto buy Enchantments'
+  - '&8&l(&f&l!&8&l) &f&lNeed to buy items? &c&l/shop'
+  - '&8&l(&f&l!&8&l) &f&lNeed &cgenbuckets? &f&l/genbuckets'
+  - '&8&l(&f&l!&8&l) &f&lWant to access all the guis? &c&l/bs'

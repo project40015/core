@@ -51,3 +51,5 @@ commands:
   potionability:
     description: Gives the player a potion with a binded ability.
     aliases: [potiona, pa]
+  crophopper:
+    description: Does something idk

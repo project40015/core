@@ -16,6 +16,7 @@ import com.decimatepvp.enchants.EnchantCommand;
 import com.decimatepvp.enchants.EnchantListener;
 import com.decimatepvp.enchants.EnchantManager;
 import com.decimatepvp.events.CustomEventCaller;
+import com.decimatepvp.functions.announcement.AnnouncementManager;
 import com.decimatepvp.functions.antitnt.AntiTntManager;
 import com.decimatepvp.functions.misc.crophopper.CropHopperCommand;
 import com.decimatepvp.functions.misc.crophopper.CropHopperManager;
@@ -92,6 +93,7 @@ public class DecimateCore extends JavaPlugin {
 	private AccountIPManager accountIpManager;
 	private EnchantManager enchantManager;
 	private PotionAbilityManager potionManager;
+	private AnnouncementManager announcementManager;
 	
 	@Override
 	public void onEnable() {
@@ -102,6 +104,7 @@ public class DecimateCore extends JavaPlugin {
 		accountIpManager = new AccountIPManager();
 		enchantManager = new EnchantManager();
 		potionManager = new PotionAbilityManager();
+		announcementManager = new AnnouncementManager();
 
 		int n = 0;
 		managers[n++] = freezeManager = new FreezeManager(this);
@@ -236,6 +239,10 @@ public class DecimateCore extends JavaPlugin {
 
 	public BanManager getBanManager() {
 		return banManager;
+	}
+
+	public AnnouncementManager getAnnouncementManager() {
+		return announcementManager;
 	}
 
 }

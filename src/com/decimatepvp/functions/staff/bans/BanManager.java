@@ -27,8 +27,8 @@ public class BanManager implements Manager {
 	private MySQL db;
 	
 	public BanManager() {
-		loadDatabase();
-		loadBans();
+//		loadDatabase();
+//		loadBans();
 	}
 	
 	public void unbanPlayer(OfflinePlayer player) {
@@ -141,8 +141,8 @@ public class BanManager implements Manager {
 
 	@Override
 	public void disable() {
-		saveBans();
-		closeDatebase();
+//		saveBans();
+//		closeDatebase();
 	}
 
 	public void removePlayer(String uuid) {

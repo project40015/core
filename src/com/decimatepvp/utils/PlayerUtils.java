@@ -2,13 +2,7 @@ package com.decimatepvp.utils;
 
 import java.util.HashSet;
 
-import net.minecraft.server.v1_8_R3.IChatBaseComponent;
-import net.minecraft.server.v1_8_R3.IChatBaseComponent.ChatSerializer;
-import net.minecraft.server.v1_8_R3.Packet;
-import net.minecraft.server.v1_8_R3.PacketPlayOutChat;
-import net.minecraft.server.v1_8_R3.PacketPlayOutTitle;
-import net.minecraft.server.v1_8_R3.PacketPlayOutTitle.EnumTitleAction;
-
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -19,8 +13,36 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionDefault;
+import org.inventivetalent.bossbar.BossBar;
+import org.inventivetalent.bossbar.BossBarAPI;
+
+import net.md_5.bungee.api.chat.TextComponent;
+import net.minecraft.server.v1_8_R3.IChatBaseComponent;
+import net.minecraft.server.v1_8_R3.IChatBaseComponent.ChatSerializer;
+import net.minecraft.server.v1_8_R3.Packet;
+import net.minecraft.server.v1_8_R3.PacketPlayOutChat;
+import net.minecraft.server.v1_8_R3.PacketPlayOutTitle;
+import net.minecraft.server.v1_8_R3.PacketPlayOutTitle.EnumTitleAction;
 
 public class PlayerUtils {
+	
+	public static void broadcastBossbar(String message, BossBarAPI.Color color, BossBarAPI.Style style,
+			int timeout, int interval) {
+		message = DecimateUtils.color(message);
+		for(Player player : Bukkit.getOnlinePlayers()) {
+			sendBossbar(player, message, color, style, timeout, interval);
+		}
+	}
+	
+	public static BossBar sendBossbar(Player player, String message, BossBarAPI.Color color, BossBarAPI.Style style,
+			int timeout, int interval) {
+		BossBar bossBar = BossBarAPI.addBar(player,
+				new TextComponent(message),
+				color, style,
+				1.0f, timeout, interval);
+		
+		return bossBar;
+	}
 	
 	@SuppressWarnings("deprecation")
 	public static BlockFace getBlockFace(Player player) {
