@@ -51,9 +51,7 @@ commands:
   potionability:
     description: Gives the player a potion with a binded ability.
     aliases: [potiona, pa]
-  crophopper:
-<<<<<<< Updated upstream
-    description: Does something idk
-=======
+  crophopper: 
     description: Gives the crop hopper
->>>>>>> Stashed changes
+  boss:
+    description: Summons the WitherBoss
