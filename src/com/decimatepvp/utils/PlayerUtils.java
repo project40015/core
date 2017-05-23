@@ -16,7 +16,10 @@ import org.bukkit.permissions.PermissionDefault;
 import org.inventivetalent.bossbar.BossBar;
 import org.inventivetalent.bossbar.BossBarAPI;
 
+import com.decimatepvp.core.DecimateCore;
+
 import net.md_5.bungee.api.chat.TextComponent;
+import net.minecraft.server.v1_8_R3.Entity;
 import net.minecraft.server.v1_8_R3.IChatBaseComponent;
 import net.minecraft.server.v1_8_R3.IChatBaseComponent.ChatSerializer;
 import net.minecraft.server.v1_8_R3.Packet;
@@ -28,9 +31,18 @@ public class PlayerUtils {
 	
 	public static void broadcastBossbar(String message, BossBarAPI.Color color, BossBarAPI.Style style,
 			int timeout, int interval) {
-		message = DecimateUtils.color(message);
 		for(Player player : Bukkit.getOnlinePlayers()) {
-			sendBossbar(player, message, color, style, timeout, interval);
+			boolean bool = true;
+			entities: for(Entity entity : DecimateCore.getCore().getEntityManager().getEntities()) {
+				if(entity.getBukkitEntity().getLocation().distance(player.getLocation()) <= 64) {
+					bool = false;
+					break entities;
+				}
+			}
+			
+			if(bool) {
+				sendBossbar(player, message, color, style, timeout, interval);
+			}
 		}
 	}
 	

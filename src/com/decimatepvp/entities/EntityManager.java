@@ -6,24 +6,34 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
+import org.bukkit.event.entity.EntityDeathEvent;
 
-import com.decimatepvp.core.DecimateCore;
+import com.google.common.collect.Lists;
 
 import net.minecraft.server.v1_8_R3.Entity;
 import net.minecraft.server.v1_8_R3.EntityTypes;
 
-public class EntityManager implements CommandExecutor {
+public class EntityManager implements Listener, CommandExecutor {
+	
+	private List<Entity> entities = Lists.newArrayList();
 	
 	public EntityManager() {
 		registerEntity(WitherBoss.class, "WitherBoss", 64);
+	}
+	
+	@EventHandler
+	public void onDeath(EntityDeathEvent event) {
+		if(entities.contains(event.getEntity())) {
+			entities.remove(event.getEntity());
+		}
 	}
 
 	@Override
@@ -32,22 +42,7 @@ public class EntityManager implements CommandExecutor {
 		if(sender.hasPermission("Decimate.staff.witherboss")) {
 			if(sender instanceof Player) {
 				Location loc = ((Player) sender).getLocation();
-				WitherBoss boss = spawnWitherBoss(loc);
-				
-				new BukkitRunnable() {
-					
-					@Override
-					public void run() {
-						if((boss != null) && (boss.isAlive())) {
-//							if(boss.locY < 0) {
-//								boss.locX = loc.getX();
-//								boss.locY = loc.getY();
-//								boss.locZ = loc.getZ();
-//							}
-							Bukkit.broadcastMessage(boss.locX + " " + boss.locY + " " + boss.locZ);
-						}
-					}
-				}.runTaskTimer(DecimateCore.getCore(), 0, 20l);
+				entities.add(spawnWitherBoss(loc));
 			}
 			else {
 				sender.sendMessage(ChatColor.RED + "Only players may use this command.");
@@ -57,8 +52,8 @@ public class EntityManager implements CommandExecutor {
 	}
 	
 	public WitherBoss spawnWitherBoss(Location location) {
-		WitherBoss boss = new WitherBoss(location.getWorld());
-		boss.spawn(location);
+		WitherBoss boss = new WitherBoss(location);
+		boss.spawn();
 		
 		return boss;
 	}
@@ -85,6 +80,10 @@ public class EntityManager implements CommandExecutor {
         catch (Exception e) {
         	e.printStackTrace();
         }
+	}
+
+	public List<Entity> getEntities() {
+		return entities;
 	}
 
 }
