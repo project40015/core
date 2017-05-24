@@ -17,6 +17,7 @@ import com.decimatepvp.core.utils.DecimateConfig;
 import com.decimatepvp.enchants.EnchantCommand;
 import com.decimatepvp.enchants.EnchantListener;
 import com.decimatepvp.enchants.EnchantManager;
+import com.decimatepvp.entities.EntityManager;
 import com.decimatepvp.events.CustomEventCaller;
 import com.decimatepvp.functions.announcement.AnnouncementManager;
 import com.decimatepvp.functions.antitnt.AntiTntManager;
@@ -97,6 +98,7 @@ public class DecimateCore extends JavaPlugin {
 	private EnchantManager enchantManager;
 	private PotionAbilityManager potionManager;
 	private AnnouncementManager announcementManager;
+	private EntityManager entityManager;
 	
 	@Override
 	public void onEnable() {
@@ -108,6 +110,7 @@ public class DecimateCore extends JavaPlugin {
 		enchantManager = new EnchantManager();
 		potionManager = new PotionAbilityManager();
 		announcementManager = new AnnouncementManager();
+		entityManager = new EntityManager();
 
 		int n = 0;
 		managers[n++] = freezeManager = new FreezeManager(this);
@@ -170,6 +173,7 @@ public class DecimateCore extends JavaPlugin {
 		getCommand("crophopper").setExecutor(new CropHopperCommand());
 		getCommand("potionability").setExecutor(potionManager);
 		getCommand("cratekey").setExecutor(new CrateKeyCommand());
+		getCommand("boss").setExecutor(entityManager);
 		
 		MicroCommands mc = new MicroCommands();
 		getCommand("discord").setExecutor(mc);
@@ -253,6 +257,10 @@ public class DecimateCore extends JavaPlugin {
 	
 	public CrateManager getCrateManager(){
 		return crateManager;
+	}
+
+	public EntityManager getEntityManager() {
+		return entityManager;
 	}
 
 }

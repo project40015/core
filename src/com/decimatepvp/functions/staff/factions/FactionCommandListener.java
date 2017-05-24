@@ -34,7 +34,6 @@ public class FactionCommandListener implements Listener {
 				}
 			}
 			else if(!FactionUtils.isAreaSafe(player)) {
-					
 				if(!isCommandAllowed(command)) {
 					player.sendMessage(ChatColor.RED + "You cannot use this in this area!");
 					event.setCancelled(true);

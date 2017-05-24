@@ -55,3 +55,5 @@ commands:
     description: Gives the crop hopper
   cratekey:
     description: Gives crate key
+  boss:
+    description: Summons the WitherBoss
