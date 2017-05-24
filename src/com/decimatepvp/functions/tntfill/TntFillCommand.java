@@ -64,7 +64,7 @@ public class TntFillCommand implements CommandExecutor {
 			}
 		}
 		
-		int amount = Integer.parseInt(arg3[0]);
+		int amount = Integer.parseInt(arg3[0]) > 9*64 ? 9*64 : Integer.parseInt(arg3[0]);
 		int range = Integer.parseInt(arg3[1]);
 		
 		if(range > core.getDecimateConfig().getTntFillRange()){

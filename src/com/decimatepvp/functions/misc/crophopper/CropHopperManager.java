@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Chunk;
 import org.bukkit.Effect;
@@ -15,7 +14,6 @@ import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.block.Block;
 import org.bukkit.block.Hopper;
-import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
@@ -38,7 +36,7 @@ public class CropHopperManager implements Listener, Manager {
 
 	private List<CropHopper> hoppers = new ArrayList<>();
 	
-	private FileConfiguration data;
+	private YamlConfiguration data;
 	
 	private ItemStack cropStack, mobStack;
 	
@@ -200,18 +198,18 @@ public class CropHopperManager implements Listener, Manager {
 	@EventHandler
 	public void onInteract(PlayerInteractEvent event){
 		if(event.getAction().equals(Action.RIGHT_CLICK_AIR)){
-			ItemStack fake = event.getItem();
+			ItemStack fake = event.getItem().clone();
 			fake.setAmount(1);
 			if(fake.equals(cropStack)){
 				ItemStack nF = mobStack.clone();
-				nF.setAmount(event.getItem().getAmount());
+				nF.setAmount(event.getPlayer().getItemInHand().getAmount());
 				event.getPlayer().setItemInHand(nF);
 				
 				event.getPlayer().playSound(event.getPlayer().getLocation(), Sound.WOOD_CLICK, 1, 1);
 				PlayerUtils.sendActionbar(event.getPlayer(), ChatColor.YELLOW + "Switched to mob hopper.");
 			}else if(fake.equals(mobStack)){
 				ItemStack nF = cropStack.clone();
-				nF.setAmount(event.getItem().getAmount());
+				nF.setAmount(event.getPlayer().getItemInHand().getAmount());
 				event.getPlayer().setItemInHand(nF);
 				
 				event.getPlayer().playSound(event.getPlayer().getLocation(), Sound.WOOD_CLICK, 1, 1);
@@ -255,18 +253,18 @@ public class CropHopperManager implements Listener, Manager {
 
 	@Override
 	public void disable() {
-		for(Player player : Bukkit.getServer().getOnlinePlayers()){
-			if(player.isOp()){
-				player.sendMessage(ChatColor.YELLOW + "Hoppers saving.");
-			}
-		}
-		if(!data.contains("data.hoppers")){
-			data.createSection("data.hoppers");
-		}
-		if(data.getString("data.hoppers") != null){
-			data.getList("data.hoppers").clear();
-		}
-		saveHoppers();
+//		for(Player player : Bukkit.getServer().getOnlinePlayers()){
+//			if(player.isOp()){
+//				player.sendMessage(ChatColor.YELLOW + "Hoppers saving.");
+//			}
+//		}
+//		if(!data.contains("data.hoppers")){
+//			data.createSection("data.hoppers");
+//		}
+//		if(data.getString("data.hoppers") != null){
+//			data.getList("data.hoppers").clear();
+//		}
+//		saveHoppers();
 	}
 	
 }

@@ -1,22 +1,43 @@
 package com.decimatepvp.functions.crate;
 
 import org.bukkit.ChatColor;
+import org.bukkit.Material;
 
 public enum Rarity {
 
-	COMMON(ChatColor.WHITE + "COMMON"),
-	RARE(ChatColor.YELLOW + "RARE"),
-	EPIC(ChatColor.LIGHT_PURPLE + "EPIC"),
-	MYTHICAL(ChatColor.RED + "MYTHICAL");
+	COMMON("COMMON", ChatColor.WHITE, Material.IRON_ORE),
+	RARE("RARE", ChatColor.YELLOW, Material.GOLD_ORE),
+	EPIC("EPIC", ChatColor.AQUA, Material.DIAMOND_ORE),
+	MYTHICAL("MYTHICAL", ChatColor.RED, Material.REDSTONE_ORE);
 	
+	private String name;
 	private String display;
+	private ChatColor color;
+	private Material change;
 	
-	Rarity(String display){
-		this.display = display;
+	Rarity(String name, ChatColor color, Material change){
+		this.name = name;
+		this.color = color;
+		this.display = color + "(" + name + ")";
+		this.change = change;
+	}
+	
+	public String getName(){
+		return name;
+	}
+	
+	public ChatColor getColor(){
+		return color;
 	}
 	
 	public String getDisplay(){
 		return display;
 	}
+	
+	public Material getChange(){
+		return change;
+	}
+	
+	
 	
 }

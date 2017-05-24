@@ -63,15 +63,7 @@ public class MiniBlock {
      */
     public void teleport(Location location){
        
-        this.location = location;
-               
-        if(!this.isRemoved){
-           
-            stand.remove();
-           
-            spawnMiniBlock(this.location, this.item, this.size);
-           
-        }
+        this.stand.teleport(location);
        
     }
    
@@ -196,6 +188,7 @@ public class MiniBlock {
                 angle = new EulerAngle(-.25,0,0);
             }else if(size == 3){
                 l.add(0, -.7, 0);
+                small = true;
             }
         }else{
             if(size == 1){

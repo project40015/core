@@ -1,4 +1,4 @@
-package com.decimatepvp.functions.misc.harvester;
+package com.decimatepvp.functions.crate;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -9,27 +9,30 @@ import org.bukkit.entity.Player;
 
 import com.decimatepvp.core.DecimateCore;
 
-public class HarvesterCommand implements CommandExecutor {
+public class CrateKeyCommand implements CommandExecutor {
 	
 	private DecimateCore core;
 	
-	public HarvesterCommand() {
+	public CrateKeyCommand() {
 		core = DecimateCore.getCore();
 	}
 
 	@Override
 	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-//		if(sender instanceof Player) {
-		if(sender.hasPermission("Decimate.trench.hoe")) {
-			if(args.length != 1){
-				sender.sendMessage(ChatColor.RED + "Must give a player argument.");
+		if(sender.hasPermission("Decimate.key.give")) {
+			if(args.length != 2){
+				sender.sendMessage(ChatColor.RED + "Correct format: /cratekey (player) (crate name)");
 				return false;
 			}
 			try{
 				Player player = Bukkit.getPlayer(args[0]);
-				core.getHarvesterManager().giveHarvester(player);
-				sender.sendMessage(ChatColor.GREEN + "You have given a Harvester Hoe!");
-				player.sendMessage(ChatColor.GREEN + "You have received a Harvester Hoe!");
+				if(core.getCrateManager().isCrate(args[1])){
+					core.getCrateManager().getCrate(args[1]).giveKey(player);
+					sender.sendMessage(ChatColor.GREEN + "Key given!");
+				}else{
+					sender.sendMessage(ChatColor.RED + "That is not a valid crate. List of crates:");
+					sender.sendMessage(ChatColor.YELLOW + core.getCrateManager().cratesString());
+				}
 			}catch(Exception ex){
 				sender.sendMessage(ChatColor.RED + "Player not found.");
 			}
@@ -37,9 +40,6 @@ public class HarvesterCommand implements CommandExecutor {
 		else {
 			sender.sendMessage(ChatColor.RED + "You do not have permission for this command.");
 		}
-//		else {
-//			sender.sendMessage(ChatColor.RED + "Only players may use this command.");
-//		}
 		
 		return false;
 	}

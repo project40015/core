@@ -18,21 +18,21 @@ import com.decimatepvp.functions.crate.Crate;
 import com.decimatepvp.functions.crate.CrateReward;
 import com.decimatepvp.functions.crate.Rarity;
 
-public class GodCrate extends Crate {
+public class DecimateCrate extends Crate {
 
-	private ItemStack godKey;
+	private ItemStack decimateKey;
 	private ArmorStand stand;
 	
-	public GodCrate(List<CrateReward> rewards) {
-		super(ChatColor.YELLOW + "God Crate", rewards);
+	public DecimateCrate(List<CrateReward> rewards) {
+		super(ChatColor.LIGHT_PURPLE + "Decimate Crate", rewards);
 		setupKey();
 	}
 	
 	private void setupKey(){
-		godKey = new ItemStack(Material.TRIPWIRE_HOOK);
-		ItemMeta meta = godKey.getItemMeta();
-		meta.setDisplayName(ChatColor.YELLOW + "God Crate Key");
-		godKey.setItemMeta(meta);
+		decimateKey = new ItemStack(Material.TRIPWIRE_HOOK);
+		ItemMeta meta = decimateKey.getItemMeta();
+		meta.setDisplayName(ChatColor.LIGHT_PURPLE + "Decimate Crate Key");
+		decimateKey.setItemMeta(meta);
 	}
 
 	@Override
@@ -47,10 +47,10 @@ public class GodCrate extends Crate {
 	@Override
 	public void giveReward(Player player, CrateReward reward) {
 		player.sendMessage("");
-		player.sendMessage(ChatColor.GRAY + "You found a " + reward.getFormatName() + ChatColor.GRAY + "!");
+		player.sendMessage(ChatColor.GRAY + "Found: " + reward.getFormatName() + ChatColor.GRAY + "!");
 		player.sendMessage("");
 		if(reward.getRarity() == Rarity.EPIC || reward.getRarity() == Rarity.MYTHICAL){
-			Bukkit.broadcastMessage(ChatColor.GRAY + player.getName() + " has found a " + reward.getRarity().getDisplay() + ChatColor.GRAY + " reward!");
+			Bukkit.broadcastMessage(ChatColor.GRAY + player.getName() + " found: " + reward.getRarity().getDisplay() + ChatColor.GRAY + " reward!");
 		}
 		reward.reward(player);
 	}
@@ -95,11 +95,12 @@ public class GodCrate extends Crate {
 
 	@Override
 	public ItemStack getItemStack() {
-		return godKey;
+		return decimateKey;
 	}
 
 	@Override
 	public void disable() {
+		System.out.println("Decimate Crate disabled.");
 		this.stand.remove();
 	}
 	

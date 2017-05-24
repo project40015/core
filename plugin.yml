@@ -52,8 +52,6 @@ commands:
     description: Gives the player a potion with a binded ability.
     aliases: [potiona, pa]
   crophopper:
-<<<<<<< Updated upstream
-    description: Does something idk
-=======
     description: Gives the crop hopper
->>>>>>> Stashed changes
+  cratekey:
+    description: Gives crate key

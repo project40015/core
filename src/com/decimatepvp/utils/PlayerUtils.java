@@ -2,6 +2,14 @@ package com.decimatepvp.utils;
 
 import java.util.HashSet;
 
+import net.md_5.bungee.api.chat.TextComponent;
+import net.minecraft.server.v1_8_R3.IChatBaseComponent;
+import net.minecraft.server.v1_8_R3.IChatBaseComponent.ChatSerializer;
+import net.minecraft.server.v1_8_R3.Packet;
+import net.minecraft.server.v1_8_R3.PacketPlayOutChat;
+import net.minecraft.server.v1_8_R3.PacketPlayOutTitle;
+import net.minecraft.server.v1_8_R3.PacketPlayOutTitle.EnumTitleAction;
+
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -15,14 +23,6 @@ import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionDefault;
 import org.inventivetalent.bossbar.BossBar;
 import org.inventivetalent.bossbar.BossBarAPI;
-
-import net.md_5.bungee.api.chat.TextComponent;
-import net.minecraft.server.v1_8_R3.IChatBaseComponent;
-import net.minecraft.server.v1_8_R3.IChatBaseComponent.ChatSerializer;
-import net.minecraft.server.v1_8_R3.Packet;
-import net.minecraft.server.v1_8_R3.PacketPlayOutChat;
-import net.minecraft.server.v1_8_R3.PacketPlayOutTitle;
-import net.minecraft.server.v1_8_R3.PacketPlayOutTitle.EnumTitleAction;
 
 public class PlayerUtils {
 	
@@ -109,6 +109,7 @@ public class PlayerUtils {
 			}
 			if(player.getInventory().getItem(i).getType().equals(material)){
 				if(amount - player.getInventory().getItem(i).getAmount() >= 0){
+					amount -= player.getInventory().getItem(i).getAmount();
 					player.getInventory().setItem(i, new ItemStack(Material.AIR));
 				}else{
 					player.getInventory().setItem(i, new ItemStack(material, player.getInventory().getItem(i).getAmount() - amount));
