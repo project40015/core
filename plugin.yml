@@ -57,3 +57,5 @@ commands:
     description: Gives crate key
   boss:
     description: Summons the WitherBoss
+  human:
+    description: Spawns clone of player.

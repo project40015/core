@@ -1,7 +1,5 @@
 package com.decimatepvp.core;
 
-import net.milkbowl.vault.economy.Economy;
-
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -37,6 +35,7 @@ import com.decimatepvp.functions.patch.border.WorldBorderManager;
 import com.decimatepvp.functions.patch.enderpearl.EnderDelayManager;
 import com.decimatepvp.functions.patch.glitchpatch.GlitchPatchManager;
 import com.decimatepvp.functions.potions.PotionAbilityManager;
+import com.decimatepvp.functions.pvp.PvPManager;
 import com.decimatepvp.functions.staff.bans.BanManager;
 import com.decimatepvp.functions.staff.factions.FactionCommandListener;
 import com.decimatepvp.functions.staff.factions.FactionDamageListener;
@@ -53,6 +52,8 @@ import com.decimatepvp.functions.staff.togglechat.ToggleChatManager;
 import com.decimatepvp.functions.tntfill.TntFillCommand;
 import com.decimatepvp.functions.tntfill.TntFillManager;
 import com.decimatepvp.minievents.MiniEvents;
+
+import net.milkbowl.vault.economy.Economy;
 
 public class DecimateCore extends JavaPlugin {
 	
@@ -72,7 +73,7 @@ public class DecimateCore extends JavaPlugin {
 	/*
 	 * Managers
 	 */
-	private Manager[] managers = new Manager[13];
+	private Manager[] managers = new Manager[14];
 	
 	private FreezeManager freezeManager;
 	private TntFillManager tntFillManager;
@@ -89,6 +90,7 @@ public class DecimateCore extends JavaPlugin {
 	private CropHopperManager cropHopperManager;
 	private BanManager banManager;
 	private CrateManager crateManager;
+	private PvPManager pvpManager;
 	
 	/*
 	 * Other
@@ -126,6 +128,7 @@ public class DecimateCore extends JavaPlugin {
 		managers[n++] = cropHopperManager = new CropHopperManager();
 		managers[n++] = banManager = new BanManager();
 		managers[n++] = crateManager = new CrateManager();
+		managers[n++] = pvpManager = new PvPManager();
 				
 		setupEco();
 		loadCommands();
@@ -135,7 +138,7 @@ public class DecimateCore extends JavaPlugin {
 				new AnvilDamageListener(), new BottleExpCommand(), new MiniEvents(), new FactionCommandListener(),
 				new FactionDamageListener(), staffCommandsManager, enderDelayManager, antiTntManager, worldBorder,
 				accountIpManager,  new EnchantListener(), new CustomEventCaller(), cropHopperManager, potionManager,
-				crateManager);
+				crateManager, pvpManager);
 	}
 	
 	@Override
@@ -174,6 +177,7 @@ public class DecimateCore extends JavaPlugin {
 		getCommand("potionability").setExecutor(potionManager);
 		getCommand("cratekey").setExecutor(new CrateKeyCommand());
 		getCommand("boss").setExecutor(entityManager);
+		getCommand("human").setExecutor(pvpManager);
 		
 		MicroCommands mc = new MicroCommands();
 		getCommand("discord").setExecutor(mc);
@@ -261,6 +265,10 @@ public class DecimateCore extends JavaPlugin {
 
 	public EntityManager getEntityManager() {
 		return entityManager;
+	}
+
+	public PvPManager getPvpManager() {
+		return pvpManager;
 	}
 
 }

@@ -4,11 +4,13 @@ import java.util.Map;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
 import org.bukkit.entity.Player;
+import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import com.decimatepvp.core.DecimateCore;
@@ -29,39 +31,49 @@ public class LogoutCommand implements CommandExecutor {
 			@Override
 			public void run() {
 				for(Player player : logoutT.keySet()) {
-					int time = logoutT.get(player);
-					double distance = logoutL.get(player).distance(player.getLocation());
-					
-					if(distance > 0.25D) {
-						player.sendMessage(color("&cCancelling Logout. Please try again."));
-						logoutT.remove(player);
-						logoutL.remove(player);
-						continue;
-					}
-					
-					if(time == 0) {
-						logout(player);
-						logoutT.remove(player);
-						logoutL.remove(player);
-					}
-					else if(time != 5){
-						player.sendMessage(color("&6" + time + " seconds..."));
-					}
+					if(player != null) {
+						int time = logoutT.get(player);
+						double distance = logoutL.get(player).distance(player.getLocation());
+						
+						if(distance > 0.25D) {
+							player.sendMessage(color("&cCancelling Logout. Please try again."));
+							logoutT.remove(player);
+							logoutL.remove(player);
+							continue;
+						}
+						
+						if(time == 0) {
+							logout(player);
+							logoutT.remove(player);
+							logoutL.remove(player);
+						}
+						else if(time != 5){
+							player.sendMessage(color("&6" + time + " seconds..."));
+						}
 
-					time--;
-					logoutT.replace(player, time);
+						time--;
+						logoutT.replace(player, time);
+					}
+					else {
+						logoutT.remove(player);
+						logoutL.remove(player);
+					}
 				}
 			}
 			
 		};
 	}
 
-	private void logout(Player player) {
-		try {
-			((CraftPlayer) player).getHandle().playerConnection.disconnect("You have logged out!");
-		}
-		catch(Exception e) {
-			player.sendMessage(ChatColor.RED + "Something went wrong. Please try again.");
+	private void logout(OfflinePlayer player) {
+		if(player.isOnline()) {
+			try {
+				player.getPlayer().setMetadata("LogoutCommand", new FixedMetadataValue(DecimateCore.getCore(), true));
+				((CraftPlayer) player.getPlayer()).getHandle().playerConnection.disconnect("You have logged out!");
+				DecimateCore.getCore().getPvpManager().removeFromList(player);
+			}
+			catch(Exception e) {
+				player.getPlayer().sendMessage(ChatColor.RED + "Something went wrong. Please try again.");
+			}
 		}
 	}
 
