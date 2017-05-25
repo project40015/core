@@ -6,6 +6,7 @@ import org.bukkit.entity.Chicken;
 import org.bukkit.entity.Creeper;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
@@ -141,7 +142,7 @@ public class MiniEvents implements Listener {
 		}
 	}
 	
-	@EventHandler
+	@EventHandler(priority = EventPriority.LOWEST)
 	public void onDeath(EntityDeathEvent event){
 		if(event.getEntity() instanceof Chicken){
 			event.getDrops().add(new ItemStack(Material.EGG, event.getDrops().size()/2));
