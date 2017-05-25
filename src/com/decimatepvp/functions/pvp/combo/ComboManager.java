@@ -8,13 +8,14 @@ import org.bukkit.ChatColor;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 
 import com.decimatepvp.core.DecimateCore;
 import com.decimatepvp.core.Manager;
 import com.decimatepvp.utils.PlayerUtils;
 
-public class ComboManager implements Manager {
+public class ComboManager implements Manager, Listener {
 
 	private List<Combo> combos = new ArrayList<Combo>();
 	private int run;
@@ -50,6 +51,14 @@ public class ComboManager implements Manager {
 		return false;
 	}
 	
+	private void killCombos(Player attacker){
+		for(int i = 0; i < combos.size(); i++){
+			if(combos.get(i).getAttacker().equals(attacker.getName())){
+				combos.remove(i--);
+			}
+		}
+	}
+	
 	private Combo getCombo(Player attacker, Player attacked){
 		for(Combo combo : this.combos){
 			if(combo.getAttacker().equals(attacker.getName()) &&
@@ -59,6 +68,7 @@ public class ComboManager implements Manager {
 		}
 		return null;
 	}
+	
 	
 	private String format(int combo){
 		switch(combo){
@@ -92,6 +102,7 @@ public class ComboManager implements Manager {
 			}else{
 				this.combos.add(new Combo(attacker.getName(), attacked.getName()));
 			}
+			killCombos(attacked);
 		}
 	}
 	
