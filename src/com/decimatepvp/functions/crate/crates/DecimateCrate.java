@@ -22,6 +22,7 @@ public class DecimateCrate extends Crate {
 
 	private ItemStack decimateKey;
 	private ArmorStand stand;
+	private CrateReward last = null;
 	
 	public DecimateCrate(List<CrateReward> rewards) {
 		super(ChatColor.LIGHT_PURPLE + "Decimate Crate", rewards);
@@ -57,40 +58,58 @@ public class DecimateCrate extends Crate {
 	
 	private void effect(Player player, CrateReward reward, Location location){
 		if(stand == null){
-			stand = location.getWorld().spawn(location.clone().add(0.5,0.2,0.5), ArmorStand.class);
+			Location loc = location.clone().add(0.5,0.2,0.5);
+			loc.setYaw(-90);
+			stand = location.getWorld().spawn(loc, ArmorStand.class);
 			stand.setVisible(false);
 			stand.setGravity(false);
 			stand.setSmall(true);
 			stand.setCustomName(super.getName());
 			stand.setCustomNameVisible(true);
 		}
-		stand.setHelmet(new ItemStack(Material.STONE));
 		super.opening = true;
-		Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(DecimateCore.getCore(), new Runnable(){
+		
+		final int cycle = 30;
+		
+		
+		for(int i = 0; i < cycle; i++){
+			final int f = i;
+			Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(DecimateCore.getCore(), new Runnable(){
 
-			@Override
-			public void run() {
-				stand.setHelmet(new ItemStack(reward.getRarity().getChange()));
-				stand.getLocation().getWorld().playEffect(stand.getLocation(), Effect.STEP_SOUND, reward.getRarity().getChange());
-				if(reward.getRarity() == Rarity.EPIC){
-					stand.getLocation().getWorld().playSound(stand.getLocation(), Sound.PIG_DEATH, 1, 1);
-				}else if(reward.getRarity() == Rarity.MYTHICAL){
-					stand.getLocation().getWorld().playSound(stand.getLocation(), Sound.HORSE_SKELETON_DEATH, 1, 1);
+				@Override
+				public void run() {
+
+					if(f == cycle-1){
+						stand.setHelmet(reward.getAnimationItem());
+						stand.setCustomName(reward.getFormatName());
+						giveReward(player, reward);
+						if(reward.getRarity() == Rarity.EPIC){
+							stand.getLocation().getWorld().playSound(stand.getLocation(), Sound.PIG_DEATH, 1, 1);
+						}else if(reward.getRarity() == Rarity.MYTHICAL){
+							stand.getLocation().getWorld().playSound(stand.getLocation(), Sound.HORSE_SKELETON_DEATH, 1, 1);
+						}
+					}else{
+						CrateReward random = last == null ? reward() : reward(last);
+						last = random;
+						stand.setHelmet(random.getAnimationItem());
+						stand.setCustomName(random.getFormatName());
+						player.getWorld().playSound(location, Sound.NOTE_PIANO, 1, 1);
+					}
 				}
-				giveReward(player, reward);
-			}
-				
-		}, 25);
+					
+			}, (int) Math.round(i + Math.pow(1.12, i)));
+		}
 		
 		Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(DecimateCore.getCore(), new Runnable(){
 
 			@Override
 			public void run() {
 				stand.setHelmet(new ItemStack(Material.AIR));
+				stand.setCustomName(getName());
 				opening = false;
 			}
 			
-		}, 50);
+		}, 20*8);
 	}
 
 	@Override

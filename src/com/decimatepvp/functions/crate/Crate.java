@@ -29,7 +29,7 @@ public abstract class Crate {
 	private void setupRewards(){
 		rewardPage = Bukkit.getServer().createInventory(null, 27, ChatColor.GRAY.toString() + ChatColor.UNDERLINE + "Crate Rewards");
 		for(CrateReward reward : rewards){
-			rewardPage.addItem(reward.getIcon());
+			rewardPage.addItem(reward.getIcon(totalChance));
 		}
 	}
 	
@@ -57,6 +57,22 @@ public abstract class Crate {
 		int i = (int)((Math.random()*totalChance) + 1);
 		int p = 0;
 		for(CrateReward cr : rewards){
+			if(i <= p + cr.getChance()){
+				return cr;
+			}else{
+				p += cr.getChance();
+			}
+		}
+		return null;
+	}
+	
+	public CrateReward reward(CrateReward last){
+		int i = (int)((Math.random()*(totalChance-last.getChance())) + 1);
+		int p = 0;
+		for(CrateReward cr : rewards){
+			if(cr.equals(last)){
+				continue;
+			}
 			if(i <= p + cr.getChance()){
 				return cr;
 			}else{

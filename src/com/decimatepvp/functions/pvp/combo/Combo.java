@@ -1,9 +1,12 @@
 package com.decimatepvp.functions.pvp.combo;
 
+import org.bukkit.entity.ArmorStand;
+
 public class Combo {
 
 	private String attacker, attacked;
 	private int combo, time;
+	private ArmorStand stand;
 	
 	public Combo(String attacker, String attacked){
 		this.attacker = attacker;
@@ -15,7 +18,7 @@ public class Combo {
 	public double hit(double damage){
 		this.combo++;
 		this.time = 20*3;
-		return damage*(1 + combo*0.05);
+		return damage*(1.25 + combo*0.05);
 	}
 	
 	public boolean time(int n){
@@ -40,6 +43,18 @@ public class Combo {
 	
 	public int getTime(){
 		return time;
+	}
+	
+	public void setStand(ArmorStand stand){
+		this.stand = stand;
+	}
+	
+	public void removeCombo(){
+		stand.remove();
+	}
+	
+	public ArmorStand getStand(){
+		return stand;
 	}
 	
 }

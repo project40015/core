@@ -11,8 +11,8 @@ public class CommandReward extends CrateReward {
 
 	private String command;
 	
-	public CommandReward(String name, ItemStack icon, Rarity rarity, int chance, String command) {
-		super(name, icon, rarity, chance);
+	public CommandReward(String name, ItemStack icon, ItemStack anim, Rarity rarity, int chance, String command) {
+		super(name, icon, anim, rarity, chance);
 		this.command = command;
 	}
 

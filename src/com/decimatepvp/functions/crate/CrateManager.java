@@ -22,6 +22,7 @@ import com.decimatepvp.functions.crate.crates.VoteCrate;
 import com.decimatepvp.functions.crate.rewards.CashReward;
 import com.decimatepvp.functions.crate.rewards.CommandReward;
 import com.decimatepvp.functions.crate.rewards.ItemReward;
+import com.decimatepvp.utils.Skull;
 
 public class CrateManager implements Manager, Listener {
 
@@ -37,27 +38,20 @@ public class CrateManager implements Manager, Listener {
 	}
 	
 	private void loadCrates(){
-		ItemReward coal = new ItemReward(new ItemStack(Material.COAL, 10), Rarity.COMMON, 200);
-		ItemReward iron = new ItemReward(new ItemStack(Material.IRON_INGOT, 10), Rarity.COMMON, 100);
-		ItemReward gold = new ItemReward(new ItemStack(Material.GOLD_INGOT, 10), Rarity.RARE, 50);
-		ItemReward diamond = new ItemReward(new ItemStack(Material.DIAMOND, 10), Rarity.EPIC, 10);
-		ItemReward emerald = new ItemReward(new ItemStack(Material.EMERALD, 10), Rarity.MYTHICAL, 5);
 		CashReward tenk = new CashReward("$10,000", new ItemStack(Material.PAPER), Rarity.COMMON, 100, 10000);
-		CommandReward harvester = new CommandReward("Harvester Hoe", new ItemStack(Material.DIAMOND_HOE), Rarity.MYTHICAL, 10, "harvester %player%");
-		CommandReward cropHopper = new CommandReward("Crop Hopper", new ItemStack(Material.HOPPER), Rarity.MYTHICAL, 10, "crophopper %player%");
-
-		rewards.add(coal);
-		rewards.add(iron);
-		rewards.add(gold);
-		rewards.add(diamond);
-		rewards.add(emerald);
-		rewards.add(tenk);
-		rewards.add(harvester);
-		rewards.add(cropHopper);
 		
-		godCrate = new GodCrate(Arrays.asList(tenk, gold, diamond, emerald, harvester));
-		voteCrate = new VoteCrate(Arrays.asList(coal, iron, gold, harvester));
-		decimateCrate = new DecimateCrate(Arrays.asList(diamond, emerald, harvester, cropHopper));
+		CrateReward blazeSpawner3 = new CommandReward("Blaze Spawner (3)", new ItemStack(Material.MOB_SPAWNER), Skull.BLAZE.getSkull(), Rarity.RARE, 25, "es give %player% BLAZE 0 3");
+		CrateReward ironSpawner2 = new CommandReward("Iron Golem Spawner (2)", new ItemStack(Material.MOB_SPAWNER), Skull.GOLEM.getSkull(), Rarity.RARE, 22, "es give %player% IRON_GOLEM 0 2");
+		CrateReward creeperSpawner2 = new CommandReward("Creeper Spawner (2)", new ItemStack(Material.MOB_SPAWNER), Skull.getPlayerSkull("MHF_Creeper"), Rarity.RARE, 22, "es give %player% CREEPER 0 2");
+		CrateReward decimateRank = new CommandReward("Decimate Rank", new ItemStack(Material.BOOK), Skull.getPlayerSkull("FarmKiteCarry"), Rarity.MYTHICAL, 1, "manuadd %player% decimate");
+		CrateReward decimateKit = new CommandReward("Decimate Kit", new ItemStack(Material.BOOK), new ItemStack(Material.DIAMOND_HELMET), Rarity.COMMON, 30, "kit decimate %player%");
+
+
+		rewards.add(tenk);
+		
+		godCrate = new GodCrate(Arrays.asList(tenk));
+		voteCrate = new VoteCrate(Arrays.asList(tenk));
+		decimateCrate = new DecimateCrate(Arrays.asList(blazeSpawner3, ironSpawner2, creeperSpawner2, decimateRank, decimateKit));
 		
 		this.crates.add(godCrate);
 		this.crates.add(voteCrate);

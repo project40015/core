@@ -10,8 +10,8 @@ public class ItemReward extends CrateReward {
 
 	private ItemStack item;
 	
-	public ItemReward(ItemStack item, Rarity rarity, int chance) {
-		super(rarity.getColor() + item.getType().toString().toLowerCase().replaceAll("_", " "), item, rarity, chance);
+	public ItemReward(ItemStack item, ItemStack anim, Rarity rarity, int chance) {
+		super(rarity.getColor() + item.getType().toString().toLowerCase().replaceAll("_", " "), item, anim, rarity, chance);
 		this.item = item;
 	}
 
