@@ -4,6 +4,8 @@ import java.util.Random;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
+import org.bukkit.entity.Damageable;
+import org.bukkit.entity.Entity;
 
 public class DecimateUtils {
 	
@@ -19,6 +21,23 @@ public class DecimateUtils {
 	
 	public static String color(String textToTranslate) {
 		return ChatColor.translateAlternateColorCodes('&', textToTranslate);
+	}
+
+	public static void damageNearbyEntities(Location loc, double d, double damage) {
+		damageNearbyEntities(loc, d, damage, null);
+	}
+
+	public static void damageNearbyEntities(Location loc, double d, double damage, Entity attacker) {
+		for(Entity entity : loc.getWorld().getNearbyEntities(loc, d, d, d)) {
+			if(entity instanceof Damageable) {
+				if(attacker != null) {
+					((Damageable) entity).damage(damage, attacker);
+				}
+				else {
+					((Damageable) entity).damage(damage);
+				}
+			}
+		}
 	}
 
 }

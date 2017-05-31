@@ -57,7 +57,7 @@ public class ParticleUtils {
 							double y = random.nextDouble() / 3;
 							double z = random.nextDouble() / 3;
 							
-							ParticleEffect.REDSTONE.display(particlecolor, loc.clone().add(x, y, z), 64);
+							summonRedstoneParticle(particlecolor, loc.clone().add(x, y, z), 64);
 						}
 					}
 					else {
@@ -92,6 +92,10 @@ public class ParticleUtils {
 				}
 			}.runTaskTimer(DecimateCore.getCore(), charge, speed);
 		}
+	}
+
+	public static void summonRedstoneParticle(OrdinaryColor particlecolor, Location loc, int range) {
+		ParticleEffect.REDSTONE.display(particlecolor, loc, range);
 	}
 
 }

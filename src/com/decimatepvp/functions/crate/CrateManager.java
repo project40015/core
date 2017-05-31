@@ -21,7 +21,6 @@ import com.decimatepvp.functions.crate.crates.GodCrate;
 import com.decimatepvp.functions.crate.crates.VoteCrate;
 import com.decimatepvp.functions.crate.rewards.CashReward;
 import com.decimatepvp.functions.crate.rewards.CommandReward;
-import com.decimatepvp.functions.crate.rewards.ItemReward;
 import com.decimatepvp.utils.Skull;
 
 public class CrateManager implements Manager, Listener {

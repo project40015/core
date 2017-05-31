@@ -62,7 +62,7 @@ public class CropHopperManager implements Listener, Manager {
 		}
 	}
 	
-	private void saveHoppers(){
+	public void saveHoppers(){
 		if(hoppers.size() == 0){
 			return;
 		}
