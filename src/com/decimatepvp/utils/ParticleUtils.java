@@ -98,4 +98,51 @@ public class ParticleUtils {
 		ParticleEffect.REDSTONE.display(particlecolor, loc, range);
 	}
 
+	public static double[][] createSphere(double size, int rings, int particlesPerRing) {
+		double[][] positions = new double[rings * particlesPerRing][3];
+		
+		int posN = 0;
+		for(double i = 0; i <= Math.PI; i += Math.PI / rings) {
+			double radius = Math.sin(i) * size;
+			double y = Math.cos(i) * size;
+			
+			for(double a = 0; a < Math.PI * 2; a += Math.PI / particlesPerRing) {
+				double x = Math.cos(a) * radius;
+				double z = Math.sin(a) * radius;
+				positions[posN] = new double[] { x, y, z };
+				posN++;
+			}
+		}
+		
+		return positions;
+	}
+
+	public static double[][][] createLayeredDisk(int rings, int particlesPerRing,
+			double startingRadius, double growthRate, boolean rateAdd) {
+		
+		double[][][] layeredDisk = new double[rings][particlesPerRing][2];
+		double radius = startingRadius;
+
+		int layer = 0;
+		for(int ring = 0; ring < rings; ring++) {
+			int i = 0;
+			for(double a = 0; a < Math.PI * 2; a += Math.PI / 24) {
+				double x = Math.cos(a) * radius;
+				double z = Math.sin(a) * radius;
+				layeredDisk[layer][i] = new double[] { x, z } ;
+				i++;
+			}
+			layer++;
+			
+			if(rateAdd) {
+				radius += growthRate;
+			}
+			else {
+				radius *= growthRate;
+			}
+		}
+		
+		return layeredDisk;
+	}
+
 }

@@ -1,7 +1,5 @@
 package com.decimatepvp.core;
 
-import net.milkbowl.vault.economy.Economy;
-
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -19,6 +17,7 @@ import com.decimatepvp.enchants.EnchantListener;
 import com.decimatepvp.enchants.EnchantManager;
 import com.decimatepvp.entities.EntityManager;
 import com.decimatepvp.events.CustomEventCaller;
+import com.decimatepvp.functions.animation.AnimationManager;
 import com.decimatepvp.functions.announcement.AnnouncementManager;
 import com.decimatepvp.functions.antitnt.AntiTntManager;
 import com.decimatepvp.functions.crate.CrateKeyCommand;
@@ -56,6 +55,8 @@ import com.decimatepvp.functions.tntfill.TntFillCommand;
 import com.decimatepvp.functions.tntfill.TntFillManager;
 import com.decimatepvp.minievents.MiniEvents;
 
+import net.milkbowl.vault.economy.Economy;
+
 public class DecimateCore extends JavaPlugin {
 	
 	private static DecimateCore core;
@@ -74,7 +75,7 @@ public class DecimateCore extends JavaPlugin {
 	/*
 	 * Managers
 	 */
-	private Manager[] managers = new Manager[15];
+	private Manager[] managers = new Manager[16];
 	
 	private FreezeManager freezeManager;
 	private TntFillManager tntFillManager;
@@ -93,6 +94,7 @@ public class DecimateCore extends JavaPlugin {
 	private CrateManager crateManager;
 	private PvPManager pvpManager;
 	private ComboManager comboManager;
+	private AnimationManager animationManager;
 	
 	/*
 	 * Other
@@ -109,7 +111,7 @@ public class DecimateCore extends JavaPlugin {
 		core = this;
 		config = new DecimateConfig();
 		
-		worldBorder = new WorldBorderManager(); // Not a Real Manager
+		worldBorder = new WorldBorderManager(); // Not a Real Man-ager
 		accountIpManager = new AccountIPManager();
 		enchantManager = new EnchantManager();
 		potionManager = new PotionAbilityManager();
@@ -132,6 +134,7 @@ public class DecimateCore extends JavaPlugin {
 		managers[n++] = crateManager = new CrateManager();
 		managers[n++] = pvpManager = new PvPManager();
 		managers[n++] = comboManager = new ComboManager();
+		managers[n++] = animationManager = new AnimationManager();
 				
 		setupEco();
 		loadCommands();
@@ -276,6 +279,10 @@ public class DecimateCore extends JavaPlugin {
 	
 	public ComboManager getComboManager(){
 		return comboManager;
+	}
+
+	public AnimationManager getAnimationManager() {
+		return animationManager;
 	}
 
 }

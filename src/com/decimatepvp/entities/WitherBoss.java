@@ -6,14 +6,25 @@ import org.bukkit.Color;
 import org.bukkit.Location;
 import org.bukkit.Sound;
 import org.bukkit.craftbukkit.v1_8_R3.CraftWorld;
+import org.bukkit.craftbukkit.v1_8_R3.entity.CraftEntity;
 import org.bukkit.craftbukkit.v1_8_R3.event.CraftEventFactory;
+import org.bukkit.craftbukkit.v1_8_R3.inventory.CraftEntityEquipment;
+import org.bukkit.entity.Enderman;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
+import org.bukkit.entity.Skeleton;
+import org.bukkit.entity.Wither;
+import org.bukkit.entity.Skeleton.SkeletonType;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityRegainHealthEvent;
 import org.bukkit.event.entity.ExplosionPrimeEvent;
+import org.bukkit.inventory.EntityEquipment;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 
 import com.decimatepvp.core.DecimateCore;
+import com.decimatepvp.functions.animation.sphere.MovementAnimation;
 import com.decimatepvp.utils.DecimateUtils;
 import com.decimatepvp.utils.ParticleEffect.OrdinaryColor;
 import com.decimatepvp.utils.ParticleUtils;
@@ -27,6 +38,7 @@ import net.minecraft.server.v1_8_R3.DamageSource;
 import net.minecraft.server.v1_8_R3.Entity;
 import net.minecraft.server.v1_8_R3.EntityAnimal;
 import net.minecraft.server.v1_8_R3.EntityArrow;
+import net.minecraft.server.v1_8_R3.EntityEnderman;
 import net.minecraft.server.v1_8_R3.EntityFireball;
 import net.minecraft.server.v1_8_R3.EntityHuman;
 import net.minecraft.server.v1_8_R3.EntityInsentient;
@@ -70,7 +82,9 @@ public class WitherBoss extends EntityMonster implements IRangedEntity {
   
   private int bp;
 	
-  	private double fallAttack[][][] = new double[10][49][2];
+  	private double[][][] fallAttack = ParticleUtils.createLayeredDisk(6, 24, 1.0D, 1.0D, true);
+  	
+  	private double[][] attackSphere = ParticleUtils.createSphere(0.75, 8, 16);
 	
 	public boolean isInFallingAttack = false;
   
@@ -89,7 +103,7 @@ public class WitherBoss extends EntityMonster implements IRangedEntity {
   };
   
   @SuppressWarnings({ "unchecked", "rawtypes" })
-public WitherBoss(Location location)
+  public WitherBoss(Location location)
   {
     super(((CraftWorld) location.getWorld()).getHandle());
     setHealth(getMaxHealth());
@@ -105,27 +119,11 @@ public WitherBoss(Location location)
     this.targetSelector.a(1, new PathfinderGoalHurtByTarget(this, false, new Class[0]));
     this.targetSelector.a(2, new PathfinderGoalNearestAttackableTarget(this, EntityInsentient.class, 0, false, false, bq));
     this.b_ = 50;
-    
-    loadFallAttack();
   }
   
   public void spawn() {
 	  world.addEntity(this);
   }
-	
-	private void loadFallAttack() {
-		double radius = 1.0D;
-		for(int size = 0; size < 10; size++) {
-			radius = 1.0D * (size / 2);
-			int i = 0;
-			for(double a = 0; a < Math.PI * 2; a += Math.PI / 24) {
-				double x = Math.cos(a) * radius;
-				double z = Math.sin(a) * radius;
-				fallAttack[size][i] = new double[] { x, z } ;
-				i++;
-			}
-		}
-	}
   
   protected void h()
   {
@@ -468,8 +466,9 @@ public WitherBoss(Location location)
 		double d7 = d1 - d4;
 		double d8 = d2 - d5;
 		
-		int rnd = random.nextInt(3);
-		double chance = random.nextDouble();
+		Location eyelocation = ((Wither) getBukkitEntity()).getEyeLocation();
+		
+		int rnd = random.nextInt(5);
 		if(rnd == 0) {
 			EntityWitherSkull entity = new EntityWitherSkull(world, this, d6, d7, d8);
 			
@@ -501,17 +500,51 @@ public WitherBoss(Location location)
 			
 			ParticleUtils.sendBeamFromEntity(vector, getRandomColor(), ((LivingEntity) getBukkitEntity()), 20, true, 5, 1l, 1l);
 		}
-		
+		else if(rnd == 3) {
+			Location entityLocation = new Location(world.getWorld(), d0, d1, d2);
+			if(target != null) {
+				if((target != null) && (target instanceof EntityAnimal)) {
+					entityLocation = ((LivingEntity) target.getBukkitEntity()).getEyeLocation().subtract(entityLocation.getDirection());
+				}
+				else {
+					entityLocation = ((LivingEntity) target.getBukkitEntity()).getEyeLocation().subtract(0, 1, 0);
+				}
+			}
+			Vector direction = eyelocation.getDirection();
+			
+			MovementAnimation animation = getRasenganAttack(new OrdinaryColor(getRandomColor()), eyelocation, direction, 16);
+			animation.start(0l, random.nextInt(2)+1);
+		}
+		else if(rnd == 4) {
+			if(target != null) {
+				world.getWorld().strikeLightning(target.getBukkitEntity().getLocation());
+			}
+		}
+
+		double chance = random.nextDouble();
 		if(chance >= 0.10D) {
 			isInFallingAttack = true;
 			this.motY = 1.0D;
 			getFallAttack().runTaskTimer(DecimateCore.getCore(), 20l, 20l);
 		}
+		chance = random.nextDouble();
+		if(chance >= 0.1D) {
+			this.setLocation(d0, d1, d2, yaw, pitch);
+			makeSound("mob.endermen.portal", 1.0f, 1.0f);
+		}
+		chance = random.nextDouble();
+		
 		
 		locX = d3;
 		locY = d4;
 		locZ = d5;
 	}
+  
+  	private MovementAnimation getRasenganAttack(OrdinaryColor particlecolor, Location start,
+			Vector direction, double range) {
+  		return new MovementAnimation(attackSphere, particlecolor, start, direction, range,
+  				10.0D, getBukkitEntity(), 0.50D);
+  	}
 	
 	private BukkitRunnable getFallAttack() {
 		return new BukkitRunnable() {
@@ -659,7 +692,7 @@ public WitherBoss(Location location)
   protected void initAttributes()
   {
     super.initAttributes();
-    getAttributeInstance(GenericAttributes.maxHealth).setValue(300.0D);
+    getAttributeInstance(GenericAttributes.maxHealth).setValue(3000.0D);
     getAttributeInstance(GenericAttributes.MOVEMENT_SPEED).setValue(0.6000000238418579D);
     getAttributeInstance(GenericAttributes.FOLLOW_RANGE).setValue(40.0D);
   }
@@ -698,4 +731,41 @@ public WitherBoss(Location location)
   {
     this.vehicle = null;
   }
+  
+  	@Override
+	public String toString() {
+	  return "DecimateWitherBoss";
+	}
+  	
+  	public static ItemStack[] equipment = new ItemStack[] {
+  			new ItemStack(org.bukkit.Material.DIAMOND_SWORD),
+  			new ItemStack(org.bukkit.Material.DIAMOND_BOOTS),
+  			new ItemStack(org.bukkit.Material.DIAMOND_LEGGINGS),
+  			new ItemStack(org.bukkit.Material.DIAMOND_CHESTPLATE),
+  			new ItemStack(org.bukkit.Material.DIAMOND_HELMET)
+  	};
+
+	public static void spawnMinion(EntityDamageByEntityEvent event) {
+		if((event.getDamager() instanceof LivingEntity) &&
+				(event.getEntity() instanceof LivingEntity)) {
+			LivingEntity damaged = (LivingEntity) event.getEntity();
+			LivingEntity damager = (LivingEntity) event.getDamager();
+			if((damager.toString().equals("DecimateWitherBoss")) && //If the killer is a WitherBoss
+					(damaged.getHealth() - event.getFinalDamage() <= 0) && //If the damaged entity will be killed
+					(Math.random() < 0.25D)) {
+				damaged.getWorld().strikeLightning(damaged.getLocation());
+				Skeleton witherskeleton = (Skeleton) damaged.getWorld().spawnEntity(damaged.getLocation(), EntityType.SKELETON);
+				witherskeleton.setSkeletonType(SkeletonType.WITHER);
+				EntityEquipment equip = witherskeleton.getEquipment();
+				
+				equip.setArmorContents(equipment.clone());
+
+				equip.setBootsDropChance(0);
+				equip.setLeggingsDropChance(0);
+				equip.setChestplateDropChance(0);
+				equip.setHelmetDropChance(0);
+				equip.setItemInHandDropChance(0);
+			}
+		}
+	}
 }

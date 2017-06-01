@@ -11,9 +11,14 @@ import org.bukkit.Location;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.EntityType;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.Skeleton;
+import org.bukkit.entity.Skeleton.SkeletonType;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
 
 import com.google.common.collect.Lists;
@@ -34,6 +39,10 @@ public class EntityManager implements Listener, CommandExecutor {
 		if(entities.contains(event.getEntity())) {
 			entities.remove(event.getEntity());
 		}
+	}
+	
+	public void onPlayerDeath(EntityDamageByEntityEvent event) {
+		WitherBoss.spawnMinion(event);
 	}
 
 	@Override
