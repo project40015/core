@@ -10,6 +10,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
+import com.decimatepvp.utils.ParticleEffect;
+
 public abstract class Crate {
 
 	private String name;
@@ -19,6 +21,7 @@ public abstract class Crate {
 	private Inventory rewardPage;
 	private ArmorStand nameStand;
 	private Location location;
+	private ParticleEffect groundEffect;
 	
 	public Crate(String name, List<CrateReward> rewards){
 		this.name = name;
@@ -27,6 +30,18 @@ public abstract class Crate {
 			this.totalChance += reward.getChance();
 		}
 		setupRewards();
+	}
+	
+	protected void setGroundEffect(ParticleEffect effect){
+		this.groundEffect = effect;
+	}
+	
+	public boolean hasGroundEffect(){
+		return groundEffect != null;
+	}
+	
+	public ParticleEffect getGroundEffect(){
+		return this.groundEffect;
 	}
 	
 	public void spawn(Location location){
