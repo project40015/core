@@ -2,19 +2,17 @@ package com.decimatepvp.entities;
 
 import java.util.List;
 
+import org.bukkit.ChatColor;
 import org.bukkit.Color;
 import org.bukkit.Location;
 import org.bukkit.Sound;
 import org.bukkit.craftbukkit.v1_8_R3.CraftWorld;
-import org.bukkit.craftbukkit.v1_8_R3.entity.CraftEntity;
 import org.bukkit.craftbukkit.v1_8_R3.event.CraftEventFactory;
-import org.bukkit.craftbukkit.v1_8_R3.inventory.CraftEntityEquipment;
-import org.bukkit.entity.Enderman;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Skeleton;
-import org.bukkit.entity.Wither;
 import org.bukkit.entity.Skeleton.SkeletonType;
+import org.bukkit.entity.Wither;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityRegainHealthEvent;
 import org.bukkit.event.entity.ExplosionPrimeEvent;
@@ -38,7 +36,6 @@ import net.minecraft.server.v1_8_R3.DamageSource;
 import net.minecraft.server.v1_8_R3.Entity;
 import net.minecraft.server.v1_8_R3.EntityAnimal;
 import net.minecraft.server.v1_8_R3.EntityArrow;
-import net.minecraft.server.v1_8_R3.EntityEnderman;
 import net.minecraft.server.v1_8_R3.EntityFireball;
 import net.minecraft.server.v1_8_R3.EntityHuman;
 import net.minecraft.server.v1_8_R3.EntityInsentient;
@@ -692,9 +689,11 @@ public class WitherBoss extends EntityMonster implements IRangedEntity {
   protected void initAttributes()
   {
     super.initAttributes();
-    getAttributeInstance(GenericAttributes.maxHealth).setValue(3000.0D);
+    getAttributeInstance(GenericAttributes.maxHealth).setValue(1000);
     getAttributeInstance(GenericAttributes.MOVEMENT_SPEED).setValue(0.6000000238418579D);
     getAttributeInstance(GenericAttributes.FOLLOW_RANGE).setValue(40.0D);
+    setCustomName(ChatColor.RED + "Wither Boss");
+    setCustomNameVisible(true);
   }
   
   public int cl()
