@@ -4,12 +4,16 @@ import java.util.List;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Color;
+import org.bukkit.FireworkEffect;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Sound;
+import org.bukkit.entity.Firework;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.FireworkMeta;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import com.decimatepvp.core.DecimateCore;
@@ -49,6 +53,15 @@ public abstract class TypicalCrate extends Crate {
 					public void run() {
 						location.getWorld().playSound(location, Sound.WATER, 1, 1);
 						ParticleEffect.DRIP_WATER.display(0, 0, 0, 0, 1, location.clone().add(.5*Math.cos((2*Math.PI)*(q/50.0)), 0.5 + q/40.0, .5*Math.sin((2*Math.PI)*(q/50.0))), 20);
+						if(q == 49){
+							FireworkEffect effect = FireworkEffect.builder().trail(false).flicker(false).withColor(Color.BLUE).with(FireworkEffect.Type.BALL).build();
+							Firework fw = location.getWorld().spawn(location, Firework.class);
+							FireworkMeta meta = fw.getFireworkMeta();
+							meta.clearEffects();
+							meta.addEffect(effect);
+							meta.setPower(0);
+							fw.setFireworkMeta(meta);
+						}
 					}
 					
 				}, i);

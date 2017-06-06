@@ -22,6 +22,7 @@ import com.decimatepvp.events.CustomEventCaller;
 import com.decimatepvp.functions.animation.AnimationManager;
 import com.decimatepvp.functions.announcement.AnnouncementManager;
 import com.decimatepvp.functions.antitnt.AntiTntManager;
+import com.decimatepvp.functions.bookCommand.CommandBookManager;
 import com.decimatepvp.functions.crate.CrateKeyCommand;
 import com.decimatepvp.functions.crate.CrateManager;
 import com.decimatepvp.functions.misc.crophopper.CropHopperCommand;
@@ -76,7 +77,7 @@ public class DecimateCore extends JavaPlugin {
 	/*
 	 * Managers
 	 */
-	private Manager[] managers = new Manager[16];
+	private Manager[] managers = new Manager[17];
 	
 	private FreezeManager freezeManager;
 	private TntFillManager tntFillManager;
@@ -96,6 +97,7 @@ public class DecimateCore extends JavaPlugin {
 	private PvPManager pvpManager;
 	private ComboManager comboManager;
 	private AnimationManager animationManager;
+	private CommandBookManager commandBookManager;
 	
 	/*
 	 * Other
@@ -132,6 +134,7 @@ public class DecimateCore extends JavaPlugin {
 		managers[n++] = antiTntManager = new AntiTntManager();
 		managers[n++] = cropHopperManager = new CropHopperManager();
 		managers[n++] = banManager = new BanManager();
+		managers[n++] = commandBookManager = new CommandBookManager(); //Must register before crateManager.
 		managers[n++] = crateManager = new CrateManager();
 		managers[n++] = pvpManager = new PvPManager();
 		managers[n++] = comboManager = new ComboManager();
@@ -145,7 +148,7 @@ public class DecimateCore extends JavaPlugin {
 				new AnvilDamageListener(), new BottleExpCommand(), new MiniEvents(), new FactionCommandListener(),
 				new FactionDamageListener(), staffCommandsManager, enderDelayManager, antiTntManager, worldBorder,
 				accountIpManager,  new EnchantListener(), new CustomEventCaller(), cropHopperManager, potionManager,
-				crateManager, comboManager, new EnchantmentLimitManager());
+				crateManager, comboManager, new EnchantmentLimitManager(), commandBookManager);
 	}
 	
 	@Override
@@ -284,6 +287,10 @@ public class DecimateCore extends JavaPlugin {
 
 	public AnimationManager getAnimationManager() {
 		return animationManager;
+	}
+	
+	public CommandBookManager getCommandBookManager(){
+		return this.commandBookManager;
 	}
 
 }

@@ -48,11 +48,11 @@ public class CrateManager implements Manager, Listener {
 	private void loadCrates(){
 		CashReward tenk = new CashReward("$10,000", new ItemStack(Material.PAPER), Rarity.COMMON, 100, 10000);
 		
-		CrateReward blazeSpawner3 = new CommandReward("Blaze Spawner (3)", new ItemStack(Material.MOB_SPAWNER), Skull.BLAZE.getSkull(), Rarity.RARE, 25, "es give %player% BLAZE 0 3");
-		CrateReward ironSpawner2 = new CommandReward("Iron Golem Spawner (2)", new ItemStack(Material.MOB_SPAWNER), Skull.GOLEM.getSkull(), Rarity.RARE, 22, "es give %player% IRON_GOLEM 0 2");
-		CrateReward creeperSpawner2 = new CommandReward("Creeper Spawner (2)", new ItemStack(Material.MOB_SPAWNER), Skull.getPlayerSkull("MHF_Creeper"), Rarity.RARE, 22, "es give %player% CREEPER 0 2");
-		CrateReward decimateRank = new CommandReward("Decimate Rank", new ItemStack(Material.NETHER_STAR), Skull.getPlayerSkull("FarmKiteCarry"), Rarity.MYTHICAL, 1, "manuadd %player% decimate");
-		CrateReward decimateKit = new CommandReward("Decimate Kit", new ItemStack(Material.BOOK), new ItemStack(Material.DIAMOND_HELMET), Rarity.COMMON, 30, "kit decimate %player%");
+		CrateReward blazeSpawner3 = new CommandReward("Blaze Spawner (3)", new ItemStack(Material.MOB_SPAWNER), Skull.BLAZE.getSkull(), Rarity.RARE, 25, "es give %player% BLAZE 0 3", false);
+		CrateReward ironSpawner2 = new CommandReward("Iron Golem Spawner (2)", new ItemStack(Material.MOB_SPAWNER), Skull.GOLEM.getSkull(), Rarity.RARE, 22, "es give %player% IRON_GOLEM 0 2", false);
+		CrateReward creeperSpawner2 = new CommandReward("Creeper Spawner (2)", new ItemStack(Material.MOB_SPAWNER), Skull.getPlayerSkull("MHF_Creeper"), Rarity.RARE, 22, "es give %player% CREEPER 0 2", false);
+		CrateReward decimateRank = new CommandReward("Decimate Rank", new ItemStack(Material.NETHER_STAR), Skull.getPlayerSkull("FarmKiteCarry"), Rarity.MYTHICAL, 1, "manuadd %player% decimate", true);
+		CrateReward decimateKit = new CommandReward("Decimate Kit", new ItemStack(Material.BOOK), new ItemStack(Material.DIAMOND_HELMET), Rarity.COMMON, 30, "kit decimate %player%", true);
 
 		CrateReward guaranteedEpic = new ItemReward(new ItemStack(Material.DIAMOND), new ItemStack(Material.DIAMOND_HELMET), Rarity.EPIC, 1000);
 		CrateReward guaranteedMythical = new ItemReward(new ItemStack(Material.REDSTONE_BLOCK), new ItemStack(Material.DIAMOND_HELMET), Rarity.MYTHICAL, 1000);
