@@ -119,12 +119,12 @@ public class CrateManager implements Manager, Listener {
 				}
 				for(Crate crate : crates){
 					if(crate.hasGroundEffect()){
-						crate.getGroundEffect().display(0, 0, 0, 0, 1, crate.getLocation().clone().add(x, 0, z), 30);
+						crate.getGroundEffect().display(0, 0, 0, 0, 1, crate.getLocation().clone().add(x, 0.05, z), 30);
 					}
 				}
 			}
 			
-		}, 2, 2);
+		}, 1, 1);
 	}
 	
 	@EventHandler

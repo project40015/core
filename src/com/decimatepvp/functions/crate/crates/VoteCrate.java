@@ -8,6 +8,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import com.decimatepvp.functions.crate.CrateReward;
+import com.decimatepvp.utils.ParticleEffect;
 
 public class VoteCrate extends TypicalCrate {
 
@@ -16,6 +17,8 @@ public class VoteCrate extends TypicalCrate {
 	public VoteCrate(List<CrateReward> rewards) {
 		super(ChatColor.GRAY + "Vote Crate", rewards);
 		setupKey();
+		
+		super.setGroundEffect(ParticleEffect.CRIT);
 	}
 	
 	private void setupKey(){
