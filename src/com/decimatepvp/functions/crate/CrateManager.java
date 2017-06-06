@@ -19,6 +19,7 @@ import org.bukkit.event.player.PlayerInteractAtEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 
+import com.decimatepvp.core.DecimateCore;
 import com.decimatepvp.core.Manager;
 import com.decimatepvp.functions.crate.crates.DecimateCrate;
 import com.decimatepvp.functions.crate.crates.GodCrate;
@@ -37,8 +38,11 @@ public class CrateManager implements Manager, Listener {
 	private VoteCrate voteCrate;
 	private DecimateCrate decimateCrate;
 	
+	private int run, i = 1;
+	
 	public CrateManager(){
 		loadCrates();
+		startGroundEffect();
 	}
 	
 	private void loadCrates(){
@@ -93,6 +97,34 @@ public class CrateManager implements Manager, Listener {
 			}
 		}
 		return null;
+	}
+	
+	private void startGroundEffect(){
+		run = Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(DecimateCore.getCore(), new Runnable(){
+
+			@Override
+			public void run() {
+				double x = 0, z = 0;
+				i = i >= 40 ? 1 : i + 1;
+				if(i <= 10){
+					x = i/10.0;
+				}else if(i <= 20){
+					x = 1;
+					z = (i-10)/10.0;
+				}else if(i <= 30){
+					x = 1 - ((i-20)/10.0);
+					z = 1;
+				}else{
+					z = 1 - ((i-30)/10.0);
+				}
+				for(Crate crate : crates){
+					if(crate.hasGroundEffect()){
+						crate.getGroundEffect().display(0, 0, 0, 0, 1, crate.getLocation().clone().add(x, 0, z), 30);
+					}
+				}
+			}
+			
+		}, 2, 2);
 	}
 	
 	@EventHandler
@@ -191,6 +223,7 @@ public class CrateManager implements Manager, Listener {
 	
 	@Override
 	public void disable() {
+		Bukkit.getServer().getScheduler().cancelTask(run);
 		for(Crate crate : this.crates){
 			crate.disable();
 			if(crate.getNameStand() != null){
