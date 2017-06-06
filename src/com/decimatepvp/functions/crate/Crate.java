@@ -5,6 +5,7 @@ import java.util.List;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
+import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
@@ -16,6 +17,8 @@ public abstract class Crate {
 	private int totalChance;
 	protected boolean opening = false;
 	private Inventory rewardPage;
+	private ArmorStand nameStand;
+	private Location location;
 	
 	public Crate(String name, List<CrateReward> rewards){
 		this.name = name;
@@ -24,6 +27,15 @@ public abstract class Crate {
 			this.totalChance += reward.getChance();
 		}
 		setupRewards();
+	}
+	
+	public void spawn(Location location){
+		this.location = location;
+		nameStand = location.getWorld().spawn(location.clone().add(.5,-1,.5), ArmorStand.class);
+		nameStand.setVisible(false);
+		nameStand.setCustomNameVisible(true);
+		nameStand.setCustomName(name);
+		nameStand.setGravity(false);
 	}
 	
 	private void setupRewards(){
@@ -84,6 +96,18 @@ public abstract class Crate {
 	
 	public Inventory getRewardPage(){
 		return this.rewardPage;
+	}
+	
+	public int getTotalChance(){
+		return this.totalChance;
+	}
+	
+	public ArmorStand getNameStand(){
+		return this.nameStand;
+	}
+	
+	public Location getLocation(){
+		return location;
 	}
 	
 	protected abstract void giveReward(Player player, CrateReward reward);

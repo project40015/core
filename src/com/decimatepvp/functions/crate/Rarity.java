@@ -8,7 +8,7 @@ public enum Rarity {
 	COMMON("COMMON", ChatColor.WHITE, Material.IRON_ORE),
 	RARE("RARE", ChatColor.YELLOW, Material.GOLD_ORE),
 	EPIC("EPIC", ChatColor.AQUA, Material.DIAMOND_ORE),
-	MYTHICAL("MYTHICAL", ChatColor.RED, Material.REDSTONE_ORE);
+	MYTHICAL("MYTHICAL", ChatColor.GREEN, Material.EMERALD_ORE);
 	
 	private String name;
 	private String display;

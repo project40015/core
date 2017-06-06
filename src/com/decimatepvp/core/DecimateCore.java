@@ -1,5 +1,7 @@
 package com.decimatepvp.core;
 
+import net.milkbowl.vault.economy.Economy;
+
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -38,6 +40,7 @@ import com.decimatepvp.functions.patch.glitchpatch.GlitchPatchManager;
 import com.decimatepvp.functions.potions.PotionAbilityManager;
 import com.decimatepvp.functions.pvp.PvPManager;
 import com.decimatepvp.functions.pvp.combo.ComboManager;
+import com.decimatepvp.functions.pvp.enchantment.EnchantmentLimitManager;
 import com.decimatepvp.functions.staff.bans.BanManager;
 import com.decimatepvp.functions.staff.factions.FactionCommandListener;
 import com.decimatepvp.functions.staff.factions.FactionDamageListener;
@@ -54,8 +57,6 @@ import com.decimatepvp.functions.staff.togglechat.ToggleChatManager;
 import com.decimatepvp.functions.tntfill.TntFillCommand;
 import com.decimatepvp.functions.tntfill.TntFillManager;
 import com.decimatepvp.minievents.MiniEvents;
-
-import net.milkbowl.vault.economy.Economy;
 
 public class DecimateCore extends JavaPlugin {
 	
@@ -144,7 +145,7 @@ public class DecimateCore extends JavaPlugin {
 				new AnvilDamageListener(), new BottleExpCommand(), new MiniEvents(), new FactionCommandListener(),
 				new FactionDamageListener(), staffCommandsManager, enderDelayManager, antiTntManager, worldBorder,
 				accountIpManager,  new EnchantListener(), new CustomEventCaller(), cropHopperManager, potionManager,
-				crateManager, pvpManager, comboManager);
+				crateManager, pvpManager, comboManager, new EnchantmentLimitManager());
 	}
 	
 	@Override

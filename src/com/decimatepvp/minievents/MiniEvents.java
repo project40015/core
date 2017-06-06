@@ -10,7 +10,6 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
-import org.bukkit.event.inventory.InventoryAction;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.InventoryOpenEvent;
@@ -104,14 +103,7 @@ public class MiniEvents implements Listener {
 	@EventHandler
 	public void onClick(InventoryClickEvent event){
 		if(event.getInventory().getType().equals(InventoryType.ENCHANTING)){
-			if(event.getSlot() == 1){
-				event.setCancelled(true);
-				return;
-			}
-		}
-		if(event.getCurrentItem() != null && event.getCurrentItem().getType().equals(Material.INK_SACK)){
-			if(event.getAction().equals(InventoryAction.COLLECT_TO_CURSOR) ||
-					event.getAction().equals(InventoryAction.MOVE_TO_OTHER_INVENTORY)){
+			if(event.getCurrentItem().equals(Material.INK_SACK)){
 				event.setCancelled(true);
 			}
 		}

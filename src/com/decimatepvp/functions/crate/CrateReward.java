@@ -27,8 +27,8 @@ public abstract class CrateReward {
 	}
 	
 	private double chance(int total){
-		double d = chance/total;
-		int a = (int) d * 100;
+		double d = (chance + 0.0)/total;
+		int a = (int) (d * 10000);
 		return a/100.0;
 	}
 	
@@ -54,7 +54,7 @@ public abstract class CrateReward {
 		lore.add(ChatColor.GRAY + "Chance: " + ChatColor.YELLOW + chance(total) + "%");
 		nm.setLore(lore);
 		n.setItemMeta(nm);
-		return icon;
+		return n;
 	}
 	
 	public int getChance(){
