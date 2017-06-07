@@ -23,6 +23,8 @@ public abstract class Crate {
 	private Location location;
 	private ParticleEffect groundEffect;
 	
+	private boolean comingSoon = false;
+	
 	public Crate(String name, List<CrateReward> rewards){
 		this.name = name;
 		this.rewards = rewards;
@@ -30,6 +32,11 @@ public abstract class Crate {
 			this.totalChance += reward.getChance();
 		}
 		setupRewards();
+	}
+	
+	public Crate(String name, boolean comingSoon){
+		this.name = name;
+		this.comingSoon = comingSoon;
 	}
 	
 	protected void setGroundEffect(ParticleEffect effect){
@@ -60,6 +67,10 @@ public abstract class Crate {
 		}
 	}
 	
+	public boolean isComingSoon(){
+		return this.comingSoon;
+	}
+	
 	public String getName(){
 		return name;
 	}
@@ -76,8 +87,10 @@ public abstract class Crate {
 				&& item.getType() == getItemStack().getType();
 	}
 	
-	public void giveKey(Player player){
-		player.getInventory().addItem(this.getItemStack());
+	public void giveKey(Player player, int amount){
+		ItemStack t = this.getItemStack().clone();
+		t.setAmount(amount);
+		player.getInventory().addItem(t);
 	}
 	
 	public CrateReward reward(){

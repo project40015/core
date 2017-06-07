@@ -23,6 +23,7 @@ import com.decimatepvp.core.DecimateCore;
 import com.decimatepvp.core.Manager;
 import com.decimatepvp.functions.crate.crates.DecimateCrate;
 import com.decimatepvp.functions.crate.crates.GodCrate;
+import com.decimatepvp.functions.crate.crates.SummerCrate;
 import com.decimatepvp.functions.crate.crates.VoteCrate;
 import com.decimatepvp.functions.crate.rewards.CashReward;
 import com.decimatepvp.functions.crate.rewards.CommandReward;
@@ -33,10 +34,6 @@ public class CrateManager implements Manager, Listener {
 
 	private List<Crate> crates = new ArrayList<>();
 	private List<CrateReward> rewards = new ArrayList<>();
-	
-	private GodCrate godCrate;
-	private VoteCrate voteCrate;
-	private DecimateCrate decimateCrate;
 	
 	private int run, i = 1;
 	
@@ -60,17 +57,20 @@ public class CrateManager implements Manager, Listener {
 
 		rewards.add(tenk);
 		
-		godCrate = new GodCrate(Arrays.asList(tenk, guaranteedMythical));
-		voteCrate = new VoteCrate(Arrays.asList(tenk, guaranteedEpic));
-		decimateCrate = new DecimateCrate(Arrays.asList(decimateKit, blazeSpawner3, ironSpawner2, creeperSpawner2, decimateRank));
+		GodCrate godCrate = new GodCrate(Arrays.asList(tenk, guaranteedMythical));
+		VoteCrate voteCrate = new VoteCrate(Arrays.asList(tenk, guaranteedEpic));
+		DecimateCrate decimateCrate = new DecimateCrate(Arrays.asList(decimateKit, blazeSpawner3, ironSpawner2, creeperSpawner2, decimateRank));
+		SummerCrate summerCrate = new SummerCrate();
 		
 		decimateCrate.spawn(new Location(Bukkit.getWorlds().get(0), 21, 76, 20));
 		godCrate.spawn(new Location(Bukkit.getWorlds().get(0), 19, 76, 22));
 		voteCrate.spawn(new Location(Bukkit.getWorlds().get(0), 16, 76, 22));
+		summerCrate.spawn(new Location(Bukkit.getWorlds().get(0), 21, 76, 17));
 		
 		this.crates.add(godCrate);
 		this.crates.add(voteCrate);
 		this.crates.add(decimateCrate);
+		this.crates.add(summerCrate);
 	}
 	
 	public boolean isCrate(String name){
@@ -129,27 +129,23 @@ public class CrateManager implements Manager, Listener {
 	
 	@EventHandler
 	public void onInteract(PlayerInteractEvent event){
-		if(event.getAction().equals(Action.RIGHT_CLICK_BLOCK)){
-			if(event.getClickedBlock().getLocation().equals(voteCrate.getLocation().getBlock().getLocation())){
-				tryToOpen(event.getPlayer(), event.getClickedBlock().getLocation(), voteCrate);
-				event.setCancelled(true);
-			}else if(event.getClickedBlock().getLocation().equals(godCrate.getLocation().getBlock().getLocation())){
-				tryToOpen(event.getPlayer(), event.getClickedBlock().getLocation(), godCrate);
-				event.setCancelled(true);
-			}else if(event.getClickedBlock().getLocation().equals(decimateCrate.getLocation().getBlock().getLocation())){
-				tryToOpen(event.getPlayer(), event.getClickedBlock().getLocation(), decimateCrate);
-				event.setCancelled(true);
-			}
-		}else if(event.getAction().equals(Action.LEFT_CLICK_BLOCK)){
-			if(event.getClickedBlock().getLocation().equals(voteCrate.getLocation().getBlock().getLocation())){
-				viewRewards(event.getPlayer(), voteCrate);
-				event.setCancelled(true);
-			}else if(event.getClickedBlock().getLocation().equals(godCrate.getLocation().getBlock().getLocation())){
-				viewRewards(event.getPlayer(), godCrate);
-				event.setCancelled(true);
-			}else if(event.getClickedBlock().getLocation().equals(decimateCrate.getLocation().getBlock().getLocation())){
-				viewRewards(event.getPlayer(), decimateCrate);
-				event.setCancelled(true);
+		if(event.getAction().equals(Action.RIGHT_CLICK_BLOCK) || event.getAction().equals(Action.LEFT_CLICK_BLOCK)){
+			for(Crate crate : crates){
+				if(crate.getLocation().getBlock().getLocation().equals(event.getClickedBlock().getLocation())){
+					if(crate.isComingSoon()){
+						event.getPlayer().sendMessage("");
+						event.getPlayer().sendMessage(crate.getName() + ChatColor.GRAY + " is coming soon to " + ChatColor.DARK_AQUA.toString() + ChatColor.UNDERLINE + "shop.decimatepvp.com" + ChatColor.GRAY + "!");
+						event.getPlayer().sendMessage("");
+					}else{
+						if(event.getAction().equals(Action.RIGHT_CLICK_BLOCK)){
+							tryToOpen(event.getPlayer(), event.getClickedBlock().getLocation(), crate);
+						}else{
+							viewRewards(event.getPlayer(), crate);
+						}
+					}
+					event.setCancelled(true);
+					return;
+				}
 			}
 		}
 	}
@@ -192,10 +188,15 @@ public class CrateManager implements Manager, Listener {
 		if(!(event.getWhoClicked() instanceof Player)){
 			return;
 		}
-		if(event.getInventory().equals(voteCrate.getRewardPage()) ||
-				event.getInventory().equals(godCrate.getRewardPage()) || event.getInventory().equals(decimateCrate.getRewardPage()) ||
-				isOpening(event.getInventory().getTitle())){
+		for(Crate crate : crates){
+			if(event.getInventory().equals(crate.getRewardPage())){
+				event.setCancelled(true);
+				return;
+			}
+		}
+		if(isOpening(event.getInventory().getTitle())){
 			event.setCancelled(true);
+			return;
 		}
 	}
 	

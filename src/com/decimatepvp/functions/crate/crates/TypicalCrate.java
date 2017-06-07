@@ -27,6 +27,11 @@ public abstract class TypicalCrate extends Crate {
 	public TypicalCrate(String name, List<CrateReward> rewards) {
 		super(name, rewards);
 	}
+	
+	public TypicalCrate(String name, boolean comingSoon){
+		super(name, comingSoon);
+	}
+	
 
 	@Override
 	protected void giveReward(Player player, CrateReward reward) {	
@@ -43,7 +48,7 @@ public abstract class TypicalCrate extends Crate {
 		if(rarity.equals(Rarity.COMMON)){
 			ParticleEffect.CLOUD.display(0, 0, 0, 0, 2, location.clone().add(0,1,0), 20);
 		}else if(rarity.equals(Rarity.RARE)){
-			ParticleEffect.ENCHANTMENT_TABLE.display(1, 1, 1, 0, 24, location.clone().add(0,1,0), 20);
+			ParticleEffect.ENCHANTMENT_TABLE.display(.5F, .5F, .5F, 1, 24, location.clone().add(0,1,0), 20);
 		}else if(rarity.equals(Rarity.EPIC)){
 			for(int i = 0; i < 50; i++){
 				final int q = i;
@@ -53,6 +58,7 @@ public abstract class TypicalCrate extends Crate {
 					public void run() {
 						location.getWorld().playSound(location, Sound.WATER, 1, 1);
 						ParticleEffect.DRIP_WATER.display(0, 0, 0, 0, 1, location.clone().add(.5*Math.cos((2*Math.PI)*(q/50.0)), 0.5 + q/40.0, .5*Math.sin((2*Math.PI)*(q/50.0))), 20);
+						ParticleEffect.DRIP_WATER.display(0, 0, 0, 0, 1, location.clone().add(-.5*Math.cos((2*Math.PI)*(q/50.0)), 0.5 + q/40.0, -.5*Math.sin((2*Math.PI)*(q/50.0))), 20);
 						if(q == 49){
 							FireworkEffect effect = FireworkEffect.builder().trail(false).flicker(false).withColor(Color.BLUE).with(FireworkEffect.Type.BALL).build();
 							Firework fw = location.getWorld().spawn(location, Firework.class);
@@ -68,8 +74,11 @@ public abstract class TypicalCrate extends Crate {
 			}
 		}else if(rarity.equals(Rarity.MYTHICAL)){
 			
+			player.getLocation().getWorld().playSound(player.getLocation(), Sound.ENDERDRAGON_DEATH, 1, 1);
+
 			Location[] locs = {new Location(Bukkit.getWorlds().get(0), 22, 76, 15), new Location(Bukkit.getWorlds().get(0), 22, 76, 23),
 					new Location(Bukkit.getWorlds().get(0), 14, 76, 23)};
+			FireworkEffect effect = FireworkEffect.builder().trail(false).flicker(false).withColor(Color.GREEN).with(FireworkEffect.Type.BALL).build();
 			for(int i = 0; i < 10; i++){
 				final int q = i;
 				Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(DecimateCore.getCore(), new Runnable(){
@@ -85,11 +94,18 @@ public abstract class TypicalCrate extends Crate {
 							}
 						}else if(q == 4){
 							if(player != null && player.isOnline() && player.getLocation().distance(locs[0]) < 40){
-								player.getLocation().getWorld().playSound(player.getLocation(), Sound.WITHER_SPAWN, 1, 1);
 								for(Location loc : locs){
 									for(int i = 1; i <= 30; i++){
 										ParticleEffect.VILLAGER_HAPPY.display(0, 0, 0, 0, 1,
-												loc.clone().add((player.getLocation().getX() - loc.getX())*(i/30.0), (player.getEyeLocation().getY() - (loc.getY() + 4) + 4)*(i/30.0), (player.getLocation().getZ() - loc.getZ())*(i/30.0)), 50);
+												loc.clone().add((player.getLocation().getX() - loc.getX())*(i/30.0), (player.getLocation().getY() - (loc.getY() + 4) + 4)*(i/30.0), (player.getLocation().getZ() - loc.getZ())*(i/30.0)), 50);
+									}
+									for(int z = 0; z < 5; z++){
+										Firework fw = loc.getWorld().spawn(loc.clone().add(0,4,0), Firework.class);
+										FireworkMeta meta = fw.getFireworkMeta();
+										meta.clearEffects();
+										meta.addEffect(effect);
+										meta.setPower(0);
+										fw.setFireworkMeta(meta);
 									}
 								}
 							}

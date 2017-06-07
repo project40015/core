@@ -18,7 +18,7 @@ public class GodCrate extends TypicalCrate {
 		super(ChatColor.YELLOW + "God Crate", rewards);
 		setupKey();
 		
-		super.setGroundEffect(ParticleEffect.FIREWORKS_SPARK);
+		super.setGroundEffect(ParticleEffect.CRIT_MAGIC);
 	}
 	
 	private void setupKey(){
