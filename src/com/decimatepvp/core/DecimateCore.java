@@ -148,7 +148,7 @@ public class DecimateCore extends JavaPlugin {
 				new AnvilDamageListener(), new BottleExpCommand(), new MiniEvents(), new FactionCommandListener(),
 				new FactionDamageListener(), staffCommandsManager, enderDelayManager, antiTntManager, worldBorder,
 				accountIpManager,  new EnchantListener(), new CustomEventCaller(), cropHopperManager, potionManager,
-				crateManager, comboManager, new EnchantmentLimitManager(), commandBookManager);
+				crateManager, comboManager, pvpManager, new EnchantmentLimitManager(), commandBookManager);
 	}
 	
 	@Override

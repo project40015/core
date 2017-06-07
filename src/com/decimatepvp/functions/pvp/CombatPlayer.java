@@ -1,39 +1,75 @@
 package com.decimatepvp.functions.pvp;
 
 import org.bukkit.Location;
-import org.bukkit.craftbukkit.v1_8_R3.CraftWorld;
-import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.Zombie;
+import org.bukkit.inventory.EntityEquipment;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.scheduler.BukkitRunnable;
 
-import com.mojang.authlib.GameProfile;
+import com.decimatepvp.core.DecimateCore;
 
-import net.minecraft.server.v1_8_R3.EntityPlayer;
-import net.minecraft.server.v1_8_R3.PlayerInteractManager;
-import net.minecraft.server.v1_8_R3.WorldServer;
-
-public class CombatPlayer extends EntityPlayer {
-
+public class CombatPlayer {
+	
+	private DecimateCore core = DecimateCore.getCore();
+	
+	private Zombie zombie;
+	
+	private String uuid;
+	
+	private ItemStack[] inv;
+	
 	public CombatPlayer(Player player) {
-		super(((CraftWorld) player.getWorld()).getHandle().getServer().getServer(),
-				((CraftWorld) player.getWorld()).getHandle().getServer().getServer().getWorldServer(0),
-				new GameProfile(player.getUniqueId(), player.getName()),
-				new PlayerInteractManager(((CraftWorld) player.getWorld()).getHandle()));
+		zombie = (Zombie) player.getWorld().spawnEntity(player.getLocation(), EntityType.ZOMBIE);
+		uuid = player.getUniqueId().toString();
+		EntityEquipment equip = zombie.getEquipment();
+		equip.setArmorContents(player.getEquipment().getArmorContents());
+		equip.setItemInHand(player.getItemInHand());
+//
+		equip.setBootsDropChance(0);
+		equip.setLeggingsDropChance(0);
+		equip.setChestplateDropChance(0);
+		equip.setHelmetDropChance(0);
+		equip.setItemInHandDropChance(0);
+
+		inv = player.getInventory().getContents();
 		
-		EntityPlayer ep = ((CraftPlayer) player).getHandle();
-		
-		this.inventory = ep.inventory;
-		
-        WorldServer worldServer = ((CraftWorld) player.getWorld()).getHandle();
-        
-        Location location = player.getLocation();
-        setPositionRotation(location.getX(), location.getY(), location.getZ(), location.getYaw(), location.getPitch());
-        
-        worldServer.addEntity(this);
-        worldServer.players.remove(this);
+		startDelay();
+	}
+	
+	private void startDelay() {
+		CombatPlayer cp = this;
+		BukkitRunnable br = new BukkitRunnable() {
+			@Override
+			public void run() {
+				core.getPvpManager().remove(cp);
+			}
+		};
+		br.runTaskLaterAsynchronously(core, 1200l);
+	}
+
+	public void onDeath() {
+		Location loc = zombie.getLocation();
+		for(ItemStack item : inv) {
+			if(item != null) {
+				loc.getWorld().dropItemNaturally(loc, item);
+			}
+		}
 	}
 
 	public void remove() {
-		world.removeEntity(this);
+		if(!zombie.isDead()) {
+			zombie.remove();
+		}
+	}
+	
+	public int getId() {
+		return zombie.getEntityId();
+	}
+
+	public String getUUID() {
+		return uuid;
 	}
 
 }

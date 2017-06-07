@@ -3,6 +3,7 @@ package com.decimatepvp.functions.pvp;
 import java.util.List;
 import java.util.Map;
 
+import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -11,6 +12,8 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.EntityDeathEvent;
+import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
@@ -24,9 +27,15 @@ public class PvPManager implements Manager, Listener, CommandExecutor {
 	
 	private List<String> killList = Lists.newArrayList();
 	private Map<String, CombatPlayer> players = Maps.newHashMap();
+	private Map<Integer, CombatPlayer> entities = Maps.newHashMap();
 	
 	public PvPManager() {
 		loadKillList();
+	}
+	
+	@EventHandler
+	public void onClick(InventoryClickEvent event) {
+		Bukkit.broadcastMessage(""+event.getSlot());
 	}
 
 	@Override
@@ -41,6 +50,7 @@ public class PvPManager implements Manager, Listener, CommandExecutor {
 		if(!players.containsKey(player.getUniqueId().toString())) {
 			CombatPlayer combat = new CombatPlayer(player);
 			players.put(player.getUniqueId().toString(), combat);
+			entities.put(combat.getId(), combat);
 			return true;
 		}
 		
@@ -49,6 +59,7 @@ public class PvPManager implements Manager, Listener, CommandExecutor {
 
 	public boolean removeHumanEntity(OfflinePlayer player) {
 		if(players.containsKey(player.getUniqueId().toString())) {
+			entities.remove(players.get(player.getUniqueId().toString()).getId());
 			players.get(player.getUniqueId().toString()).remove();
 			players.remove(player.getUniqueId().toString());
 			return true;
@@ -73,6 +84,21 @@ public class PvPManager implements Manager, Listener, CommandExecutor {
 		}
 		
 		return false;
+	}
+	
+	public void remove(CombatPlayer cp) {
+		entities.remove(cp.getId());
+		players.remove(cp.getUUID(), cp);
+		cp.remove();
+	}
+	
+	@EventHandler
+	public void onEntityDeath(EntityDeathEvent event) {
+		if(entities.containsKey(event.getEntity().getEntityId())) {
+			CombatPlayer cp = entities.get(event.getEntity().getEntityId());
+			cp.onDeath();
+			remove(cp);
+		}
 	}
 	
 	@EventHandler
