@@ -3,7 +3,6 @@ package com.decimatepvp.functions.pvp;
 import java.util.List;
 import java.util.Map;
 
-import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -13,7 +12,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDeathEvent;
-import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
@@ -33,10 +31,10 @@ public class PvPManager implements Manager, Listener, CommandExecutor {
 		loadKillList();
 	}
 	
-	@EventHandler
-	public void onClick(InventoryClickEvent event) {
-		Bukkit.broadcastMessage(""+event.getSlot());
-	}
+//	@EventHandler
+//	public void onClick(InventoryClickEvent event) {
+//		Bukkit.broadcastMessage(""+event.getSlot());
+//	}
 
 	@Override
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
@@ -96,7 +94,7 @@ public class PvPManager implements Manager, Listener, CommandExecutor {
 	public void onEntityDeath(EntityDeathEvent event) {
 		if(entities.containsKey(event.getEntity().getEntityId())) {
 			CombatPlayer cp = entities.get(event.getEntity().getEntityId());
-			cp.onDeath();
+			cp.onDeath(event);
 			remove(cp);
 		}
 	}
@@ -108,6 +106,9 @@ public class PvPManager implements Manager, Listener, CommandExecutor {
 			player.getInventory().clear();
 			player.damage(Double.MAX_VALUE);
 			removeFromList(player);
+		}
+		if(players.containsKey(player.getUniqueId().toString())) {
+			remove(players.get(player.getUniqueId().toString()));
 		}
 	}
 	
@@ -133,6 +134,10 @@ public class PvPManager implements Manager, Listener, CommandExecutor {
 		FileConfiguration config = cfg.getData();
 		
 		config.set("KillList", killList);
+		
+		for(CombatPlayer cp : players.values()) {
+			cp.remove();
+		}
 	}
 
 }

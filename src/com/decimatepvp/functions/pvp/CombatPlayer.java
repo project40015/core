@@ -1,10 +1,13 @@
 package com.decimatepvp.functions.pvp;
 
 import org.bukkit.Location;
+import org.bukkit.craftbukkit.v1_8_R3.inventory.CraftInventory;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Zombie;
+import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.inventory.EntityEquipment;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 
@@ -18,7 +21,7 @@ public class CombatPlayer {
 	
 	private String uuid;
 	
-	private ItemStack[] inv;
+	private Inventory inventory;
 	
 	public CombatPlayer(Player player) {
 		zombie = (Zombie) player.getWorld().spawnEntity(player.getLocation(), EntityType.ZOMBIE);
@@ -26,18 +29,19 @@ public class CombatPlayer {
 		EntityEquipment equip = zombie.getEquipment();
 		equip.setArmorContents(player.getEquipment().getArmorContents());
 		equip.setItemInHand(player.getItemInHand());
-//
-		equip.setBootsDropChance(0);
-		equip.setLeggingsDropChance(0);
-		equip.setChestplateDropChance(0);
-		equip.setHelmetDropChance(0);
-		equip.setItemInHandDropChance(0);
+		equip.setBootsDropChance(100);
+		equip.setLeggingsDropChance(100);
+		equip.setChestplateDropChance(100);
+		equip.setHelmetDropChance(100);
+		equip.setItemInHandDropChance(100);
 
-		inv = player.getInventory().getContents();
+		inventory = new CraftInventory(((CraftInventory) player.getInventory()).getInventory());
+//		inventory.removeItem(equip.getArmorContents());
+//		inventory.remove(equip.getItemInHand());
 		
 		startDelay();
 	}
-	
+
 	private void startDelay() {
 		CombatPlayer cp = this;
 		BukkitRunnable br = new BukkitRunnable() {
@@ -49,13 +53,16 @@ public class CombatPlayer {
 		br.runTaskLaterAsynchronously(core, 1200l);
 	}
 
-	public void onDeath() {
+	public void onDeath(EntityDeathEvent event) {
 		Location loc = zombie.getLocation();
-		for(ItemStack item : inv) {
+		for(ItemStack item : inventory) {
 			if(item != null) {
 				loc.getWorld().dropItemNaturally(loc, item);
 			}
 		}
+		
+		event.setDroppedExp(0);
+		event.getDrops().clear();
 	}
 
 	public void remove() {
