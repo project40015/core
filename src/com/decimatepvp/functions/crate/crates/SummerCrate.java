@@ -1,41 +1,40 @@
 package com.decimatepvp.functions.crate.crates;
 
+import java.util.List;
+
 import org.bukkit.ChatColor;
-import org.bukkit.Location;
-import org.bukkit.entity.Player;
+import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 
 import com.decimatepvp.functions.crate.CrateReward;
 import com.decimatepvp.utils.ParticleEffect;
 
 public class SummerCrate extends TypicalCrate {
 
-	public SummerCrate() {
-		super(ChatColor.GOLD + "Summer Crate", true);
-		super.setGroundEffect(ParticleEffect.REDSTONE);
-	}
-
-	@Override
-	protected void giveReward(Player player, CrateReward reward) {
-		// TODO Auto-generated method stub
+	private ItemStack summerKey;
+	
+	public SummerCrate(List<CrateReward> rewards) {
+		super(ChatColor.GOLD + "Summer Crate", rewards);
+		setupKey();
 		
+		super.setGroundEffect(ParticleEffect.FLAME);
+	}
+	
+	private void setupKey(){
+		summerKey = new ItemStack(Material.TRIPWIRE_HOOK);
+		ItemMeta meta = summerKey.getItemMeta();
+		meta.setDisplayName(ChatColor.GOLD + "Summer Crate Key");
+		summerKey.setItemMeta(meta);
 	}
 
 	@Override
 	public ItemStack getItemStack() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public boolean open(Player player, CrateReward reward, Location location) {
-		// TODO Auto-generated method stub
-		return false;
+		return summerKey;
 	}
 
 	@Override
 	public void disable() {
-		// TODO Auto-generated method stub
 		
 	}
 

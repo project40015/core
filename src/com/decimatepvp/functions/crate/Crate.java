@@ -60,7 +60,23 @@ public abstract class Crate {
 		nameStand.setGravity(false);
 	}
 	
+	private void orderRewards(){
+		boolean again = false;
+		for(int i = 0; i < rewards.size() - 1; i++){
+			if(rewards.get(i).getRarity().isRarer(rewards.get(i+1).getRarity())){
+				CrateReward r = rewards.get(i);
+				rewards.set(i, rewards.get(i+1));
+				rewards.set(i+1, r);
+				again = true;
+			}
+		}
+		if(again){
+			orderRewards();
+		}
+	}
+	
 	private void setupRewards(){
+		orderRewards();
 		rewardPage = Bukkit.getServer().createInventory(null, 27, ChatColor.GRAY.toString() + ChatColor.UNDERLINE + "Crate Rewards");
 		for(CrateReward reward : rewards){
 			rewardPage.addItem(reward.getIcon(totalChance));

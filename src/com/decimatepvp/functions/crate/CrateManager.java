@@ -27,13 +27,11 @@ import com.decimatepvp.functions.crate.crates.SummerCrate;
 import com.decimatepvp.functions.crate.crates.VoteCrate;
 import com.decimatepvp.functions.crate.rewards.CashReward;
 import com.decimatepvp.functions.crate.rewards.CommandReward;
-import com.decimatepvp.functions.crate.rewards.ItemReward;
 import com.decimatepvp.utils.Skull;
 
 public class CrateManager implements Manager, Listener {
 
 	private List<Crate> crates = new ArrayList<>();
-	private List<CrateReward> rewards = new ArrayList<>();
 	
 	private int run, i = 1;
 	
@@ -43,24 +41,10 @@ public class CrateManager implements Manager, Listener {
 	}
 	
 	private void loadCrates(){
-		CashReward tenk = new CashReward("$10,000", new ItemStack(Material.PAPER), Rarity.COMMON, 100, 10000);
-		
-		CrateReward blazeSpawner3 = new CommandReward("Blaze Spawner (3)", new ItemStack(Material.MOB_SPAWNER), Skull.BLAZE.getSkull(), Rarity.RARE, 25, "es give %player% BLAZE 0 3", false);
-		CrateReward ironSpawner2 = new CommandReward("Iron Golem Spawner (2)", new ItemStack(Material.MOB_SPAWNER), Skull.GOLEM.getSkull(), Rarity.RARE, 22, "es give %player% IRON_GOLEM 0 2", false);
-		CrateReward creeperSpawner2 = new CommandReward("Creeper Spawner (2)", new ItemStack(Material.MOB_SPAWNER), Skull.getPlayerSkull("MHF_Creeper"), Rarity.RARE, 22, "es give %player% CREEPER 0 2", false);
-		CrateReward decimateRank = new CommandReward("Decimate Rank", new ItemStack(Material.NETHER_STAR), Skull.getPlayerSkull("FarmKiteCarry"), Rarity.MYTHICAL, 1, "manuadd %player% decimate", true);
-		CrateReward decimateKit = new CommandReward("Decimate Kit", new ItemStack(Material.BOOK), new ItemStack(Material.DIAMOND_HELMET), Rarity.COMMON, 30, "kit decimate %player%", true);
-
-		CrateReward guaranteedEpic = new ItemReward(new ItemStack(Material.DIAMOND), new ItemStack(Material.DIAMOND_HELMET), Rarity.EPIC, 1000);
-		CrateReward guaranteedMythical = new ItemReward(new ItemStack(Material.REDSTONE_BLOCK), new ItemStack(Material.DIAMOND_HELMET), Rarity.MYTHICAL, 1000);
-
-
-		rewards.add(tenk);
-		
-		GodCrate godCrate = new GodCrate(Arrays.asList(tenk, guaranteedMythical));
-		VoteCrate voteCrate = new VoteCrate(Arrays.asList(tenk, guaranteedEpic));
-		DecimateCrate decimateCrate = new DecimateCrate(Arrays.asList(decimateKit, blazeSpawner3, ironSpawner2, creeperSpawner2, decimateRank));
-		SummerCrate summerCrate = new SummerCrate();
+		GodCrate godCrate = setupGodCrate();
+		VoteCrate voteCrate = setupVoteCrate();
+		DecimateCrate decimateCrate = setupDecimateCrate();
+		SummerCrate summerCrate = setupSummerCrate();
 		
 		decimateCrate.spawn(new Location(Bukkit.getWorlds().get(0), 21, 76, 20));
 		godCrate.spawn(new Location(Bukkit.getWorlds().get(0), 19, 76, 22));
@@ -71,6 +55,45 @@ public class CrateManager implements Manager, Listener {
 		this.crates.add(voteCrate);
 		this.crates.add(decimateCrate);
 		this.crates.add(summerCrate);
+	}
+	
+	private SummerCrate setupSummerCrate(){
+		return new SummerCrate(Arrays.asList(
+				new CommandReward("Summer Kit (PERM)", Skull.getPlayerSkull("MHF_Present2"), Rarity.EPIC, 14, "manuaddp %player% essentials.kits.summer", true,
+						ChatColor.GRAY + "Gives you access to " + ChatColor.GOLD + "Summer Kit" + ChatColor.GRAY + " (weekly):~ ~" + ChatColor.GRAY +
+						"1 x " + ChatColor.GOLD + "Aestas's Helmet" + ChatColor.GRAY + ": Diamond helmet that absorbs 20% of damage while you are in the sun.",
+						ChatColor.GRAY + "You have unlocked the " + ChatColor.GOLD + "Summer " + ChatColor.GRAY + "kit!"),
+				new CommandReward("Decimate Rank", Skull.getPlayerSkull("MHF_Present1"), Rarity.MYTHICAL, 1, "manuadd %player% decimate", true, ChatColor.GRAY +
+						"Receive the " + DecimateCore.getCore().getColoredDecimate() + ChatColor.GRAY + " rank!",
+						ChatColor.GRAY + "You have unlocked the " + DecimateCore.getCore().getColoredDecimate() + ChatColor.GRAY + " rank!"),
+				new CommandReward("Blaze Spawner (4)", new ItemStack(Material.MOB_SPAWNER), Rarity.RARE, 25, "es give %player% BLAZE 0 4", false),
+				new CommandReward("Iron Golem Spawner (2)", new ItemStack(Material.MOB_SPAWNER), Rarity.RARE, 20, "es give %player% IRON_GOLEM 0 2", false),
+				new CashReward("$4,000,000", new ItemStack(Material.PAPER), Rarity.COMMON, 40, 4000000) 
+				));
+	}
+	
+	private GodCrate setupGodCrate(){
+		return new GodCrate(Arrays.asList(
+				new CashReward("$100,000", new ItemStack(Material.PAPER), Rarity.COMMON, 100, 100000)
+				));
+	}
+	
+	private DecimateCrate setupDecimateCrate(){
+		return new DecimateCrate(Arrays.asList(
+				new CommandReward("Blaze Spawner (3)", new ItemStack(Material.MOB_SPAWNER), Rarity.RARE, 25, "es give %player% BLAZE 0 3", false),
+				new CommandReward("Iron Golem Spawner (2)",new ItemStack(Material.MOB_SPAWNER), Rarity.RARE, 22, "es give %player% IRON_GOLEM 0 2", false),
+				new CommandReward("Creeper Spawner (2)", new ItemStack(Material.MOB_SPAWNER), Rarity.RARE, 22, "es give %player% CREEPER 0 2", false),
+				new CommandReward("Decimate Rank", Skull.getPlayerSkull("MHF_Present1"), Rarity.MYTHICAL, 1, "manuadd %player% decimate", true, ChatColor.GRAY +
+						"Receive the " + DecimateCore.getCore().getColoredDecimate() + ChatColor.GRAY + " rank!",
+						ChatColor.GRAY + "You have unlocked the " + DecimateCore.getCore().getColoredDecimate() + ChatColor.GRAY + " rank!"),
+				new CommandReward("Decimate Kit (1)", new ItemStack(Material.BOOK), Rarity.COMMON, 30, "kit decimate %player%", true)
+				));
+	}
+	
+	private VoteCrate setupVoteCrate(){
+		return new VoteCrate(Arrays.asList(
+				new CashReward("$10,000", new ItemStack(Material.PAPER), Rarity.COMMON, 100, 10000)
+				));
 	}
 	
 	public boolean isCrate(String name){
@@ -183,13 +206,32 @@ public class CrateManager implements Manager, Listener {
 		return false;
 	}
 	
+	private CrateReward getCrateReward(Crate crate, ItemStack item){
+		for(CrateReward cr : crate.getRewards()){
+			if(cr.getIcon(1).getItemMeta().getDisplayName().equals(item.getItemMeta().getDisplayName())){
+				return cr;
+			}
+		}
+		return null;
+	}
+	
 	@EventHandler
 	public void onClick(InventoryClickEvent event){
 		if(!(event.getWhoClicked() instanceof Player)){
 			return;
 		}
+		Player p = (Player) event.getWhoClicked();
 		for(Crate crate : crates){
 			if(event.getInventory().equals(crate.getRewardPage())){
+				CrateReward cr = getCrateReward(crate, event.getCurrentItem());
+				if(cr != null){
+					if(!cr.getDescription().equals("")){
+						String[] msgs = cr.getDescription().split("~");
+						for(String s : msgs){
+							p.sendMessage(s);
+						}
+					}
+				}
 				event.setCancelled(true);
 				return;
 			}
@@ -232,7 +274,6 @@ public class CrateManager implements Manager, Listener {
 			}
 		}
 		crates.clear();
-		rewards.clear();
 	}
 
 }

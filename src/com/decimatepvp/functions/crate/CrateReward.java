@@ -11,11 +11,16 @@ import org.bukkit.inventory.meta.ItemMeta;
 public abstract class CrateReward {
 
 	private String name;
-	private ItemStack icon, anim;
+	private ItemStack icon;
 	private Rarity rarity;
 	private int chance;
+	private String description;
 	
-	public CrateReward(String name, ItemStack icon, ItemStack anim, Rarity rarity, int chance){
+	public CrateReward(String name, ItemStack icon, Rarity rarity, int chance){
+		this(name, icon, rarity, chance, "");
+	}
+	
+	public CrateReward(String name, ItemStack icon, Rarity rarity, int chance, String description){
 		this.name = name;
 		this.icon = icon.clone();
 		this.rarity = rarity;
@@ -23,7 +28,7 @@ public abstract class CrateReward {
 		ItemMeta im = this.icon.getItemMeta();
 		im.setDisplayName(getFormatName());
 		this.icon.setItemMeta(im);
-		this.anim = anim;
+		this.description = description;
 	}
 	
 	private double chance(int total){
@@ -61,8 +66,8 @@ public abstract class CrateReward {
 		return chance;
 	}
 	
-	public ItemStack getAnimationItem(){
-		return this.anim;
+	public String getDescription(){
+		return this.description;
 	}
 	
 }

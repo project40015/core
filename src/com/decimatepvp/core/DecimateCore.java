@@ -1,5 +1,6 @@
 package com.decimatepvp.core;
 
+import net.md_5.bungee.api.ChatColor;
 import net.milkbowl.vault.economy.Economy;
 
 import org.bukkit.event.Listener;
@@ -25,6 +26,7 @@ import com.decimatepvp.functions.antitnt.AntiTntManager;
 import com.decimatepvp.functions.bookCommand.CommandBookManager;
 import com.decimatepvp.functions.crate.CrateKeyCommand;
 import com.decimatepvp.functions.crate.CrateManager;
+import com.decimatepvp.functions.crate.rewards.RewardListener;
 import com.decimatepvp.functions.misc.crophopper.CropHopperCommand;
 import com.decimatepvp.functions.misc.crophopper.CropHopperManager;
 import com.decimatepvp.functions.misc.harvester.HarvesterCommand;
@@ -148,7 +150,8 @@ public class DecimateCore extends JavaPlugin {
 				new AnvilDamageListener(), new BottleExpCommand(), new MiniEvents(), new FactionCommandListener(),
 				new FactionDamageListener(), staffCommandsManager, enderDelayManager, antiTntManager, worldBorder,
 				accountIpManager,  new EnchantListener(), new CustomEventCaller(), cropHopperManager, potionManager,
-				crateManager, comboManager, pvpManager, new EnchantmentLimitManager(), commandBookManager);
+				crateManager, comboManager, pvpManager, new EnchantmentLimitManager(), commandBookManager,
+				new RewardListener());
 	}
 	
 	@Override
@@ -291,6 +294,10 @@ public class DecimateCore extends JavaPlugin {
 	
 	public CommandBookManager getCommandBookManager(){
 		return this.commandBookManager;
+	}
+	
+	public String getColoredDecimate(){
+		return ChatColor.translateAlternateColorCodes('&', "&cD&6E&eC&aI&bM&9A&5T&cE");
 	}
 
 }

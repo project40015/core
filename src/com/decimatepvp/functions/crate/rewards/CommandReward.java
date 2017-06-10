@@ -17,15 +17,23 @@ public class CommandReward extends CrateReward {
 	private String command;
 	private CommandBook commandBook;
 	
-	public CommandReward(String name, ItemStack icon, ItemStack anim, Rarity rarity, int chance, String command, boolean book) {
-		super(name, icon, anim, rarity, chance);
+	public CommandReward(String name, ItemStack icon, Rarity rarity, int chance, String command, boolean book) {
+		this(name, icon, rarity, chance, command, book, "", "");
+	}
+	
+	public CommandReward(String name, ItemStack icon, Rarity rarity, int chance, String command, boolean book, String description) {
+		this(name, icon, rarity, chance, command, book, description, "");
+	}
+	
+	public CommandReward(String name, ItemStack icon, Rarity rarity, int chance, String command, boolean book, String description, String itemDesc) {
+		super(name, icon, rarity, chance, description);
 		this.command = command;
 		if(book){
 			ItemStack commandBookIcon = new ItemStack(Material.BOOK);
 			ItemMeta im = commandBookIcon.getItemMeta();
 			im.setDisplayName(rarity.getColor() + name + ChatColor.GRAY + " (Right Click)");
 			commandBookIcon.setItemMeta(im);
-			this.commandBook = new CommandBook(commandBookIcon, command);
+			this.commandBook = itemDesc.equals("") ? new CommandBook(commandBookIcon, command) : new CommandBook(commandBookIcon, command, itemDesc);
 			DecimateCore.getCore().getCommandBookManager().addCommandBook(commandBook);
 		}
 	}

@@ -6,14 +6,13 @@ import org.bukkit.inventory.ItemStack;
 import com.decimatepvp.core.DecimateCore;
 import com.decimatepvp.functions.crate.CrateReward;
 import com.decimatepvp.functions.crate.Rarity;
-import com.decimatepvp.utils.Skull;
 
 public class CashReward extends CrateReward {
 
 	private int cash;
 	
 	public CashReward(String name, ItemStack icon, Rarity rarity, int chance, int cash) {
-		super(rarity.getColor() + name, icon, Skull.EXCLAMATION.getSkull(), rarity, chance);
+		super(rarity.getColor() + name, icon, rarity, chance);
 		this.cash = cash;
 	}
 

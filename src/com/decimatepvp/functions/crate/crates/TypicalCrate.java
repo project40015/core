@@ -57,8 +57,9 @@ public abstract class TypicalCrate extends Crate {
 					@Override
 					public void run() {
 						location.getWorld().playSound(location, Sound.WATER, 1, 1);
-						ParticleEffect.DRIP_WATER.display(0, 0, 0, 0, 1, location.clone().add(.5*Math.cos((2*Math.PI)*(q/50.0)), 0.5 + q/40.0, .5*Math.sin((2*Math.PI)*(q/50.0))), 20);
-						ParticleEffect.DRIP_WATER.display(0, 0, 0, 0, 1, location.clone().add(-.5*Math.cos((2*Math.PI)*(q/50.0)), 0.5 + q/40.0, -.5*Math.sin((2*Math.PI)*(q/50.0))), 20);
+						double multiplier = q/100.0;
+						ParticleEffect.DRIP_WATER.display(0, 0, 0, 0, 1, location.clone().add(multiplier*Math.cos((2*Math.PI)*(q/50.0)), 0.5 + q/40.0, multiplier*Math.sin((2*Math.PI)*(q/50.0))), 20);
+						ParticleEffect.DRIP_WATER.display(0, 0, 0, 0, 1, location.clone().add(-1*multiplier*Math.cos((2*Math.PI)*(q/50.0)), 0.5 + q/40.0, -1*multiplier*Math.sin((2*Math.PI)*(q/50.0))), 20);
 						if(q == 49){
 							FireworkEffect effect = FireworkEffect.builder().trail(false).flicker(false).withColor(Color.BLUE).with(FireworkEffect.Type.BALL).build();
 							Firework fw = location.getWorld().spawn(location, Firework.class);
@@ -95,10 +96,13 @@ public abstract class TypicalCrate extends Crate {
 						}else if(q == 4){
 							if(player != null && player.isOnline() && player.getLocation().distance(locs[0]) < 40){
 								for(Location loc : locs){
-									for(int i = 1; i <= 30; i++){
-										ParticleEffect.VILLAGER_HAPPY.display(0, 0, 0, 0, 1,
-												loc.clone().add((player.getLocation().getX() - loc.getX())*(i/30.0), (player.getLocation().getY() - (loc.getY() + 4) + 4)*(i/30.0), (player.getLocation().getZ() - loc.getZ())*(i/30.0)), 50);
-									}
+									
+									//Arrows removed
+									
+//									for(int i = 1; i <= 30; i++){
+//										ParticleEffect.VILLAGER_HAPPY.display(0, 0, 0, 0, 1,
+//												loc.clone().add((player.getLocation().getX() - loc.getX())*(i/30.0), (player.getLocation().getY() - (loc.getY() + 4) + 4)*(i/30.0), (player.getLocation().getZ() - loc.getZ())*(i/30.0)), 50);
+//									}
 									for(int z = 0; z < 5; z++){
 										Firework fw = loc.getWorld().spawn(loc.clone().add(0,4,0), Firework.class);
 										FireworkMeta meta = fw.getFireworkMeta();

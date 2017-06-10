@@ -10,10 +10,16 @@ public class CommandBook {
 
 	private ItemStack item;
 	private String command;
+	private String message = "";
 	
 	public CommandBook(ItemStack item, String command){
 		this.item = item;
 		this.command = command;
+	}
+	
+	public CommandBook(ItemStack item, String command, String message){
+		this(item, command);
+		this.message = message;
 	}
 	
 	public ItemStack getItem(){
@@ -35,6 +41,10 @@ public class CommandBook {
 		}
 		player.playSound(player.getLocation(), Sound.HORSE_SADDLE, 1, 1);
 		Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), command.replaceAll("%player%", player.getName()));
+		
+		if(!this.message.equals("")){
+			player.sendMessage(message);
+		}
 	}
 	
 }

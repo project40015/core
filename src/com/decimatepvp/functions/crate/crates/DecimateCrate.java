@@ -18,7 +18,7 @@ public class DecimateCrate extends TypicalCrate {
 		super(ChatColor.LIGHT_PURPLE + "Decimate Crate", rewards);
 		setupKey();
 		
-		super.setGroundEffect(ParticleEffect.FLAME);
+		super.setGroundEffect(ParticleEffect.PORTAL);
 	}
 	
 	private void setupKey(){
