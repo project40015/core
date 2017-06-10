@@ -80,7 +80,7 @@ public abstract class Crate {
 	private void orderRewards(){
 		boolean again = false;
 		for(int i = 0; i < rewards.size() - 1; i++){
-			if(rewards.get(i).getRarity().isRarer(rewards.get(i+1).getRarity())){
+			if(rewards.get(i).getChance() < rewards.get(i+1).getChance()){
 				CrateReward r = rewards.get(i);
 				rewards.set(i, rewards.get(i+1));
 				rewards.set(i+1, r);
@@ -92,9 +92,23 @@ public abstract class Crate {
 		}
 	}
 	
+	private int pageSize(){
+		int n = this.rewards.size();
+		if(n <= 9){
+			return 9;
+		}
+		if(n <= 18){
+			return 18;
+		}
+		if(n <= 27){
+			return 27;
+		}
+		return 54;
+	}
+	
 	private void setupRewards(){
 		orderRewards();
-		rewardPage = Bukkit.getServer().createInventory(null, 27, ChatColor.GRAY.toString() + ChatColor.UNDERLINE + "Crate Rewards");
+		rewardPage = Bukkit.getServer().createInventory(null, pageSize(), ChatColor.GRAY.toString() + ChatColor.UNDERLINE + "Crate Rewards");
 		for(CrateReward reward : rewards){
 			rewardPage.addItem(reward.getIcon(totalChance));
 		}
@@ -190,14 +204,18 @@ public abstract class Crate {
 	
 	public void clearStands(){
 		if(this.nameStand != null){
-			this.nameStand.remove();
+			if(!this.nameStand.isDead()){
+				this.nameStand.remove();
+			}
 		}
 		if(this.timeStand != null){
-			this.timeStand.remove();
+			if(!this.timeStand.isDead()){
+				this.timeStand.remove();
+			}
 		}
 	}
 	
-	protected abstract void giveReward(Player player, CrateReward reward);
+	protected abstract void giveReward(Player player, CrateReward reward, Location location);
 	public abstract ItemStack getItemStack();
 	public abstract boolean open(Player player, CrateReward reward, Location location);
 	public abstract void disable();

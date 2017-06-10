@@ -27,6 +27,9 @@ public class CommandBookManager implements Listener, Manager {
 	}
 	
 	public CommandBook getCommandBook(ItemStack item){
+		if(item == null){
+			return null;
+		}
 		ItemStack c = item.clone();
 		c.setAmount(1);
 		for(CommandBook book : this.commandBooks){

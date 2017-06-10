@@ -16,8 +16,11 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.player.PlayerInteractAtEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerKickEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.ItemStack;
 
 import com.decimatepvp.core.DecimateCore;
@@ -25,9 +28,12 @@ import com.decimatepvp.core.Manager;
 import com.decimatepvp.functions.crate.crates.DecimateCrate;
 import com.decimatepvp.functions.crate.crates.GodCrate;
 import com.decimatepvp.functions.crate.crates.SummerCrate;
+import com.decimatepvp.functions.crate.crates.TypicalCrate;
 import com.decimatepvp.functions.crate.crates.VoteCrate;
 import com.decimatepvp.functions.crate.rewards.CashReward;
 import com.decimatepvp.functions.crate.rewards.CommandReward;
+import com.decimatepvp.functions.crate.rewards.ItemReward;
+import com.decimatepvp.utils.EnchantGlow;
 import com.decimatepvp.utils.Skull;
 
 public class CrateManager implements Manager, Listener {
@@ -54,6 +60,40 @@ public class CrateManager implements Manager, Listener {
 		this.crates.add(summerCrate);
 	}
 	
+	@EventHandler
+	public void onClose(InventoryCloseEvent event){
+		if(!(event.getPlayer() instanceof Player)){
+			return;
+		}
+		Player player = (Player) event.getPlayer();
+		for(Crate crate : this.crates){
+			if(crate instanceof TypicalCrate){
+				TypicalCrate tp = (TypicalCrate) crate;
+				tp.finish(player);
+			}
+		}
+	}
+	
+	@EventHandler
+	public void onLeave(PlayerQuitEvent event){
+		for(Crate crate : this.crates){
+			if(crate instanceof TypicalCrate){
+				TypicalCrate tp = (TypicalCrate) crate;
+				tp.finish(event.getPlayer());
+			}
+		}
+	}
+	
+	@EventHandler
+	public void onKick(PlayerKickEvent event){
+		for(Crate crate : this.crates){
+			if(crate instanceof TypicalCrate){
+				TypicalCrate tp = (TypicalCrate) crate;
+				tp.finish(event.getPlayer());
+			}
+		}	
+	}
+	
 	private SummerCrate setupSummerCrate(){
 		return new SummerCrate(Arrays.asList(
 				new CommandReward("Summer Kit (PERM)", Skull.getPlayerSkull("MHF_Present2"), Rarity.EPIC, 14, "manuaddp %player% essentials.kits.summer", true,
@@ -65,13 +105,17 @@ public class CrateManager implements Manager, Listener {
 						ChatColor.GRAY + "You have unlocked the " + DecimateCore.getCore().getColoredDecimate() + ChatColor.GRAY + " rank!"),
 				new CommandReward("Blaze Spawner (4)", new ItemStack(Material.MOB_SPAWNER), Rarity.RARE, 25, "es give %player% BLAZE 0 4", false),
 				new CommandReward("Iron Golem Spawner (2)", new ItemStack(Material.MOB_SPAWNER), Rarity.RARE, 20, "es give %player% IRON_GOLEM 0 2", false),
-				new CashReward("$4,000,000", new ItemStack(Material.PAPER), Rarity.COMMON, 40, 4000000) 
+				new CashReward("$3,500,000", new ItemStack(Material.PAPER), Rarity.COMMON, 40, 3500000) 
 				));
 	}
 	
 	private GodCrate setupGodCrate(){
 		return new GodCrate(Arrays.asList(
-				new CashReward("$100,000", new ItemStack(Material.PAPER), Rarity.COMMON, 100, 100000)
+				new CommandReward("Blaze Spawner (2)", new ItemStack(Material.MOB_SPAWNER), Rarity.COMMON, 25+3+3, "es give %player% BLAZE 0 3", false),
+				new CommandReward("Iron Golem Spawner (1)",new ItemStack(Material.MOB_SPAWNER), Rarity.RARE, 22-3, "es give %player% IRON_GOLEM 0 2", false),
+				new CommandReward("Creeper Spawner (1)", new ItemStack(Material.MOB_SPAWNER), Rarity.RARE, 22-3, "es give %player% CREEPER 0 2", false),
+				new CommandReward("Decimate Key (1)", glowItem(Material.TRIPWIRE_HOOK, 1, true), Rarity.MYTHICAL, 1, "cratekey %player% decimate_key 1", false),
+				new CommandReward("Decimate Kit (1)", new ItemStack(Material.BOOK), Rarity.COMMON, 30, "kit decimate %player%", true)
 				));
 	}
 	
@@ -83,14 +127,33 @@ public class CrateManager implements Manager, Listener {
 				new CommandReward("Decimate Rank", Skull.getPlayerSkull("MHF_Present1"), Rarity.MYTHICAL, 1, "manuadd %player% decimate", true, ChatColor.GRAY +
 						"Receive the " + DecimateCore.getCore().getColoredDecimate() + ChatColor.GRAY + " rank!",
 						ChatColor.GRAY + "You have unlocked the " + DecimateCore.getCore().getColoredDecimate() + ChatColor.GRAY + " rank!"),
-				new CommandReward("Decimate Kit (1)", new ItemStack(Material.BOOK), Rarity.COMMON, 30, "kit decimate %player%", true)
+				new CommandReward("Protection V Kit (1)", new ItemStack(Material.BOOK), Rarity.COMMON, 30, "kit protectionv %player%", true)
 				));
 	}
 	
 	private VoteCrate setupVoteCrate(){
 		return new VoteCrate(Arrays.asList(
-				new CashReward("$10,000", new ItemStack(Material.PAPER), Rarity.COMMON, 100, 10000)
+				new CommandReward("Creeper Spawner (1)", new ItemStack(Material.MOB_SPAWNER), Rarity.MYTHICAL, 1, "es give %player% CREEPER 0 1", false),
+				new ItemReward("Hopper (4)", item(Material.HOPPER, 0, 4), Rarity.RARE, 15),
+				new CommandReward("God Key (1)", glowItem(Material.TRIPWIRE_HOOK, 1, true), Rarity.MYTHICAL, 2, "cratekey %player% god_crate 1", false),
+				new CommandReward("Zombie Spawner (1)", new ItemStack(Material.MOB_SPAWNER), Rarity.COMMON, 20, "es give %player% ZOMBIE 0 1", false),
+				new CommandReward("Skeleton Spawner (1)", new ItemStack(Material.MOB_SPAWNER), Rarity.COMMON, 20, "es give %player% SKELETON 0 1", false),
+				new CommandReward("Cow Spawner (1)", new ItemStack(Material.MOB_SPAWNER), Rarity.EPIC, 5, "es give %player% COW 0 1", false),
+				new ItemReward("God Apple (4)", item(Material.GOLDEN_APPLE, 1, 4), Rarity.COMMON, 20),
+				new CashReward("$100,000", new ItemStack(Material.PAPER), Rarity.RARE, 17, 500000)
 				));
+	}
+	
+	private ItemStack item(Material material, int data, int amount){
+		return new ItemStack(material, amount, (byte) data);
+	}
+	
+	private ItemStack glowItem(Material material, int amount, boolean glow){
+		ItemStack i = new ItemStack(material, amount, (byte) 0);
+		if(glow){
+			EnchantGlow.addGlow(i);
+		}
+		return i;
 	}
 	
 	public boolean isCrate(String name){
@@ -120,7 +183,13 @@ public class CrateManager implements Manager, Listener {
 	}
 	
 	private void startTimer(){
-		final int t = 2;
+		List<Crate> groundDisplayCrates = new ArrayList<>();
+		for(Crate crate : this.crates){
+			if(crate.hasGroundEffect()){
+				groundDisplayCrates.add(crate);
+			}
+		}
+		final int t = 3;
 		run = Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(DecimateCore.getCore(), new Runnable(){
 
 			@Override
@@ -138,10 +207,8 @@ public class CrateManager implements Manager, Listener {
 				}else{
 					z = 1 - ((i-30)/10.0);
 				}
-				for(int i = 0; i < crates.size(); i++){
-					if(crates.get(i).hasGroundEffect()){
-						crates.get(i).getGroundEffect().display(0, 0, 0, 0, 1, crates.get(i).getLocation().clone().add(x, 0.05, z), 30);
-					}
+				for(int i = 0; i < groundDisplayCrates.size(); i++){
+					groundDisplayCrates.get(i).getGroundEffect().display(0, 0, 0, 0, 1, groundDisplayCrates.get(i).getLocation().clone().add(x, 0.05, z), 30);
 				}
 			}
 			
@@ -149,19 +216,27 @@ public class CrateManager implements Manager, Listener {
 	}
 	
 	private void startSeasonalTimer(){
+		List<Crate> seasonal = new ArrayList<Crate>();
+		for(Crate crate : this.crates){
+			if(crate.isSeasonal()){
+				seasonal.add(crate);
+			}
+		}
+		if(seasonal.size() == 0){
+			return;
+		}
 		runB = Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(DecimateCore.getCore(), new Runnable(){
 
 			@Override
 			public void run() {
-				for(int i = 0; i < crates.size(); i++){
-					if(crates.get(i).isSeasonal()){
-						if(crates.get(i).isOver()){
-							crates.get(i).clearStands();
-							crates.get(i).disable();
-							crates.remove(i--);
-						}else{
-							crates.get(i).setTimeString(ChatColor.GRAY + formatTimeString(crates.get(i).getOver()));
-						}
+				for(int i = 0; i < seasonal.size(); i++){
+					if(seasonal.get(i).isOver()){
+						seasonal.get(i).clearStands();
+						seasonal.get(i).disable();
+						crates.remove(seasonal);
+						seasonal.remove(i--);
+					}else{
+						seasonal.get(i).setTimeString(ChatColor.GRAY + formatTimeString(seasonal.get(i).getOver()));
 					}
 				}
 			}

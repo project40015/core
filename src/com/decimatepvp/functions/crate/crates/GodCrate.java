@@ -10,6 +10,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import com.decimatepvp.functions.crate.CrateReward;
+import com.decimatepvp.utils.EnchantGlow;
 import com.decimatepvp.utils.ParticleEffect;
 
 public class GodCrate extends TypicalCrate {
@@ -28,6 +29,7 @@ public class GodCrate extends TypicalCrate {
 		ItemMeta meta = godKey.getItemMeta();
 		meta.setDisplayName(ChatColor.YELLOW + "God Crate Key");
 		godKey.setItemMeta(meta);
+		EnchantGlow.addGlow(godKey);
 	}
 
 	@Override

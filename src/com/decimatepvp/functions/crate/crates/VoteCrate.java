@@ -10,6 +10,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import com.decimatepvp.functions.crate.CrateReward;
+import com.decimatepvp.utils.EnchantGlow;
 import com.decimatepvp.utils.ParticleEffect;
 
 public class VoteCrate extends TypicalCrate {
@@ -28,6 +29,7 @@ public class VoteCrate extends TypicalCrate {
 		ItemMeta meta = voteKey.getItemMeta();
 		meta.setDisplayName(ChatColor.GRAY + "Vote Crate Key");
 		voteKey.setItemMeta(meta);
+		EnchantGlow.addGlow(voteKey);
 	}
 
 	@Override

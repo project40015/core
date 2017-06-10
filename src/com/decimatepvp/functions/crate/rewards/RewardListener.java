@@ -14,7 +14,7 @@ public class RewardListener implements Listener {
 		if(event.getEntity() instanceof Player){
 			Player p = (Player) event.getEntity();
 			if(p.getInventory().getHelmet() != null && p.getInventory().getHelmet().getItemMeta() != null){
-				if(p.getInventory().getHelmet().getItemMeta().getDisplayName().equals(ChatColor.GOLD + "Aestas's Helmet")){
+				if(p.getInventory().getHelmet().getItemMeta().getLore().contains(ChatColor.GRAY + "Aestas's Enchant I")){
 					if(p.getLocation().getBlock().getLightFromSky() == 15 &&
 							p.getLocation().getWorld().getTime() >= 0 &&
 							p.getLocation().getWorld().getTime() <= 12000){

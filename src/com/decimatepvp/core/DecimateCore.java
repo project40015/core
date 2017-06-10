@@ -157,7 +157,9 @@ public class DecimateCore extends JavaPlugin {
 	@Override
 	public void onDisable(){
 		for(Manager manager : managers){
-			manager.disable();
+			if(manager != null){
+				manager.disable();
+			}
 		}
 	}
 

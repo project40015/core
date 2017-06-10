@@ -1,5 +1,6 @@
 package com.decimatepvp.functions.crate.crates;
 
+import java.util.HashMap;
 import java.util.List;
 
 import org.bukkit.Bukkit;
@@ -24,6 +25,8 @@ import com.decimatepvp.utils.ParticleEffect;
 
 public abstract class TypicalCrate extends Crate {
 
+	private HashMap<String, CrateReward> openers = new HashMap<String, CrateReward>();
+	
 	public TypicalCrate(String name, List<CrateReward> rewards, Location location) {
 		super(name, rewards, location);
 	}
@@ -32,9 +35,14 @@ public abstract class TypicalCrate extends Crate {
 		super(name, comingSoon, location);
 	}
 	
+	public HashMap<String, CrateReward> getOpeners(){
+		return this.openers;
+	}
+	
 
 	@Override
-	protected void giveReward(Player player, CrateReward reward) {	
+	protected void giveReward(Player player, CrateReward reward, Location location) {	
+		postEffect(player, reward.getRarity(), location);
 		player.sendMessage("");
 		player.sendMessage(ChatColor.GRAY + "Found: " + reward.getFormatName() + ChatColor.GRAY + "!");
 		player.sendMessage("");
@@ -127,7 +135,15 @@ public abstract class TypicalCrate extends Crate {
 		}
 	}
 	
+	public void finish(Player player){
+		if(this.openers.containsKey(player.getName())){
+			this.giveReward(player, this.openers.get(player.getName()), super.getLocation().clone().add(0.5,0.5,0.5));
+			this.openers.remove(player.getName());
+		}
+	}
+	
 	private void effect(Player player, CrateReward reward, Location location){
+		this.openers.put(player.getName(), reward);
 		Inventory inventory = Bukkit.getServer().createInventory(player, 27, ChatColor.UNDERLINE + super.getName());
 		ItemStack it = new ItemStack(Material.HOPPER);
 		ItemMeta im = it.getItemMeta();
@@ -142,24 +158,30 @@ public abstract class TypicalCrate extends Crate {
 		
 		player.openInventory(inventory);
 		final int p = 19;
+		int[] runners = new int[p];
 		for(int i = 0; i < p; i++){
 			final int q = i;
-			Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(DecimateCore.getCore(), new Runnable(){
+			runners[i] = Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(DecimateCore.getCore(), new Runnable(){
 
 				@Override
 				public void run() {
-					player.playSound(player.getLocation(), Sound.FIRE_IGNITE, 1, 1);
-					for(int i = 0; i < 8; i++){
-						inventory.setItem(17-i, inventory.getItem(16-i));
-					}
-					if(q != p - 5){
-						inventory.setItem(9, reward().getIcon(getTotalChance()));
+					if(!openers.containsKey(player.getName())){
+						for(int i = q; i < p; i++){
+							Bukkit.getServer().getScheduler().cancelTask(runners[i]);
+						}
 					}else{
-						inventory.setItem(9, reward.getIcon(getTotalChance()));
-					}
-					if(q == p - 1){
-						giveReward(player, reward);
-						postEffect(player, reward.getRarity(), location.clone().add(0.5,0.5,0.5));
+						player.playSound(player.getLocation(), Sound.DIG_SNOW, 1, 1);
+						for(int i = 0; i < 8; i++){
+							inventory.setItem(17-i, inventory.getItem(16-i));
+						}
+						if(q != p - 5){
+							inventory.setItem(9, reward().getIcon(getTotalChance()));
+						}else{
+							inventory.setItem(9, reward.getIcon(getTotalChance()));
+						}
+						if(q == p - 1){
+							finish(player);
+						}
 					}
 				}
 				

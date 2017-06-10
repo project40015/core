@@ -11,6 +11,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import com.decimatepvp.functions.crate.CrateReward;
+import com.decimatepvp.utils.EnchantGlow;
 import com.decimatepvp.utils.ParticleEffect;
 
 public class SummerCrate extends TypicalCrate {
@@ -32,6 +33,7 @@ public class SummerCrate extends TypicalCrate {
 		ItemMeta meta = summerKey.getItemMeta();
 		meta.setDisplayName(ChatColor.GOLD + "Summer Crate Key");
 		summerKey.setItemMeta(meta);
+		EnchantGlow.addGlow(summerKey);
 	}
 
 	@Override
