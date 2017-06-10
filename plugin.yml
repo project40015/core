@@ -59,3 +59,9 @@ commands:
     description: Summons the WitherBoss
   human:
     description: Spawns clone of player.
+  store:
+    description: View the server store.
+    aliases: [donate]
+  map:
+    description: View map info.
+    aliases: [season]

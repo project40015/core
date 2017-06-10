@@ -24,12 +24,12 @@ import com.decimatepvp.utils.ParticleEffect;
 
 public abstract class TypicalCrate extends Crate {
 
-	public TypicalCrate(String name, List<CrateReward> rewards) {
-		super(name, rewards);
+	public TypicalCrate(String name, List<CrateReward> rewards, Location location) {
+		super(name, rewards, location);
 	}
 	
-	public TypicalCrate(String name, boolean comingSoon){
-		super(name, comingSoon);
+	public TypicalCrate(String name, boolean comingSoon, Location location){
+		super(name, comingSoon, location);
 	}
 	
 

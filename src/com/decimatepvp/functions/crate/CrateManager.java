@@ -2,6 +2,7 @@ package com.decimatepvp.functions.crate;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
 import org.bukkit.Bukkit;
@@ -33,11 +34,12 @@ public class CrateManager implements Manager, Listener {
 
 	private List<Crate> crates = new ArrayList<>();
 	
-	private int run, i = 1;
+	private int run, runB, i = 1;
 	
 	public CrateManager(){
 		loadCrates();
-		startGroundEffect();
+		startTimer();
+		startSeasonalTimer();
 	}
 	
 	private void loadCrates(){
@@ -45,11 +47,6 @@ public class CrateManager implements Manager, Listener {
 		VoteCrate voteCrate = setupVoteCrate();
 		DecimateCrate decimateCrate = setupDecimateCrate();
 		SummerCrate summerCrate = setupSummerCrate();
-		
-		decimateCrate.spawn(new Location(Bukkit.getWorlds().get(0), 21, 76, 20));
-		godCrate.spawn(new Location(Bukkit.getWorlds().get(0), 19, 76, 22));
-		voteCrate.spawn(new Location(Bukkit.getWorlds().get(0), 16, 76, 22));
-		summerCrate.spawn(new Location(Bukkit.getWorlds().get(0), 21, 76, 17));
 		
 		this.crates.add(godCrate);
 		this.crates.add(voteCrate);
@@ -122,7 +119,8 @@ public class CrateManager implements Manager, Listener {
 		return null;
 	}
 	
-	private void startGroundEffect(){
+	private void startTimer(){
+		final int t = 2;
 		run = Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(DecimateCore.getCore(), new Runnable(){
 
 			@Override
@@ -140,14 +138,46 @@ public class CrateManager implements Manager, Listener {
 				}else{
 					z = 1 - ((i-30)/10.0);
 				}
-				for(Crate crate : crates){
-					if(crate.hasGroundEffect()){
-						crate.getGroundEffect().display(0, 0, 0, 0, 1, crate.getLocation().clone().add(x, 0.05, z), 30);
+				for(int i = 0; i < crates.size(); i++){
+					if(crates.get(i).hasGroundEffect()){
+						crates.get(i).getGroundEffect().display(0, 0, 0, 0, 1, crates.get(i).getLocation().clone().add(x, 0.05, z), 30);
 					}
 				}
 			}
 			
-		}, 1, 1);
+		}, t, t);
+	}
+	
+	private void startSeasonalTimer(){
+		runB = Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(DecimateCore.getCore(), new Runnable(){
+
+			@Override
+			public void run() {
+				for(int i = 0; i < crates.size(); i++){
+					if(crates.get(i).isSeasonal()){
+						if(crates.get(i).isOver()){
+							crates.get(i).clearStands();
+							crates.get(i).disable();
+							crates.remove(i--);
+						}else{
+							crates.get(i).setTimeString(ChatColor.GRAY + formatTimeString(crates.get(i).getOver()));
+						}
+					}
+				}
+			}
+			
+		}, 20, 20);
+	}
+	
+	private String formatTimeString(Date then){
+		long time = then.getTime() - System.currentTimeMillis();
+		
+		int seconds = (int) ((time / 1000) % 60);
+		int minutes = (int) ((time / (1000*60)) % 60);
+		int hours   = (int) ((time / (1000*60*60)) % 24);
+		int days = (int) ((time / (1000*60*60*24)));
+		
+		return days + "d " + hours + "h " + minutes + "m " + seconds + "s";
 	}
 	
 	@EventHandler
@@ -266,12 +296,15 @@ public class CrateManager implements Manager, Listener {
 	
 	@Override
 	public void disable() {
-		Bukkit.getServer().getScheduler().cancelTask(run);
+		if(Bukkit.getServer().getScheduler().isCurrentlyRunning(run)){
+			Bukkit.getServer().getScheduler().cancelTask(run);
+		}
+		if(Bukkit.getServer().getScheduler().isCurrentlyRunning(runB)){
+			Bukkit.getServer().getScheduler().cancelTask(runB);
+		}
 		for(Crate crate : this.crates){
+			crate.clearStands();
 			crate.disable();
-			if(crate.getNameStand() != null){
-				crate.getNameStand().remove();
-			}
 		}
 		crates.clear();
 	}

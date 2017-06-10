@@ -196,6 +196,8 @@ public class DecimateCore extends JavaPlugin {
 		getCommand("discord").setExecutor(mc);
 		getCommand("website").setExecutor(mc);
 		getCommand("ping").setExecutor(mc);
+		getCommand("map").setExecutor(mc);
+		getCommand("store").setExecutor(mc);
 	}
 
 	public static DecimateCore getCore() {

@@ -1,5 +1,6 @@
 package com.decimatepvp.functions.crate;
 
+import java.util.Date;
 import java.util.List;
 
 import org.bukkit.Bukkit;
@@ -19,24 +20,40 @@ public abstract class Crate {
 	private int totalChance;
 	protected boolean opening = false;
 	private Inventory rewardPage;
-	private ArmorStand nameStand;
+	private ArmorStand nameStand, timeStand;
 	private Location location;
 	private ParticleEffect groundEffect;
 	
 	private boolean comingSoon = false;
+	private boolean seasonal = false;
+	private String time = "N/A";
 	
-	public Crate(String name, List<CrateReward> rewards){
+	private Date over;
+	
+	public Crate(String name, List<CrateReward> rewards, Location location){
 		this.name = name;
 		this.rewards = rewards;
 		for(CrateReward reward : rewards){
 			this.totalChance += reward.getChance();
 		}
 		setupRewards();
+		spawn(location);
 	}
 	
-	public Crate(String name, boolean comingSoon){
+	public Crate(String name, boolean comingSoon, Location location){
 		this.name = name;
 		this.comingSoon = comingSoon;
+		spawn(location);
+	}
+	
+	protected void addTimeStand(Date over){
+		this.seasonal = true;
+		this.over = over;
+		this.timeStand = nameStand.getWorld().spawn(nameStand.getLocation().clone().add(0,-.3,0), ArmorStand.class);
+		timeStand.setVisible(false);
+		timeStand.setCustomNameVisible(true);
+		timeStand.setCustomName(time);
+		timeStand.setGravity(false);
 	}
 	
 	protected void setGroundEffect(ParticleEffect effect){
@@ -51,9 +68,9 @@ public abstract class Crate {
 		return this.groundEffect;
 	}
 	
-	public void spawn(Location location){
+	private void spawn(Location location){
 		this.location = location;
-		nameStand = location.getWorld().spawn(location.clone().add(.5,-1,.5), ArmorStand.class);
+		nameStand = location.getWorld().spawn(location.clone().add(.5,-.9,.5), ArmorStand.class);
 		nameStand.setVisible(false);
 		nameStand.setCustomNameVisible(true);
 		nameStand.setCustomName(name);
@@ -152,6 +169,32 @@ public abstract class Crate {
 	
 	public Location getLocation(){
 		return location;
+	}
+	
+	public boolean isSeasonal(){
+		return this.seasonal;
+	}
+	
+	public void setTimeString(String st){
+		this.time = st;
+		this.timeStand.setCustomName(time);
+	}
+	
+	public boolean isOver(){
+		return (new Date()).after(over);
+	}
+	
+	public Date getOver(){
+		return this.over;
+	}
+	
+	public void clearStands(){
+		if(this.nameStand != null){
+			this.nameStand.remove();
+		}
+		if(this.timeStand != null){
+			this.timeStand.remove();
+		}
 	}
 	
 	protected abstract void giveReward(Player player, CrateReward reward);
