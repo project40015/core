@@ -50,10 +50,15 @@ public class AnnouncementManager {
 			
 			@Override
 			public void run() {
-				String message = DecimateUtils.color(getNextAnnouncement());
-				for(Player player : Bukkit.getOnlinePlayers()) {
-					PlayerUtils.sendBossbar(player, message, BossBarAPI.Color.PINK, BossBarAPI.Style.PROGRESS, 20, 2);
-					player.playSound(player.getEyeLocation(), sound, pitch, 1f);
+				try {
+					String message = DecimateUtils.color(getNextAnnouncement());
+					for(Player player : Bukkit.getOnlinePlayers()) {
+						PlayerUtils.sendBossbar(player, message, BossBarAPI.Color.PINK, BossBarAPI.Style.PROGRESS, 20, 2);
+						player.playSound(player.getEyeLocation(), sound, pitch, 1f);
+					}
+				}
+				catch(Exception e) {
+//					e.printStackTrace();
 				}
 			}
 		};

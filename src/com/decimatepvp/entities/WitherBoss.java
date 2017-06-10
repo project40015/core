@@ -6,6 +6,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.Color;
 import org.bukkit.Location;
 import org.bukkit.Sound;
+import org.bukkit.World;
 import org.bukkit.craftbukkit.v1_8_R3.CraftWorld;
 import org.bukkit.craftbukkit.v1_8_R3.event.CraftEventFactory;
 import org.bukkit.entity.EntityType;
@@ -98,27 +99,31 @@ public class WitherBoss extends EntityMonster implements IRangedEntity {
       return a((Entity)object);
     }
   };
-  
+
   @SuppressWarnings({ "unchecked", "rawtypes" })
-  public WitherBoss(Location location)
-  {
-    super(((CraftWorld) location.getWorld()).getHandle());
-    setHealth(getMaxHealth());
-    setSize(0.9F, 3.5F);
-    setLocation(location.getX(), location.getY(), location.getZ(), location.getYaw(), location.getPitch());
-    this.fireProof = true;
-    ((Navigation)getNavigation()).d(true);
-    this.goalSelector.a(0, new PathfinderGoalFloat(this));
-    this.goalSelector.a(2, new PathfinderGoalArrowAttack(this, 1.0D, 40, 20.0F));
-    this.goalSelector.a(5, new PathfinderGoalRandomStroll(this, 1.0D));
-    this.goalSelector.a(6, new PathfinderGoalLookAtPlayer(this, EntityHuman.class, 8.0F));
-    this.goalSelector.a(7, new PathfinderGoalRandomLookaround(this));
-    this.targetSelector.a(1, new PathfinderGoalHurtByTarget(this, false, new Class[0]));
-    this.targetSelector.a(2, new PathfinderGoalNearestAttackableTarget(this, EntityInsentient.class, 0, false, false, bq));
-    this.b_ = 50;
+  public WitherBoss(net.minecraft.server.v1_8_R3.World world) {
+	    super(world);
+	    setHealth(getMaxHealth());
+	    setSize(0.9F, 3.5F);
+	    this.fireProof = true;
+	    ((Navigation)getNavigation()).d(true);
+	    this.goalSelector.a(0, new PathfinderGoalFloat(this));
+	    this.goalSelector.a(2, new PathfinderGoalArrowAttack(this, 1.0D, 40, 20.0F));
+	    this.goalSelector.a(5, new PathfinderGoalRandomStroll(this, 1.0D));
+	    this.goalSelector.a(6, new PathfinderGoalLookAtPlayer(this, EntityHuman.class, 8.0F));
+	    this.goalSelector.a(7, new PathfinderGoalRandomLookaround(this));
+	    this.targetSelector.a(1, new PathfinderGoalHurtByTarget(this, false, new Class[0]));
+	    this.targetSelector.a(2, new PathfinderGoalNearestAttackableTarget(this, EntityInsentient.class, 0, false, false, bq));
+	    this.b_ = 50;
+	  
   }
   
-  public void spawn() {
+  public WitherBoss(World world) {
+	  this(((CraftWorld) world).getHandle());
+  }
+  
+  public void spawn(Location location) {
+	  setLocation(location.getX(), location.getY(), location.getZ(), location.getYaw(), location.getPitch());
 	  world.addEntity(this);
   }
   
@@ -463,7 +468,7 @@ public class WitherBoss extends EntityMonster implements IRangedEntity {
 		double d7 = d1 - d4;
 		double d8 = d2 - d5;
 		
-		Location eyelocation = ((Wither) getBukkitEntity()).getEyeLocation();
+		Location eyelocation = ((LivingEntity) getBukkitEntity()).getEyeLocation();
 		
 		int rnd = random.nextInt(5);
 		if(rnd == 0) {
