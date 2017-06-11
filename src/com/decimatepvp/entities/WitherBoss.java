@@ -2,7 +2,7 @@ package com.decimatepvp.entities;
 
 import java.util.List;
 
-import org.bukkit.ChatColor;
+import org.bukkit.Bukkit;
 import org.bukkit.Color;
 import org.bukkit.Location;
 import org.bukkit.Sound;
@@ -13,7 +13,6 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Skeleton;
 import org.bukkit.entity.Skeleton.SkeletonType;
-import org.bukkit.entity.Wither;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityRegainHealthEvent;
 import org.bukkit.event.entity.ExplosionPrimeEvent;
@@ -22,7 +21,6 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 
-import com.decimatepvp.core.DecimateCore;
 import com.decimatepvp.functions.animation.sphere.MovementAnimation;
 import com.decimatepvp.utils.DecimateUtils;
 import com.decimatepvp.utils.ParticleEffect.OrdinaryColor;
@@ -103,7 +101,6 @@ public class WitherBoss extends EntityMonster implements IRangedEntity {
   @SuppressWarnings({ "unchecked", "rawtypes" })
   public WitherBoss(net.minecraft.server.v1_8_R3.World world) {
 	    super(world);
-	    setHealth(getMaxHealth());
 	    setSize(0.9F, 3.5F);
 	    this.fireProof = true;
 	    ((Navigation)getNavigation()).d(true);
@@ -517,22 +514,24 @@ public class WitherBoss extends EntityMonster implements IRangedEntity {
 			MovementAnimation animation = getRasenganAttack(new OrdinaryColor(getRandomColor()), eyelocation, direction, 16);
 			animation.start(0l, random.nextInt(2)+1);
 		}
-		else if(rnd == 4) {
-			if(target != null) {
-				world.getWorld().strikeLightning(target.getBukkitEntity().getLocation());
-			}
-		}
 
 		double chance = random.nextDouble();
-		if(chance >= 0.10D) {
-			isInFallingAttack = true;
-			this.motY = 1.0D;
-			getFallAttack().runTaskTimer(DecimateCore.getCore(), 20l, 20l);
-		}
+//		if(chance <= 0.10D) {
+//			isInFallingAttack = true;
+//			this.motY = 1.0D;
+//			getFallAttack().runTaskTimer(DecimateCore.getCore(), 20l, 20l);
+//		}
 		chance = random.nextDouble();
-		if(chance >= 0.1D) {
+		if(chance <= 0.10D) {
 			this.setLocation(d0, d1, d2, yaw, pitch);
 			makeSound("mob.endermen.portal", 1.0f, 1.0f);
+		}
+		chance = random.nextDouble();
+		if(chance <= 0.05D) {
+			if(target != null) {
+				world.getWorld().strikeLightning(target.getBukkitEntity().getLocation());
+				Bukkit.broadcastMessage(getHealth() + "/" + getMaxHealth());
+			}
 		}
 		chance = random.nextDouble();
 		
@@ -694,10 +693,10 @@ public class WitherBoss extends EntityMonster implements IRangedEntity {
   protected void initAttributes()
   {
     super.initAttributes();
-    getAttributeInstance(GenericAttributes.maxHealth).setValue(1000);
+    getAttributeInstance(GenericAttributes.maxHealth).setValue(10000);
     getAttributeInstance(GenericAttributes.MOVEMENT_SPEED).setValue(0.6000000238418579D);
     getAttributeInstance(GenericAttributes.FOLLOW_RANGE).setValue(40.0D);
-    setCustomName(ChatColor.RED + "Wither Boss");
+    setCustomName(DecimateUtils.color("&4&lWither Boss"));
     setCustomNameVisible(true);
   }
   
@@ -723,7 +722,7 @@ public class WitherBoss extends EntityMonster implements IRangedEntity {
   
   public boolean cm()
   {
-    return getHealth() <= getMaxHealth() / 2.0F;
+    return false;
   }
   
   public EnumMonsterType getMonsterType()
