@@ -46,8 +46,9 @@ commands:
     description: Removes a player from the blacklist.
   iplist:
     description: Lists players on a single IP.
-  applyenchant:
+  enchant:
     description: Applies enchant to current held item.
+    aliases: [enchants]
   potionability:
     description: Gives the player a potion with a binded ability.
     aliases: [potiona, pa]
