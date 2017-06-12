@@ -70,3 +70,6 @@ commands:
     description: Broadcast to server.
   trenchpickaxe:
     description: Gives a player the Trench Pickaxe
+  hub:
+    description: Return to the hub.
+    aliases: [lobby]

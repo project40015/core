@@ -3,9 +3,11 @@ package com.decimatepvp.core;
 import net.md_5.bungee.api.ChatColor;
 import net.milkbowl.vault.economy.Economy;
 
+import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.plugin.messaging.PluginMessageListener;
 
 import com.decimatepvp.core.commands.BottleExpCommand;
 import com.decimatepvp.core.commands.CraftTntCommand;
@@ -34,6 +36,7 @@ import com.decimatepvp.functions.misc.harvester.HarvesterManager;
 import com.decimatepvp.functions.misc.itemcooldown.ItemCooldownManager;
 import com.decimatepvp.functions.misc.minicommands.BlacklistManager;
 import com.decimatepvp.functions.misc.minicommands.ColorsCommand;
+import com.decimatepvp.functions.misc.minicommands.HubCommand;
 import com.decimatepvp.functions.misc.minicommands.MicroCommands;
 import com.decimatepvp.functions.misc.minicommands.NightVisionCommand;
 import com.decimatepvp.functions.misc.minicommands.OnlineCommand;
@@ -61,8 +64,10 @@ import com.decimatepvp.functions.staff.togglechat.ToggleChatManager;
 import com.decimatepvp.functions.tntfill.TntFillCommand;
 import com.decimatepvp.functions.tntfill.TntFillManager;
 import com.decimatepvp.minievents.MiniEvents;
+import com.google.common.io.ByteArrayDataInput;
+import com.google.common.io.ByteStreams;
 
-public class DecimateCore extends JavaPlugin {
+public class DecimateCore extends JavaPlugin implements PluginMessageListener {
 	
 	private static DecimateCore core;
 	
@@ -117,6 +122,10 @@ public class DecimateCore extends JavaPlugin {
 	public void onEnable() {
 		core = this;
 		config = new DecimateConfig();
+		
+		
+	    this.getServer().getMessenger().registerOutgoingPluginChannel(this, "BungeeCord");
+	    this.getServer().getMessenger().registerIncomingPluginChannel(this, "BungeeCord", this);
 		
 		worldBorder = new WorldBorderManager(); // Not a Real Man-ager
 		accountIpManager = new AccountIPManager();
@@ -205,6 +214,7 @@ public class DecimateCore extends JavaPlugin {
 		getCommand("store").setExecutor(mc);
 		getCommand("dbroadcast").setExecutor(mc);
 		getCommand("trenchpickaxe").setExecutor(trenchPick);
+		getCommand("hub").setExecutor(new HubCommand());
 	}
 
 	public static DecimateCore getCore() {
@@ -308,5 +318,19 @@ public class DecimateCore extends JavaPlugin {
 	public String getColoredDecimate(){
 		return ChatColor.translateAlternateColorCodes('&', "&cD&6E&eC&aI&bM&9A&5T&cE");
 	}
+
+	  @Override
+	  public void onPluginMessageReceived(String channel, Player player, byte[] message) {
+	    if (!channel.equals("BungeeCord")) {
+	      return;
+	    }
+	    ByteArrayDataInput in = ByteStreams.newDataInput(message);
+	    String subchannel = in.readUTF();
+	    if (subchannel.equals("SomeSubChannel")) {
+	    	
+	      // Execute here
+	    	
+	    }
+	  }
 
 }

@@ -11,7 +11,6 @@ import org.bukkit.inventory.meta.ItemMeta;
 
 import com.decimatepvp.functions.crate.CrateReward;
 import com.decimatepvp.utils.EnchantGlow;
-import com.decimatepvp.utils.ParticleEffect;
 
 public class DecimateCrate extends TypicalCrate {
 
@@ -21,7 +20,7 @@ public class DecimateCrate extends TypicalCrate {
 		super(ChatColor.LIGHT_PURPLE + "Decimate Crate", rewards, new Location(Bukkit.getWorlds().get(0), 21, 76, 20));
 		setupKey();
 		
-		super.setGroundEffect(ParticleEffect.SPELL_WITCH);
+//		super.setGroundEffect(ParticleEffect.SPELL_WITCH);
 	}
 	
 	private void setupKey(){
