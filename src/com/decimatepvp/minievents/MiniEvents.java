@@ -124,6 +124,12 @@ public class MiniEvents implements Listener {
 	@EventHandler
 	public void onChange(WeatherChangeEvent event){
 		if(!event.toWeatherState()){
+			if(event.getWorld().isThundering()){
+				event.getWorld().setThundering(false);
+			}
+			if(event.getWorld().hasStorm()){
+				event.getWorld().setStorm(false);
+			}
 			event.setCancelled(true);
 		}
 	}

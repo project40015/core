@@ -34,7 +34,7 @@ public class TrenchPick implements Listener, CommandExecutor{
 	@EventHandler
 	public void onBlockBreak(BlockBreakEvent event) {
 		ItemStack item = event.getPlayer().getItemInHand();
-		if(isTrenchPickaxe(item)) {
+		if(isTrenchPickaxe(item) && !event.isCancelled()) {
 			breakArea(event.getBlock().getLocation().add(0.5D, 0.5D, 0.5D));
 		}
 	}
@@ -51,6 +51,9 @@ public class TrenchPick implements Listener, CommandExecutor{
 	}
 
 	public boolean isTrenchPickaxe(ItemStack item) {
+		if(item == null){
+			return false;
+		}
 		return (item.hasItemMeta() ? item.getItemMeta().hasLore() ? 
 				item.getItemMeta().getLore().get(0).equals("Mines all blocks in a 5x5 area around the block.")
 				: false : false);
