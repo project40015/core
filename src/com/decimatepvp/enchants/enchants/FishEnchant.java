@@ -5,13 +5,19 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
 import com.decimatepvp.enchants.types.CustomEquipEnchant;
+import com.decimatepvp.utils.DecimateUtils;
 
 public class FishEnchant extends CustomEquipEnchant {
 	
 	private final PotionEffect waterBreathing;
+	
+	private static String[] lore = new String[] {
+			DecimateUtils.color("&3&lWanna Aquaman?! Of course you don't but you can "
+					+ "breathe under water with this so that's nice.")
+	};
 
 	public FishEnchant() {
-		super("Fish", 1, ItemType.HELMET);
+		super("Fish", 1, lore, ItemType.HELMET);
 		
 		this.waterBreathing = new PotionEffect(PotionEffectType.WATER_BREATHING, Integer.MAX_VALUE, 0);
 	}

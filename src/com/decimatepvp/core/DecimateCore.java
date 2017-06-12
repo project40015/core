@@ -37,6 +37,7 @@ import com.decimatepvp.functions.misc.minicommands.ColorsCommand;
 import com.decimatepvp.functions.misc.minicommands.MicroCommands;
 import com.decimatepvp.functions.misc.minicommands.NightVisionCommand;
 import com.decimatepvp.functions.misc.minicommands.OnlineCommand;
+import com.decimatepvp.functions.misc.trench.TrenchPick;
 import com.decimatepvp.functions.patch.border.WorldBorderManager;
 import com.decimatepvp.functions.patch.enderpearl.EnderDelayManager;
 import com.decimatepvp.functions.patch.glitchpatch.GlitchPatchManager;
@@ -110,6 +111,7 @@ public class DecimateCore extends JavaPlugin {
 	private PotionAbilityManager potionManager;
 	private AnnouncementManager announcementManager;
 	private EntityManager entityManager;
+	private TrenchPick trenchPick;
 	
 	@Override
 	public void onEnable() {
@@ -122,6 +124,7 @@ public class DecimateCore extends JavaPlugin {
 		potionManager = new PotionAbilityManager();
 		announcementManager = new AnnouncementManager();
 		entityManager = new EntityManager();
+		trenchPick = new TrenchPick();
 
 		int n = 0;
 		managers[n++] = freezeManager = new FreezeManager(this);
@@ -151,7 +154,7 @@ public class DecimateCore extends JavaPlugin {
 				new FactionDamageListener(), staffCommandsManager, enderDelayManager, antiTntManager, worldBorder,
 				accountIpManager,  new EnchantListener(), new CustomEventCaller(), cropHopperManager, potionManager,
 				crateManager, comboManager, pvpManager, new EnchantmentLimitManager(), commandBookManager,
-				new RewardListener());
+				new RewardListener(), trenchPick);
 	}
 	
 	@Override
@@ -201,6 +204,7 @@ public class DecimateCore extends JavaPlugin {
 		getCommand("map").setExecutor(mc);
 		getCommand("store").setExecutor(mc);
 		getCommand("dbroadcast").setExecutor(mc);
+		getCommand("trenchpickaxe").setExecutor(trenchPick);
 	}
 
 	public static DecimateCore getCore() {

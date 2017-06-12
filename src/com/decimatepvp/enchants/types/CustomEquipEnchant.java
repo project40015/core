@@ -6,8 +6,8 @@ import com.decimatepvp.enchants.CustomEnchant;
 
 public abstract class CustomEquipEnchant extends CustomEnchant {
 
-	public CustomEquipEnchant(String enchantName, int enchantMaxLevel, ItemType... types) {
-		super(enchantName, enchantMaxLevel, types);
+	public CustomEquipEnchant(String enchantName, int enchantMaxLevel, String[] lore, ItemType... types) {
+		super(enchantName, enchantMaxLevel, lore, types);
 	}
 	
 	public abstract void onEquip(LivingEntity entity, int level);

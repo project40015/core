@@ -3,6 +3,7 @@ package com.decimatepvp.enchants;
 import java.util.List;
 
 import org.bukkit.Material;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -10,6 +11,8 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
+import org.bukkit.event.inventory.ClickType;
+import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 
@@ -24,7 +27,26 @@ import com.decimatepvp.events.PlayerEquipEvent;
 
 public class EnchantListener implements Listener {
 	
-	private final DecimateCore core = DecimateCore.getCore();
+	private static final DecimateCore core = DecimateCore.getCore();
+	
+	@SuppressWarnings("deprecation")
+	@EventHandler
+	public void onBookEnchant(InventoryClickEvent event) {
+		ItemStack cursor = event.getCursor();
+		ItemStack clicked = event.getCurrentItem();
+		if(event.getClick() == ClickType.MIDDLE) {
+			if(core.getEnchantManager().isEnchantedBook(cursor)) {
+				CustomEnchant enchantment = core.getEnchantManager().
+						getEnchantById(cursor.getEnchantmentLevel(Enchantment.ARROW_FIRE));
+				if(enchantment.isItemApplicable(clicked)) {
+					core.getEnchantManager().addEnchantToItem(clicked, enchantment.getEnchantName(), 
+							cursor.getEnchantmentLevel(Enchantment.ARROW_DAMAGE));
+					cursor.setAmount(0);
+					event.setCursor(null);
+				}
+			}
+		}
+	}
 	
 	/*
 	 * CustomDeathEnchant

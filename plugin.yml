@@ -46,9 +46,9 @@ commands:
     description: Removes a player from the blacklist.
   iplist:
     description: Lists players on a single IP.
-  enchant:
+  giveenchantment:
     description: Applies enchant to current held item.
-    aliases: [enchants]
+    aliases: [giveenchant]
   potionability:
     description: Gives the player a potion with a binded ability.
     aliases: [potiona, pa]
@@ -68,3 +68,5 @@ commands:
     aliases: [season]
   dbroadcast:
     description: Broadcast to server.
+  trenchpickaxe:
+    description: Gives a player the Trench Pickaxe

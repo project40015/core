@@ -5,13 +5,18 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
 import com.decimatepvp.enchants.types.CustomEquipEnchant;
+import com.decimatepvp.utils.DecimateUtils;
 
 public class SwiftnessEnchant extends CustomEquipEnchant {
 	
 	private final PotionEffect speed;
+	
+	private static String[] lore = new String[] {
+			DecimateUtils.color("&b&lThis enchantment allows ")
+	};
 
 	public SwiftnessEnchant() {
-		super("Swiftness", 1, ItemType.BOOTS);
+		super("Swiftness", 1, lore, ItemType.BOOTS);
 		
 		this.speed = new PotionEffect(PotionEffectType.SPEED, Integer.MAX_VALUE, 1);
 	}

@@ -5,15 +5,20 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
 import com.decimatepvp.enchants.types.CustomEquipEnchant;
+import com.decimatepvp.utils.DecimateUtils;
 
 public class WarriorEnchant extends CustomEquipEnchant {
 	
 	private final PotionEffect strength;
+	
+	private static String[] lore = new String[] {
+			DecimateUtils.color("&c&lThis enchantment channels your inner warrior giving you permanent Strength II.")
+	};
 
 	public WarriorEnchant() {
-		super("Warrior", 1, ItemType.CHESTPLATE);
+		super("Warrior", 1, lore, ItemType.CHESTPLATE);
 		
-		this.strength = new PotionEffect(PotionEffectType.INCREASE_DAMAGE, Integer.MAX_VALUE, 0);
+		this.strength = new PotionEffect(PotionEffectType.INCREASE_DAMAGE, Integer.MAX_VALUE, 1);
 	}
 
 	@Override

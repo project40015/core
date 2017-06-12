@@ -3,15 +3,18 @@ package com.decimatepvp.enchants;
 import java.util.List;
 import java.util.Map;
 
+import org.bukkit.Material;
+import org.bukkit.enchantments.Enchantment;
+import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import com.decimatepvp.enchants.enchants.ExpEnchant;
-import com.decimatepvp.enchants.enchants.ExtinguishEnchant;
 import com.decimatepvp.enchants.enchants.FishEnchant;
 import com.decimatepvp.enchants.enchants.SwiftnessEnchant;
 import com.decimatepvp.enchants.enchants.WarriorEnchant;
 import com.decimatepvp.utils.DecimateUtils;
+import com.decimatepvp.utils.ItemUtils;
 import com.decimatepvp.utils.RomanNumeralUtils;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
@@ -19,18 +22,22 @@ import com.google.common.collect.Maps;
 import net.md_5.bungee.api.ChatColor;
 
 public class EnchantManager {
-	
+
 	private Map<String, CustomEnchant> customEnchants = Maps.newHashMap();
+	private Map<CustomEnchant, Integer> customEnchantIds = Maps.newHashMap();
+	private Map<Integer, CustomEnchant> customEnchantIdsR = Maps.newHashMap();
 	
 	public EnchantManager() {
-		registerEnchants(new ExtinguishEnchant(), new SwiftnessEnchant(), new FishEnchant(), new WarriorEnchant(),
-				new ExpEnchant());
+		registerEnchant(new ExpEnchant(), 0);
+		registerEnchant(new FishEnchant(), 1);
+		registerEnchant(new SwiftnessEnchant(), 2);
+		registerEnchant(new WarriorEnchant(), 3);
 	}
 	
-	private void registerEnchants(CustomEnchant... enchantments) {
-		for(CustomEnchant enchantment : enchantments) {
-			customEnchants.put(enchantment.getEnchantName(), enchantment);
-		}
+	private void registerEnchant(CustomEnchant enchantment, int id) {
+		customEnchants.put(enchantment.getEnchantName(), enchantment);
+		customEnchantIds.put(enchantment, id);
+		customEnchantIdsR.put(id, enchantment);
 	}
 
 	public List<CustomEnchant> getEnchantsOnItem(ItemStack item) {
@@ -59,6 +66,9 @@ public class EnchantManager {
 				lore.add(DecimateUtils.color("&7" + enchantment.getEnchantName() + " " + toRoman(level)));
 				if(meta.hasLore()) {
 					lore.addAll(meta.getLore());
+				}
+				for(String str : enchantment.getLore()) {
+					lore.add(str);
 				}
 				meta.setLore(lore);
 				item.setItemMeta(meta);
@@ -110,6 +120,33 @@ public class EnchantManager {
 	
 	private String toRoman(int number) {
 		return RomanNumeralUtils.convertToRoman(number);
+	}
+
+	public ItemStack getEnchantedBook(String enchant, int level) {
+		ItemStack book = new ItemStack(Material.BOOK);
+		CustomEnchant enchantment = getEnchant(enchant);
+		if(enchantment != null) {
+			ItemUtils.setDisplayName(book, enchantment.getEnchantName() + " " + toRoman(level));
+			ItemUtils.setLore(book, enchantment.getLore());
+			book.addUnsafeEnchantment(Enchantment.ARROW_INFINITE, 69);
+			book.addUnsafeEnchantment(Enchantment.ARROW_DAMAGE, level);
+			book.addUnsafeEnchantment(Enchantment.ARROW_FIRE, customEnchantIds.get(enchantment));
+			ItemMeta meta = book.getItemMeta();
+			meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
+			book.setItemMeta(meta);
+			return book;
+		}
+		return null;
+	}
+
+	public boolean isEnchantedBook(ItemStack item) {
+		return (item.getEnchantmentLevel(Enchantment.ARROW_INFINITE) == 69) && 
+				(item.getType() == Material.BOOK) &&
+				(customEnchantIds.containsValue(item.getEnchantmentLevel(Enchantment.ARROW_FIRE)));
+	}
+
+	public CustomEnchant getEnchantById(int enchantmentLevel) {
+		return customEnchantIdsR.get(enchantmentLevel);
 	}
 
 }

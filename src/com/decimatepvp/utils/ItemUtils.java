@@ -40,7 +40,8 @@ public class ItemUtils {
 				(i1.hasItemMeta()) && (i2.hasItemMeta()) &&
 				(i1.getItemMeta().hasDisplayName()) && (i2.getItemMeta().hasDisplayName()) &&
 				(i1.getItemMeta().getDisplayName().equals(i2.getItemMeta().getDisplayName())) &&
-				(i1.getType() == i2.getType());
+				(i1.getType() == i2.getType()) &&
+				(i1.getEnchantments().equals(i2.getEnchantments()));
 	}
 
 }

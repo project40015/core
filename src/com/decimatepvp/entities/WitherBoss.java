@@ -547,6 +547,7 @@ public class WitherBoss extends EntityMonster implements IRangedEntity {
   				10.0D, getBukkitEntity(), 0.50D);
   	}
 	
+	@SuppressWarnings("unused")
 	private BukkitRunnable getFallAttack() {
 		return new BukkitRunnable() {
 			

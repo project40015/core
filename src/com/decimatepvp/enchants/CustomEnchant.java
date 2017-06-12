@@ -12,12 +12,14 @@ public class CustomEnchant {
 	
 	private int enchantMaxLevel;
 	
+	private String[] lore;
+	
 	private ItemType[] types;
 	
-	
-	public CustomEnchant(String enchantName, int enchantMaxLevel, ItemType... types) {
+	public CustomEnchant(String enchantName, int enchantMaxLevel, String[] lore, ItemType... types) {
 		this.enchantName = enchantName;
 		this.enchantMaxLevel = enchantMaxLevel;
+		this.lore = lore;
 		this.types = types;
 		
 		this.random = new Random();
@@ -51,6 +53,10 @@ public class CustomEnchant {
 		public boolean isItemOfType(ItemStack item) {
 			return item.getType().toString().contains("_" + this.toString());
 		}
+	}
+
+	public String[] getLore() {
+		return lore;
 	}
 
 }
