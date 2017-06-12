@@ -12,6 +12,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 
 import com.decimatepvp.functions.crate.CrateReward;
 import com.decimatepvp.utils.EnchantGlow;
+import com.decimatepvp.utils.ParticleEffect;
 
 public class SummerCrate extends TypicalCrate {
 
@@ -22,7 +23,7 @@ public class SummerCrate extends TypicalCrate {
 		super(ChatColor.GOLD + "Summer Crate", rewards, new Location(Bukkit.getWorlds().get(0), 21, 76, 17));
 		setupKey();
 		
-//		super.setGroundEffect(ParticleEffect.FLAME);
+		super.setGroundEffect(ParticleEffect.FLAME);
 		super.addTimeStand(new Date(2017-1900, 6-1, 30, 12, 0));
 
 	}

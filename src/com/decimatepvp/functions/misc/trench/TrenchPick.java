@@ -19,23 +19,24 @@ import com.decimatepvp.utils.ItemUtils;
 
 public class TrenchPick implements Listener, CommandExecutor{
 	
-	private static final int RADIUS = 2;
+	private static final int RADIUS = 1;
 	
 	private final ItemStack pickaxe;
+	private final String lore = ChatColor.YELLOW + "Mines all blocks in a 3x3 area around the block.";
 	
 	public TrenchPick() {
 		pickaxe = new ItemStack(Material.DIAMOND_PICKAXE);
 		pickaxe.addEnchantment(Enchantment.DIG_SPEED, 5);
 		pickaxe.addEnchantment(Enchantment.DURABILITY, 3);
 		ItemUtils.setDisplayName(pickaxe, "&l&eTrench Pickaxe");
-		ItemUtils.setLore(pickaxe, new String[] { "&eMines all blocks in a 5x5 area around the block." });
+		ItemUtils.setLore(pickaxe, new String[] { lore });
 	}
 	
 	@EventHandler
 	public void onBlockBreak(BlockBreakEvent event) {
 		ItemStack item = event.getPlayer().getItemInHand();
 		if(isTrenchPickaxe(item) && !event.isCancelled()) {
-			breakArea(event.getBlock().getLocation().add(0.5D, 0.5D, 0.5D));
+			breakArea(event.getBlock().getLocation().clone());
 		}
 	}
 	
@@ -55,7 +56,7 @@ public class TrenchPick implements Listener, CommandExecutor{
 			return false;
 		}
 		return (item.hasItemMeta() ? item.getItemMeta().hasLore() ? 
-				item.getItemMeta().getLore().get(0).equals("Mines all blocks in a 5x5 area around the block.")
+				item.getItemMeta().getLore().contains(lore)
 				: false : false);
 	}
 

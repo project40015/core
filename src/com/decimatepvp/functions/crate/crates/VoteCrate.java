@@ -11,6 +11,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 
 import com.decimatepvp.functions.crate.CrateReward;
 import com.decimatepvp.utils.EnchantGlow;
+import com.decimatepvp.utils.ParticleEffect;
 
 public class VoteCrate extends TypicalCrate {
 
@@ -20,7 +21,7 @@ public class VoteCrate extends TypicalCrate {
 		super(ChatColor.GRAY + "Vote Crate", rewards, new Location(Bukkit.getWorlds().get(0), 16, 76, 22));
 		setupKey();
 		
-//		super.setGroundEffect(ParticleEffect.CRIT);
+		super.setGroundEffect(ParticleEffect.CRIT);
 	}
 	
 	private void setupKey(){

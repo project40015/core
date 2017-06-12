@@ -125,7 +125,7 @@ public class DecimateCore extends JavaPlugin implements PluginMessageListener {
 		
 		
 	    this.getServer().getMessenger().registerOutgoingPluginChannel(this, "BungeeCord");
-	    this.getServer().getMessenger().registerIncomingPluginChannel(this, "BungeeCord", this);
+//	    this.getServer().getMessenger().registerIncomingPluginChannel(this, "BungeeCord", this);
 		
 		worldBorder = new WorldBorderManager(); // Not a Real Man-ager
 		accountIpManager = new AccountIPManager();
@@ -199,7 +199,7 @@ public class DecimateCore extends JavaPlugin implements PluginMessageListener {
 		getCommand("blacklist").setExecutor(blacklistManager);
 		getCommand("blacklistpardon").setExecutor(blacklistManager);
 		getCommand("iplist").setExecutor(accountIpManager);
-		getCommand("applyenchant").setExecutor(new EnchantCommand());
+		getCommand("giveenchantment").setExecutor(new EnchantCommand());
 		getCommand("crophopper").setExecutor(new CropHopperCommand());
 		getCommand("potionability").setExecutor(potionManager);
 		getCommand("cratekey").setExecutor(new CrateKeyCommand());

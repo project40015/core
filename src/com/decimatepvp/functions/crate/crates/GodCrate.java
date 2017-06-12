@@ -11,6 +11,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 
 import com.decimatepvp.functions.crate.CrateReward;
 import com.decimatepvp.utils.EnchantGlow;
+import com.decimatepvp.utils.ParticleEffect;
 
 public class GodCrate extends TypicalCrate {
 
@@ -20,7 +21,7 @@ public class GodCrate extends TypicalCrate {
 		super(ChatColor.YELLOW + "God Crate", rewards, new Location(Bukkit.getWorlds().get(0), 19, 76, 22));
 		setupKey();
 		
-//		super.setGroundEffect(ParticleEffect.CRIT_MAGIC);
+		super.setGroundEffect(ParticleEffect.CRIT_MAGIC);
 	}
 	
 	private void setupKey(){
