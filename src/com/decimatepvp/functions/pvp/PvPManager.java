@@ -3,6 +3,9 @@ package com.decimatepvp.functions.pvp;
 import java.util.List;
 import java.util.Map;
 
+import org.bukkit.GameMode;
+import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -11,9 +14,12 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.inventory.ItemStack;
 
 import com.decimatepvp.core.DecimateCore;
 import com.decimatepvp.core.Manager;
@@ -91,9 +97,19 @@ public class PvPManager implements Manager, Listener, CommandExecutor {
 	}
 	
 	@EventHandler
+	public void onEntityDamage(EntityDamageEvent event){
+		if(this.entities.containsKey(event.getEntity().getEntityId())){
+			if(event.getCause().equals(DamageCause.FIRE_TICK)){
+				event.setCancelled(true);
+			}
+		}
+	}
+	
+	@EventHandler
 	public void onEntityDeath(EntityDeathEvent event) {
 		if(entities.containsKey(event.getEntity().getEntityId())) {
 			CombatPlayer cp = entities.get(event.getEntity().getEntityId());
+			killList.add(cp.getUUID());
 			cp.onDeath(event);
 			remove(cp);
 		}
@@ -104,7 +120,11 @@ public class PvPManager implements Manager, Listener, CommandExecutor {
 		Player player = event.getPlayer();
 		if(killList.contains(player.getUniqueId().toString())) {
 			player.getInventory().clear();
-			player.damage(Double.MAX_VALUE);
+			player.getInventory().setHelmet(new ItemStack(Material.AIR));
+			player.getInventory().setChestplate(new ItemStack(Material.AIR));
+			player.getInventory().setLeggings(new ItemStack(Material.AIR));
+			player.getInventory().setBoots(new ItemStack(Material.AIR));
+			player.setHealth(0);
 			removeFromList(player);
 		}
 		if(players.containsKey(player.getUniqueId().toString())) {
@@ -116,8 +136,26 @@ public class PvPManager implements Manager, Listener, CommandExecutor {
 	public void onPlayerQuit(PlayerQuitEvent event) {
 		Player player = event.getPlayer();
 		if(!player.hasMetadata("LogoutCommand")) {
-			addHumanEntity(player);
+			if(!shouldCancelLogger(player)){
+				addHumanEntity(player);
+			}
 		}
+	}
+	
+	private boolean shouldCancelLogger(Player player){
+		if(player.getGameMode().equals(GameMode.CREATIVE) ||
+				player.getGameMode().equals(GameMode.SPECTATOR)){
+			return true;
+		}
+		Location loc = player.getLocation();
+		if(loc.getX() > -75 && loc.getX() < 77){
+			if(loc.getY() > 64){
+				if(loc.getZ() > -75 && loc.getZ() < 77){
+					return true;
+				}
+			}
+		}
+		return false;
 	}
 
 	private void loadKillList() {

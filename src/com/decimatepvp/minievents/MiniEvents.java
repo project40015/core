@@ -8,6 +8,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.CreatureSpawnEvent;
+import org.bukkit.event.entity.CreatureSpawnEvent.SpawnReason;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -19,6 +21,7 @@ import org.bukkit.event.player.PlayerKickEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
+import org.bukkit.event.weather.WeatherChangeEvent;
 import org.bukkit.inventory.ItemStack;
 
 import com.decimatepvp.utils.PlayerUtils;
@@ -103,9 +106,25 @@ public class MiniEvents implements Listener {
 	@EventHandler
 	public void onClick(InventoryClickEvent event){
 		if(event.getInventory().getType().equals(InventoryType.ENCHANTING)){
-			if(event.getCurrentItem().equals(Material.INK_SACK)){
+			if(event.getCurrentItem().getType().equals(Material.getMaterial(351))){
 				event.setCancelled(true);
 			}
+		}
+	}
+	
+	@EventHandler
+	public void onSpawn(CreatureSpawnEvent event){
+		if(event.getSpawnReason().equals(SpawnReason.BUILD_WITHER) ||
+				event.getSpawnReason().equals(SpawnReason.CHUNK_GEN) ||
+				event.getSpawnReason().equals(SpawnReason.NATURAL)){
+			event.setCancelled(true);
+		}
+	}
+	
+	@EventHandler
+	public void onChange(WeatherChangeEvent event){
+		if(!event.toWeatherState()){
+			event.setCancelled(true);
 		}
 	}
 	

@@ -1,5 +1,6 @@
 package com.decimatepvp.functions.crate.crates;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -26,6 +27,7 @@ import com.decimatepvp.utils.ParticleEffect;
 public abstract class TypicalCrate extends Crate {
 
 	private HashMap<String, CrateReward> openers = new HashMap<String, CrateReward>();
+	private List<String> closed = new ArrayList<String>();
 	
 	public TypicalCrate(String name, List<CrateReward> rewards, Location location) {
 		super(name, rewards, location);
@@ -56,7 +58,7 @@ public abstract class TypicalCrate extends Crate {
 		if(rarity.equals(Rarity.COMMON)){
 			ParticleEffect.CLOUD.display(0, 0, 0, 0, 2, location.clone().add(0,1,0), 20);
 		}else if(rarity.equals(Rarity.RARE)){
-			ParticleEffect.ENCHANTMENT_TABLE.display(.5F, .5F, .5F, 1, 24, location.clone().add(0,1,0), 20);
+			ParticleEffect.LAVA.display(.5F, .5F, .5F, 1, 32, location.clone().add(0,1,0), 20);
 		}else if(rarity.equals(Rarity.EPIC)){
 			for(int i = 0; i < 50; i++){
 				final int q = i;
@@ -135,10 +137,13 @@ public abstract class TypicalCrate extends Crate {
 		}
 	}
 	
-	public void finish(Player player){
+	public void finish(Player player, boolean early){
 		if(this.openers.containsKey(player.getName())){
 			this.giveReward(player, this.openers.get(player.getName()), super.getLocation().clone().add(0.5,0.5,0.5));
 			this.openers.remove(player.getName());
+			if(early){
+				this.closed.add(player.getName());
+			}
 		}
 	}
 	
@@ -157,7 +162,7 @@ public abstract class TypicalCrate extends Crate {
 		}
 		
 		player.openInventory(inventory);
-		final int p = 19;
+		final int p = 20;
 		int[] runners = new int[p];
 		for(int i = 0; i < p; i++){
 			final int q = i;
@@ -165,12 +170,14 @@ public abstract class TypicalCrate extends Crate {
 
 				@Override
 				public void run() {
-					if(!openers.containsKey(player.getName())){
-						for(int i = q; i < p; i++){
+					if(!openers.containsKey(player.getName()) || closed.contains(player.getName())){
+						for(int i = q + 1; i < p; i++){
 							Bukkit.getServer().getScheduler().cancelTask(runners[i]);
 						}
+						if(closed.contains(player.getName())){
+							closed.remove(player.getName());
+						}
 					}else{
-						player.playSound(player.getLocation(), Sound.DIG_SNOW, 1, 1);
 						for(int i = 0; i < 8; i++){
 							inventory.setItem(17-i, inventory.getItem(16-i));
 						}
@@ -180,12 +187,15 @@ public abstract class TypicalCrate extends Crate {
 							inventory.setItem(9, reward.getIcon(getTotalChance()));
 						}
 						if(q == p - 1){
-							finish(player);
+							player.playSound(player.getLocation(), Sound.NOTE_PLING, 1, 1);
+							finish(player, false);
+						}else{
+							player.playSound(player.getLocation(), Sound.NOTE_BASS_GUITAR, 1, 1);
 						}
 					}
 				}
 				
-			}, (long) (q + ((0.001*Math.pow(q, 4)) < 2 ? 2 : (0.001*Math.pow(q, 4)))));
+			}, (long) (q*1.5 + ((0.001*Math.pow(q, 4)) < 2 ? 2 : (0.001*Math.pow(q, 4)))));
 		}
 	}
 	
@@ -194,8 +204,17 @@ public abstract class TypicalCrate extends Crate {
 
 	@Override
 	public boolean open(Player player, CrateReward reward, Location location) {
-		effect(player, reward, location);
-		return true;
+		//Rig rarity
+//		for(CrateReward r : super.getRewards()){
+//			if(r.getRarity().equals(Rarity.RARE)){
+//				reward = r;
+//				break;
+//			}
+//		}
+		if(!this.closed.contains(player.getName())){
+			effect(player, reward, location);
+		}
+		return !this.closed.contains(player.getName());
 	}
 
 	@Override

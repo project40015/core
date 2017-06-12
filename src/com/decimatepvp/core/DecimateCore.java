@@ -200,6 +200,7 @@ public class DecimateCore extends JavaPlugin {
 		getCommand("ping").setExecutor(mc);
 		getCommand("map").setExecutor(mc);
 		getCommand("store").setExecutor(mc);
+		getCommand("dbroadcast").setExecutor(mc);
 	}
 
 	public static DecimateCore getCore() {

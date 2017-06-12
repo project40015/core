@@ -6,6 +6,8 @@ import java.util.Map;
 import org.apache.commons.lang.math.NumberUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.GameMode;
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.Command;
@@ -24,6 +26,7 @@ import org.bukkit.inventory.ItemStack;
 
 import com.decimatepvp.abilities.AbstractPotionAbility;
 import com.decimatepvp.abilities.ShockwavePotion;
+import com.decimatepvp.core.DecimateCore;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
@@ -43,9 +46,30 @@ public class PotionAbilityManager implements Listener, CommandExecutor, TabCompl
 		if((proj.getShooter() != null) &&
 				(proj.getShooter() instanceof Player)) {
 			Player player = (Player) proj.getShooter();
-			ItemStack hand = player.getItemInHand();
+			int slot = player.getInventory().getHeldItemSlot();
+			ItemStack hand = player.getItemInHand().clone();
 			if((hand != null) && (hand.getType() == Material.POTION)) {
 				if(hand.containsEnchantment(Enchantment.ARROW_INFINITE)) {
+					Location loc = player.getLocation();
+					if(loc.getX() > -75 && loc.getX() < 77){
+						if(loc.getY() > 64){
+							if(loc.getZ() > -75 && loc.getZ() < 77){
+								if(!player.getGameMode().equals(GameMode.CREATIVE)){
+									Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(DecimateCore.getCore(), new Runnable(){
+
+										@Override
+										public void run() {
+											hand.setAmount(hand.getAmount() + 1);
+											player.getInventory().setItem(slot, hand);
+										}
+										
+									}, 1);
+								}
+								event.getEntity().remove();
+								return;
+							}
+						}
+					}
 					int id = hand.getEnchantmentLevel(Enchantment.ARROW_INFINITE);
 					proj.setCustomName("Custom Effect Id: " + id);
 				}

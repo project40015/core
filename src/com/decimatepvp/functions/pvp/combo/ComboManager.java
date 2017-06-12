@@ -6,13 +6,10 @@ import java.util.List;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Sound;
-import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
-import org.bukkit.event.entity.EntityDamageEvent;
-import org.bukkit.event.player.PlayerInteractAtEntityEvent;
 
 import com.decimatepvp.core.DecimateCore;
 import com.decimatepvp.core.Manager;
@@ -36,7 +33,7 @@ public class ComboManager implements Manager, Listener {
 			public void run() {
 				for(int i = 0; i < combos.size(); i++){
 					if(combos.get(i).time(n)){
-						combos.get(i).removeCombo();
+//						combos.get(i).removeCombo();
 						combos.remove(i--);
 					}
 				}
@@ -58,7 +55,7 @@ public class ComboManager implements Manager, Listener {
 	private void killCombos(Player attacker){
 		for(int i = 0; i < combos.size(); i++){
 			if(combos.get(i).getAttacker().equals(attacker.getName())){
-				combos.get(i).removeCombo();
+//				combos.get(i).removeCombo();
 				combos.remove(i--);
 			}
 		}
@@ -94,34 +91,34 @@ public class ComboManager implements Manager, Listener {
 		}
 	}
 	
-	private boolean isStand(ArmorStand stand){
-		for(Combo combo : this.combos){
-			if(combo.getStand().equals(stand)){
-				return true;
-			}
-		}
-		return false;
-	}
+//	private boolean isStand(ArmorStand stand){
+//		for(Combo combo : this.combos){
+//			if(combo.getStand().equals(stand)){
+//				return true;
+//			}
+//		}
+//		return false;
+//	}
 	
-	@EventHandler
-	public void onDamage(EntityDamageEvent event){
-		if(event.getEntity() instanceof ArmorStand){
-			ArmorStand stand = (ArmorStand) event.getEntity();
-			if(isStand(stand)){
-				event.setCancelled(true);
-			}
-		}
-	}
+//	@EventHandler
+//	public void onDamage(EntityDamageEvent event){
+//		if(event.getEntity() instanceof ArmorStand){
+//			ArmorStand stand = (ArmorStand) event.getEntity();
+//			if(isStand(stand)){
+//				event.setCancelled(true);
+//			}
+//		}
+//	}
 	
-	@EventHandler
-	public void onInteract(PlayerInteractAtEntityEvent event){
-		if(event.getRightClicked() instanceof ArmorStand){
-			ArmorStand stand = (ArmorStand) event.getRightClicked();
-			if(isStand(stand)){
-				event.setCancelled(true);
-			}
-		}
-	}
+//	@EventHandler
+//	public void onInteract(PlayerInteractAtEntityEvent event){
+//		if(event.getRightClicked() instanceof ArmorStand){
+//			ArmorStand stand = (ArmorStand) event.getRightClicked();
+//			if(isStand(stand)){
+//				event.setCancelled(true);
+//			}
+//		}
+//	}
 	
 	@EventHandler
 	public void onAttack(EntityDamageByEntityEvent event){
@@ -134,16 +131,16 @@ public class ComboManager implements Manager, Listener {
 			if(isInCombo(attacker, attacked)){
 				Combo combo = getCombo(attacker, attacked);
 				if(combo.getCombo() != 1){
-					if(combo.getCombo() == 2){
-						ArmorStand stand = attacked.getWorld().spawn(attacked.getEyeLocation().clone().add(0,300,0), ArmorStand.class);
-						stand.setVisible(false);
-						stand.setGravity(false);
-						stand.setSmall(true);
-						stand.setCustomNameVisible(true);
-						combo.setStand(stand);
-					}
-					combo.getStand().setCustomName(format(combo.getCombo() - 1));
-					combo.getStand().teleport(attacked.getLocation().clone().add(Math.random(), 2, Math.random()));
+//					if(combo.getCombo() == 2){
+//						ArmorStand stand = attacked.getWorld().spawn(attacked.getEyeLocation().clone().add(0,300,0), ArmorStand.class);
+//						stand.setVisible(false);
+//						stand.setGravity(false);
+//						stand.setSmall(true);
+//						stand.setCustomNameVisible(true);
+//						combo.setStand(stand);
+//					}
+//					combo.getStand().setCustomName(format(combo.getCombo() - 1));
+//					combo.getStand().teleport(attacked.getLocation().clone().add(Math.random(), 2, Math.random()));
 					attacker.playSound(attacked.getLocation(), Sound.NOTE_PLING, 1, 1);
 					PlayerUtils.sendActionbar(attacker, ChatColor.GRAY + "Combo: " + format(combo.getCombo() - 1));
 				}
@@ -157,9 +154,9 @@ public class ComboManager implements Manager, Listener {
 	
 	@Override
 	public void disable() {
-		for(Combo combo : this.combos){
-			combo.removeCombo();
-		}
+//		for(Combo combo : this.combos){
+//			combo.removeCombo();
+//		}
 		Bukkit.getServer().getScheduler().cancelTask(run);
 		combos.clear();
 	}

@@ -69,7 +69,7 @@ public class CrateManager implements Manager, Listener {
 		for(Crate crate : this.crates){
 			if(crate instanceof TypicalCrate){
 				TypicalCrate tp = (TypicalCrate) crate;
-				tp.finish(player);
+				tp.finish(player, true);
 			}
 		}
 	}
@@ -79,7 +79,7 @@ public class CrateManager implements Manager, Listener {
 		for(Crate crate : this.crates){
 			if(crate instanceof TypicalCrate){
 				TypicalCrate tp = (TypicalCrate) crate;
-				tp.finish(event.getPlayer());
+				tp.finish(event.getPlayer(), true);
 			}
 		}
 	}
@@ -89,7 +89,7 @@ public class CrateManager implements Manager, Listener {
 		for(Crate crate : this.crates){
 			if(crate instanceof TypicalCrate){
 				TypicalCrate tp = (TypicalCrate) crate;
-				tp.finish(event.getPlayer());
+				tp.finish(event.getPlayer(), true);
 			}
 		}	
 	}
@@ -357,7 +357,7 @@ public class CrateManager implements Manager, Listener {
 			return;
 		}
 		if(!crate.open(player, crate.reward(), location)){
-			player.sendMessage(ChatColor.RED + "This crate is already being opened.");
+			player.sendMessage(ChatColor.RED + "Please wait 1 second before opening another crate.");
 			return;
 		}
 		if(player.getItemInHand().getAmount() > 1){

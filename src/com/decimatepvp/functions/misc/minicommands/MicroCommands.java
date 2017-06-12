@@ -1,5 +1,6 @@
 package com.decimatepvp.functions.misc.minicommands;
 
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -36,6 +37,20 @@ public class MicroCommands implements CommandExecutor {
 				arg0.sendMessage(ChatColor.GRAY + "Ping: " + ChatColor.YELLOW + getPing((Player)arg0) + "ms");
 			}else{
 				arg0.sendMessage("Players only.");
+			}
+		}else if(arg1.getName().equalsIgnoreCase("dbroadcast")){
+			if(arg0.isOp()){
+				if(arg3.length < 1){
+					return true;
+				}
+				String message = "";
+				for(int i = 0; i < arg3.length; i++){
+					message += arg3[i] + " ";
+				}
+				message = message.trim();
+				Bukkit.broadcastMessage(ChatColor.translateAlternateColorCodes('&', message));
+			}else{
+				arg0.sendMessage(ChatColor.RED + "You do not have permission for this.");
 			}
 		}
 		

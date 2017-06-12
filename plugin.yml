@@ -65,3 +65,5 @@ commands:
   map:
     description: View map info.
     aliases: [season]
+  dbroadcast:
+    description: Broadcast to server.

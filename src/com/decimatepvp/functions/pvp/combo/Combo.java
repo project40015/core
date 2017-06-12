@@ -1,12 +1,11 @@
 package com.decimatepvp.functions.pvp.combo;
 
-import org.bukkit.entity.ArmorStand;
 
 public class Combo {
 
 	private String attacker, attacked;
 	private int combo, time;
-	private ArmorStand stand;
+//	private ArmorStand stand;
 	
 	public Combo(String attacker, String attacked){
 		this.attacker = attacker;
@@ -45,16 +44,16 @@ public class Combo {
 		return time;
 	}
 	
-	public void setStand(ArmorStand stand){
-		this.stand = stand;
-	}
+//	public void setStand(ArmorStand stand){
+//		this.stand = stand;
+//	}
 	
-	public void removeCombo(){
-		stand.remove();
-	}
+//	public void removeCombo(){
+//		stand.remove();
+//	}
 	
-	public ArmorStand getStand(){
-		return stand;
-	}
+//	public ArmorStand getStand(){
+//		return stand;
+//	}
 	
 }
