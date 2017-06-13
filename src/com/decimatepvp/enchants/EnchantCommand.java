@@ -1,5 +1,6 @@
 package com.decimatepvp.enchants;
 
+import java.util.Collections;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
@@ -24,18 +25,15 @@ public class EnchantCommand implements CommandExecutor, TabCompleter {
 	public List<String> onTabComplete(CommandSender sender, Command command, String label, String[] args) {
 		List<String> enchants = Lists.newArrayList(core.getEnchantManager().getCustomEnchants().keySet());
 		List<String> completer = Lists.newArrayList();
-		if(args.length == 1) {
-			String arg = args[0].toLowerCase();
+		if(args.length == 2) {
+			String arg = args[1].toLowerCase();
 			for(String enchant : enchants) {
 				if(enchant.toLowerCase().startsWith(arg)) {
 					completer.add(enchant);
 				}
 			}
-			
+			Collections.sort(completer);
 			return completer;
-		}
-		else if(args.length == 0) {
-			return enchants;
 		}
 		
 		return null;
@@ -48,10 +46,10 @@ public class EnchantCommand implements CommandExecutor, TabCompleter {
 			Player player = (Player) sender;
 			if(player.hasPermission("Decimate.enchant.book")) {
 				if(args.length == 3) {
-					String enchant = args[0];
-					if(core.getEnchantManager().isEnchant(enchant)) {
-						OfflinePlayer op = Bukkit.getOfflinePlayer(args[1]);
-						if(op.isOnline()) {
+					OfflinePlayer op = Bukkit.getOfflinePlayer(args[0]);
+					if(op.isOnline()) {
+						String enchant = args[1];
+						if(core.getEnchantManager().isEnchant(enchant)) {
 							if(StringUtils.isNumeric(args[2])) {
 								int level = (int) Double.parseDouble(args[2]);
 								if(level <= core.getEnchantManager().getEnchant(enchant).getEnchantMaxLevel()) {
@@ -74,11 +72,17 @@ public class EnchantCommand implements CommandExecutor, TabCompleter {
 							}
 						}
 						else {
-							sender.sendMessage(ChatColor.RED + "That player is not online.");
+							sender.sendMessage(ChatColor.RED + "That is not a proper enchantment.");
+							String enchantments = "";
+							for(CustomEnchant ce : core.getEnchantManager().getAllEnchants()) {
+								enchantments += ChatColor.AQUA + ce.getEnchantName() + ChatColor.DARK_AQUA + ", ";
+							}
+							enchantments = enchantments.substring(0, enchantments.length() - 2);
+							sender.sendMessage(enchantments);
 						}
 					}
 					else {
-						sender.sendMessage(ChatColor.RED + "That is not a proper enchantment.");
+						sender.sendMessage(ChatColor.RED + "That player is not online.");
 					}
 				}
 				else {

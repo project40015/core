@@ -1,5 +1,6 @@
 package com.decimatepvp.enchants;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
@@ -147,6 +148,10 @@ public class EnchantManager {
 
 	public CustomEnchant getEnchantById(int enchantmentLevel) {
 		return customEnchantIdsR.get(enchantmentLevel);
+	}
+	
+	public Collection<CustomEnchant> getAllEnchants() {
+		return customEnchants.values();
 	}
 
 }
