@@ -15,7 +15,7 @@ public class CropHopper {
 	
 	public CropHopper(String saved){
 		String[] args = saved.split(" ");
-		location = new Location(Bukkit.getWorld(args[3]), Integer.parseInt(args[0]), Integer.parseInt(args[1]), Integer.parseInt(args[2]));
+		location = new Location(Bukkit.getWorld(args[0]), Integer.parseInt(args[1]), Integer.parseInt(args[2]), Integer.parseInt(args[3]));
 		this.crop = Boolean.valueOf(args[4]);
 	}
 	
