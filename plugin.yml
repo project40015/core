@@ -54,6 +54,8 @@ commands:
     aliases: [potiona, pa]
   crophopper:
     description: Gives the crop hopper
+  mobhopper:
+    description: Gives the mob hopper
   cratekey:
     description: Gives crate key
   boss:
@@ -73,3 +75,5 @@ commands:
   hub:
     description: Return to the hub.
     aliases: [lobby]
+  dsellwand:
+    description: Give a sellwand.

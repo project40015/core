@@ -5,6 +5,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
+import org.bukkit.block.BlockFace;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -32,11 +33,32 @@ public class TrenchPick implements Listener, CommandExecutor{
 		ItemUtils.setLore(pickaxe, new String[] { lore });
 	}
 	
+	private BlockFace getBlockFace(double yaw, double pitch){
+		yaw = yaw + 180;
+		if(pitch < -45){
+			return BlockFace.UP;
+		}
+		if(pitch > 45){
+			return BlockFace.DOWN;
+		}
+		if(yaw <= 135 && yaw > 45){
+			return BlockFace.EAST;
+		}
+		if(yaw <= 45 && yaw > -45){
+			return BlockFace.NORTH;
+		}
+		if(yaw <= -45 && yaw > -135){
+			return BlockFace.WEST;
+		}
+		return BlockFace.SOUTH;
+	}
+	
 	@EventHandler
 	public void onBlockBreak(BlockBreakEvent event) {
 		ItemStack item = event.getPlayer().getItemInHand();
 		if(isTrenchPickaxe(item) && !event.isCancelled()) {
-			breakArea(event.getBlock().getLocation().clone());
+			breakArea(event.getBlock().getRelative(getBlockFace(event.getPlayer().getLocation().getYaw(),
+					event.getPlayer().getLocation().getPitch())).getLocation().clone());
 		}
 	}
 	

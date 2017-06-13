@@ -11,7 +11,6 @@ import org.bukkit.Effect;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.Sound;
 import org.bukkit.block.Block;
 import org.bukkit.block.Hopper;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -19,18 +18,15 @@ import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.entity.EntitySpawnEvent;
-import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import com.decimatepvp.core.DecimateCore;
 import com.decimatepvp.core.Manager;
-import com.decimatepvp.utils.PlayerUtils;
 
 public class CropHopperManager implements Listener, Manager {
 
@@ -143,6 +139,12 @@ public class CropHopperManager implements Listener, Manager {
 		}
 	}
 	
+	public void giveCropHopperHand(Player player, boolean crop, int amount){
+		ItemStack clone = crop ? cropStack.clone() : mobStack.clone();
+		clone.setAmount(amount);
+		player.getInventory().setItemInHand(clone);
+	}
+	
 	@EventHandler
 	public void onPlace(BlockPlaceEvent event){
 		ItemStack fake = event.getItemInHand();
@@ -195,28 +197,28 @@ public class CropHopperManager implements Listener, Manager {
 		return false;
 	}
 	
-	@EventHandler
-	public void onInteract(PlayerInteractEvent event){
-		if(event.getAction().equals(Action.RIGHT_CLICK_AIR)){
-			ItemStack fake = event.getItem().clone();
-			fake.setAmount(1);
-			if(fake.equals(cropStack)){
-				ItemStack nF = mobStack.clone();
-				nF.setAmount(event.getPlayer().getItemInHand().getAmount());
-				event.getPlayer().setItemInHand(nF);
-				
-				event.getPlayer().playSound(event.getPlayer().getLocation(), Sound.WOOD_CLICK, 1, 1);
-				PlayerUtils.sendActionbar(event.getPlayer(), ChatColor.YELLOW + "Switched to mob hopper.");
-			}else if(fake.equals(mobStack)){
-				ItemStack nF = cropStack.clone();
-				nF.setAmount(event.getPlayer().getItemInHand().getAmount());
-				event.getPlayer().setItemInHand(nF);
-				
-				event.getPlayer().playSound(event.getPlayer().getLocation(), Sound.WOOD_CLICK, 1, 1);
-				PlayerUtils.sendActionbar(event.getPlayer(), ChatColor.YELLOW + "Switched to crop hopper.");
-			}
-		}
-	}
+//	@EventHandler
+//	public void onInteract(PlayerInteractEvent event){
+//		if(event.getAction().equals(Action.RIGHT_CLICK_AIR)){
+//			ItemStack fake = event.getItem().clone();
+//			fake.setAmount(1);
+//			if(fake.equals(cropStack)){
+//				ItemStack nF = mobStack.clone();
+//				nF.setAmount(event.getPlayer().getItemInHand().getAmount());
+//				event.getPlayer().setItemInHand(nF);
+//				
+//				event.getPlayer().playSound(event.getPlayer().getLocation(), Sound.WOOD_CLICK, 1, 1);
+//				PlayerUtils.sendActionbar(event.getPlayer(), ChatColor.YELLOW + "Switched to mob hopper.");
+//			}else if(fake.equals(mobStack)){
+//				ItemStack nF = cropStack.clone();
+//				nF.setAmount(event.getPlayer().getItemInHand().getAmount());
+//				event.getPlayer().setItemInHand(nF);
+//				
+//				event.getPlayer().playSound(event.getPlayer().getLocation(), Sound.WOOD_CLICK, 1, 1);
+//				PlayerUtils.sendActionbar(event.getPlayer(), ChatColor.YELLOW + "Switched to crop hopper.");
+//			}
+//		}
+//	}
 	
 	@EventHandler
 	public void onExplode(EntityExplodeEvent event){

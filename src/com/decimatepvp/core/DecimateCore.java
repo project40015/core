@@ -40,6 +40,8 @@ import com.decimatepvp.functions.misc.minicommands.HubCommand;
 import com.decimatepvp.functions.misc.minicommands.MicroCommands;
 import com.decimatepvp.functions.misc.minicommands.NightVisionCommand;
 import com.decimatepvp.functions.misc.minicommands.OnlineCommand;
+import com.decimatepvp.functions.misc.sellwand.SellWandCommand;
+import com.decimatepvp.functions.misc.sellwand.SellWandManager;
 import com.decimatepvp.functions.misc.trench.TrenchPick;
 import com.decimatepvp.functions.patch.border.WorldBorderManager;
 import com.decimatepvp.functions.patch.enderpearl.EnderDelayManager;
@@ -85,7 +87,7 @@ public class DecimateCore extends JavaPlugin implements PluginMessageListener {
 	/*
 	 * Managers
 	 */
-	private Manager[] managers = new Manager[17];
+	private Manager[] managers = new Manager[18];
 	
 	private FreezeManager freezeManager;
 	private TntFillManager tntFillManager;
@@ -106,6 +108,7 @@ public class DecimateCore extends JavaPlugin implements PluginMessageListener {
 	private ComboManager comboManager;
 	private AnimationManager animationManager;
 	private CommandBookManager commandBookManager;
+	private SellWandManager sellWandManager;
 	
 	/*
 	 * Other
@@ -153,6 +156,7 @@ public class DecimateCore extends JavaPlugin implements PluginMessageListener {
 		managers[n++] = pvpManager = new PvPManager();
 		managers[n++] = comboManager = new ComboManager();
 		managers[n++] = animationManager = new AnimationManager();
+		managers[n++] = sellWandManager = new SellWandManager();
 				
 		setupEco();
 		loadCommands();
@@ -200,11 +204,14 @@ public class DecimateCore extends JavaPlugin implements PluginMessageListener {
 		getCommand("blacklistpardon").setExecutor(blacklistManager);
 		getCommand("iplist").setExecutor(accountIpManager);
 		getCommand("giveenchantment").setExecutor(new EnchantCommand());
-		getCommand("crophopper").setExecutor(new CropHopperCommand());
+		CropHopperCommand chc = new CropHopperCommand();
+		getCommand("crophopper").setExecutor(chc);
+		getCommand("mobhopper").setExecutor(chc);
 		getCommand("potionability").setExecutor(potionManager);
 		getCommand("cratekey").setExecutor(new CrateKeyCommand());
 		getCommand("boss").setExecutor(entityManager);
 		getCommand("human").setExecutor(pvpManager);
+		getCommand("dsellwand").setExecutor(new SellWandCommand());
 		
 		MicroCommands mc = new MicroCommands();
 		getCommand("discord").setExecutor(mc);
@@ -319,6 +326,10 @@ public class DecimateCore extends JavaPlugin implements PluginMessageListener {
 		return ChatColor.translateAlternateColorCodes('&', "&cD&6E&eC&aI&bM&9A&5T&cE");
 	}
 
+	public SellWandManager getSellWandManager(){
+		return this.sellWandManager;
+	}
+	
 	  @Override
 	  public void onPluginMessageReceived(String channel, Player player, byte[] message) {
 	    if (!channel.equals("BungeeCord")) {

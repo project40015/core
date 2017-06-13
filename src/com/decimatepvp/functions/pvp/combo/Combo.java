@@ -17,7 +17,7 @@ public class Combo {
 	public double hit(double damage){
 		this.combo++;
 		this.time = 20*3;
-		return damage*(1.25 + combo*0.05);
+		return damage*(1.2 + combo*0.05);
 	}
 	
 	public boolean time(int n){
