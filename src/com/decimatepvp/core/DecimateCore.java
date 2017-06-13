@@ -167,7 +167,7 @@ public class DecimateCore extends JavaPlugin implements PluginMessageListener {
 				new FactionDamageListener(), staffCommandsManager, enderDelayManager, antiTntManager, worldBorder,
 				accountIpManager,  new EnchantListener(), new CustomEventCaller(), cropHopperManager, potionManager,
 				crateManager, comboManager, pvpManager, new EnchantmentLimitManager(), commandBookManager,
-				new RewardListener(), trenchPick);
+				new RewardListener(), trenchPick, sellWandManager);
 	}
 	
 	@Override

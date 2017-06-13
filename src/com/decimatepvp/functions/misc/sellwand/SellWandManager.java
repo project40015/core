@@ -29,7 +29,25 @@ public class SellWandManager implements Manager, Listener {
 	}
 	
 	private void fillSellableItems(){
-		this.sellableItems.add(new SellableItem(Material.CACTUS, 3.90));
+		this.sellableItems.add(new SellableItem(Material.ROTTEN_FLESH, 1.56));
+		this.sellableItems.add(new SellableItem(Material.BONE, 1.56));
+		this.sellableItems.add(new SellableItem(Material.SULPHUR, 7.81));
+		this.sellableItems.add(new SellableItem(Material.SPIDER_EYE, 1.64));
+		this.sellableItems.add(new SellableItem(Material.ENDER_PEARL, 15.31));
+		this.sellableItems.add(new SellableItem(Material.BLAZE_ROD, 17.19));
+		this.sellableItems.add(new SellableItem(Material.LEATHER, 1.56));
+		this.sellableItems.add(new SellableItem(Material.COOKED_BEEF, 3.51));
+		this.sellableItems.add(new SellableItem(Material.ARROW, 1.00));
+		this.sellableItems.add(new SellableItem(Material.RED_ROSE, 1.00));
+		this.sellableItems.add(new SellableItem(Material.STRING, 1.56));
+		this.sellableItems.add(new SellableItem(Material.FEATHER, 1.00));
+		this.sellableItems.add(new SellableItem(Material.EGG, 4.00));
+		this.sellableItems.add(new SellableItem(Material.IRON_INGOT, 26.00));
+		this.sellableItems.add(new SellableItem(Material.GOLD_INGOT, 24.00));
+		this.sellableItems.add(new SellableItem(Material.RAW_CHICKEN, 1.00));
+		this.sellableItems.add(new SellableItem(Material.CACTUS, 12.50));
+		this.sellableItems.add(new SellableItem(Material.SUGAR_CANE, 5.08));
+
 	}
 	
 	private void setupWand(){
@@ -73,8 +91,11 @@ public class SellWandManager implements Manager, Listener {
 						}
 					}
 					if(total > 0){
-						event.getPlayer().sendMessage(ChatColor.GREEN + "Sold " + totalItems + " item(s) for $" + total + "!");
 						DecimateCore.getCore().eco.depositPlayer(event.getPlayer(), total);
+						total = total*100;
+						int fixed = (int) total;
+						total = fixed/100.0;
+						event.getPlayer().sendMessage(ChatColor.GREEN + "Sold " + totalItems + " item(s) for $" + total + "!");
 					}
 				}
 			}
