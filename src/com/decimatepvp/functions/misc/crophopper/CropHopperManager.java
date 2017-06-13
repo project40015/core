@@ -1,10 +1,10 @@
 package com.decimatepvp.functions.misc.crophopper;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Chunk;
 import org.bukkit.Effect;
@@ -13,7 +13,7 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.Hopper;
-import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -27,44 +27,40 @@ import org.bukkit.inventory.meta.ItemMeta;
 
 import com.decimatepvp.core.DecimateCore;
 import com.decimatepvp.core.Manager;
+import com.decimatepvp.core.utils.Configuration;
+import com.google.common.collect.Lists;
 
 public class CropHopperManager implements Listener, Manager {
 
 	private List<CropHopper> hoppers = new ArrayList<>();
 	
-	private YamlConfiguration data;
-	
 	private ItemStack cropStack, mobStack;
 	
 	public CropHopperManager(){
 		createStacks();
-		loadData();
 		loadHoppers();
 	}
 	
 	private void loadHoppers(){
-		loadData();
-		List<String> hoppers = data.getStringList("data.hoppers");
-		for(String st : hoppers){
-			this.hoppers.add(new CropHopper(st));
-		}
-	}
-	
-	private void loadData(){
-		data = YamlConfiguration.loadConfiguration(new File(DecimateCore.getCore().getDataFolder().getPath() + "/data", "hopper.yml"));
+		FileConfiguration config = new Configuration(DecimateCore.getCore(), "/crophoppers", "hoppers.yml").getData();
 		
-		for(String str : data.getStringList("data.hoppers")){
-			hoppers.add(new CropHopper(str));
+		for(String data : config.getStringList("data.hoppers")) {
+			this.hoppers.add(new CropHopper(data));
 		}
 	}
 	
 	public void saveHoppers(){
-		if(hoppers.size() == 0){
-			return;
+		Configuration cfg = new Configuration(DecimateCore.getCore(), "/crophoppers", "hoppers.yml");
+		FileConfiguration config = cfg.getData();
+		
+		List<String> data = Lists.newArrayList();
+		for(CropHopper ch : hoppers) {
+			data.add(ch.toString());
 		}
-		data.getStringList("data.hoppers").add(hoppers.get(0).toString());
-		hoppers.remove(0);
-		saveHoppers();
+		
+		config.set("data.hoppers", data);
+		
+		cfg.saveData();
 	}
 	
 	public void addHopper(CropHopper hopper){
@@ -255,18 +251,13 @@ public class CropHopperManager implements Listener, Manager {
 
 	@Override
 	public void disable() {
-//		for(Player player : Bukkit.getServer().getOnlinePlayers()){
-//			if(player.isOp()){
-//				player.sendMessage(ChatColor.YELLOW + "Hoppers saving.");
-//			}
-//		}
-//		if(!data.contains("data.hoppers")){
-//			data.createSection("data.hoppers");
-//		}
-//		if(data.getString("data.hoppers") != null){
-//			data.getList("data.hoppers").clear();
-//		}
-//		saveHoppers();
+		for(Player player : Bukkit.getServer().getOnlinePlayers()){
+			if(player.isOp()){
+				player.sendMessage(ChatColor.YELLOW + "Hoppers saving.");
+			}
+		}
+		
+		saveHoppers();
 	}
 	
 }
