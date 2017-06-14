@@ -18,6 +18,10 @@ public class FactionUtils {
 	private static FPlayers players = FPlayers.getInstance();
 	private static Board board = Board.getInstance();
 	
+	public static Faction getWilderness() {
+		return factions.getWilderness();
+	}
+	
 	public static Faction getSafezone() {
 		return factions.getSafeZone();
 	}
@@ -60,6 +64,10 @@ public class FactionUtils {
 	
 	public static Faction getFaction(OfflinePlayer player) {
 		return getFPlayer(player).getFaction();
+	}
+	
+	public static Factions getFactions() {
+		return factions;
 	}
 
 }

@@ -103,6 +103,7 @@ public class MiniEvents implements Listener {
 		}
 	}
 	
+	@SuppressWarnings("deprecation")
 	@EventHandler
 	public void onClick(InventoryClickEvent event){
 		if(event.getInventory().getType().equals(InventoryType.ENCHANTING)){
