@@ -77,3 +77,5 @@ commands:
     aliases: [lobby]
   dsellwand:
     description: Give a sellwand.
+  dstop:
+    description: Turn the server off.

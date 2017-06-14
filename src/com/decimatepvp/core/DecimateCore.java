@@ -32,6 +32,7 @@ import com.decimatepvp.functions.crate.CrateManager;
 import com.decimatepvp.functions.crate.rewards.RewardListener;
 import com.decimatepvp.functions.misc.crophopper.CropHopperCommand;
 import com.decimatepvp.functions.misc.crophopper.CropHopperManager;
+import com.decimatepvp.functions.misc.decimatestop.DecimateStop;
 import com.decimatepvp.functions.misc.harvester.HarvesterCommand;
 import com.decimatepvp.functions.misc.harvester.HarvesterManager;
 import com.decimatepvp.functions.misc.itemcooldown.ItemCooldownManager;
@@ -168,7 +169,7 @@ public class DecimateCore extends JavaPlugin implements PluginMessageListener {
 				new FactionDamageListener(), staffCommandsManager, enderDelayManager, antiTntManager, worldBorder,
 				accountIpManager,  new EnchantListener(), new CustomEventCaller(), cropHopperManager, potionManager,
 				crateManager, comboManager, pvpManager, new EnchantmentLimitManager(), commandBookManager,
-				new RewardListener(), trenchPick, sellWandManager, new ExplosionListener());
+				new RewardListener(), trenchPick, sellWandManager, new ExplosionListener(), new DecimateStop());
 	}
 	
 	@Override
@@ -213,6 +214,7 @@ public class DecimateCore extends JavaPlugin implements PluginMessageListener {
 		getCommand("boss").setExecutor(entityManager);
 		getCommand("human").setExecutor(pvpManager);
 		getCommand("dsellwand").setExecutor(new SellWandCommand());
+		getCommand("dstop").setExecutor(new DecimateStop());
 		
 		MicroCommands mc = new MicroCommands();
 		getCommand("discord").setExecutor(mc);
