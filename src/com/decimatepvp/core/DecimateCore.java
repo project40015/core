@@ -14,6 +14,7 @@ import com.decimatepvp.core.commands.CraftTntCommand;
 import com.decimatepvp.core.commands.LogoutCommand;
 import com.decimatepvp.core.listener.AnvilDamageListener;
 import com.decimatepvp.core.listener.EntityItemListener;
+import com.decimatepvp.core.listener.ExplosionListener;
 import com.decimatepvp.core.listener.PlayerBreakBlockListener;
 import com.decimatepvp.core.listener.PlayerUseItemListener;
 import com.decimatepvp.core.utils.DecimateConfig;
@@ -167,7 +168,7 @@ public class DecimateCore extends JavaPlugin implements PluginMessageListener {
 				new FactionDamageListener(), staffCommandsManager, enderDelayManager, antiTntManager, worldBorder,
 				accountIpManager,  new EnchantListener(), new CustomEventCaller(), cropHopperManager, potionManager,
 				crateManager, comboManager, pvpManager, new EnchantmentLimitManager(), commandBookManager,
-				new RewardListener(), trenchPick, sellWandManager);
+				new RewardListener(), trenchPick, sellWandManager, new ExplosionListener());
 	}
 	
 	@Override
