@@ -13,6 +13,7 @@ import net.minecraft.server.v1_8_R3.PacketPlayOutTitle.EnumTitleAction;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
@@ -44,6 +45,18 @@ public class PlayerUtils {
 				sendBossbar(player, message, color, style, timeout, interval);
 			}
 		}
+	}
+	
+	public static boolean isInSpawn(Player player){
+		Location loc = player.getLocation();
+		if(loc.getX() > -75 && loc.getX() < 77){
+			if(loc.getY() > 64){
+				if(loc.getZ() > -75 && loc.getZ() < 77){
+					return true;
+				}
+			}
+		}
+		return false;
 	}
 	
 	public static BossBar sendBossbar(Player player, String message, BossBarAPI.Color color, BossBarAPI.Style style,

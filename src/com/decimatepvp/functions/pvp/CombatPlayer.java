@@ -1,6 +1,7 @@
 package com.decimatepvp.functions.pvp;
 
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Zombie;
@@ -27,6 +28,9 @@ public class CombatPlayer {
 	
 	public CombatPlayer(Player player) {
 		zombie = (Zombie) player.getWorld().spawnEntity(player.getLocation(), EntityType.ZOMBIE);
+		zombie.setHealth(player.getHealth());
+		zombie.setFallDistance(player.getFallDistance());
+		zombie.setVelocity(player.getVelocity());
 		uuid = player.getUniqueId().toString();
 		EntityEquipment equip = zombie.getEquipment();
 		equip.setArmorContents(player.getEquipment().getArmorContents());
@@ -65,12 +69,12 @@ public class CombatPlayer {
 	public void onDeath(EntityDeathEvent event) {
 		Location loc = zombie.getLocation();
 		for(ItemStack item : inventory) {
-			if(item != null) {
+			if(item != null && !item.getType().equals(Material.AIR)) {
 				loc.getWorld().dropItemNaturally(loc, item);
 			}
 		}
 		for(ItemStack item : armor) {
-			if(item != null) {
+			if(item != null && !item.getType().equals(Material.AIR)) {
 				loc.getWorld().dropItemNaturally(loc, item);
 			}
 		}

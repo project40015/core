@@ -22,6 +22,7 @@ import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.entity.EntitySpawnEvent;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
@@ -89,22 +90,49 @@ public class CropHopperManager implements Listener, Manager {
 		return null;
 	}
 	
-	public boolean isCropHopper(Chunk chunk, boolean crop){
-		for(CropHopper hopper : hoppers){
-			if(hopper.getLocation().getChunk().equals(chunk) && hopper.isCrop() == crop){
-				return true;
-			}
-		}
-		return false;
-	}
+//	public boolean isCropHopper(Chunk chunk, boolean crop){
+//		for(CropHopper hopper : hoppers){
+//			if(hopper.getLocation().getChunk().equals(chunk) && hopper.isCrop() == crop){
+//				return true;
+//			}
+//		}
+//		return false;
+//	}
 	
-	public CropHopper getCropHopper(Chunk chunk, boolean crop){
-		for(CropHopper hopper : hoppers){
+	public CropHopper getCropHopper(Material drop, int amount, Chunk chunk, boolean crop){
+		for(int i = 0; i < hoppers.size(); i++){
+			CropHopper hopper = hoppers.get(i);
 			if(hopper.getLocation().getChunk().equals(chunk) && hopper.isCrop() == crop){
-				return hopper;
+				if(!(hopper.getLocation().getBlock().getState() instanceof Hopper)){
+					hoppers.remove(i--);
+					continue;
+				}
+				Hopper rHopper = (Hopper) hopper.getLocation().getBlock().getState();
+				int space = getSpace(drop, rHopper);
+				if(space == 0){
+					continue;
+				}
+				if(space >= amount){
+					return hopper;
+				}
 			}
 		}
 		return null;
+	}
+	
+	private int getSpace(Material drop, Hopper hopper){
+		Inventory inv = hopper.getInventory();
+		int space = 0;
+		for(int i = 0; i < inv.getSize(); i++){
+			if(inv.getItem(i) != null && drop.equals(inv.getItem(i).getType())){
+				if(inv.getItem(i).getAmount() != drop.getMaxStackSize()){
+					space += drop.getMaxStackSize() - inv.getItem(i).getAmount();
+				}
+			}else if(inv.getItem(i) == null || inv.getItem(i).getType().equals(Material.AIR)){
+				space += 64;
+			}
+		}
+		return space;
 	}
 	
 	private void createStacks(){
@@ -143,7 +171,7 @@ public class CropHopperManager implements Listener, Manager {
 	
 	@EventHandler
 	public void onPlace(BlockPlaceEvent event){
-		ItemStack fake = event.getItemInHand();
+		ItemStack fake = event.getItemInHand().clone();
 		fake.setAmount(1);
 		if(fake.equals(cropStack)){
 			CropHopper hopper = new CropHopper(event.getBlock().getLocation(), true);
@@ -174,8 +202,8 @@ public class CropHopperManager implements Listener, Manager {
 	}
 	
 	private boolean fill(Location location, ItemStack item, boolean crop){
-		if(this.isCropHopper(location.getChunk(), crop)){
-			CropHopper ch = this.getCropHopper(location.getChunk(), crop); 
+		CropHopper ch = this.getCropHopper(item.getType(), item.getAmount(), location.getChunk(), crop); 
+		if(ch != null){
 			Block b = ch.getLocation().getBlock();
 			if(b.getState() instanceof Hopper){
 				Hopper h = (Hopper) b.getState();

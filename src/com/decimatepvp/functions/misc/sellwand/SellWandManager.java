@@ -6,12 +6,15 @@ import java.util.List;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
+import org.bukkit.block.BlockFace;
 import org.bukkit.block.Chest;
+import org.bukkit.block.Hopper;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
@@ -79,26 +82,49 @@ public class SellWandManager implements Manager, Listener {
 					event.getItem().getItemMeta().getDisplayName().equals(wand.getItemMeta().getDisplayName())){
 				Block block = event.getClickedBlock();
 				if(block.getState() instanceof Chest){
+					BlockFace[] faces = new BlockFace[] {BlockFace.NORTH, BlockFace.SOUTH, BlockFace.EAST, BlockFace.WEST};
 					Chest chest = (Chest) block.getState();
-					double total = 0;
-					int totalItems = 0;
-					for(int i = 0; i < chest.getBlockInventory().getSize(); i++){
-						if(chest.getBlockInventory().getItem(i) != null &&
-								isSellable(chest.getBlockInventory().getItem(i).getType())){
-							total += getValue(chest.getBlockInventory().getItem(i));
-							totalItems += chest.getBlockInventory().getItem(i).getAmount();
-							chest.getBlockInventory().setItem(i, new ItemStack(Material.AIR));
+					Inventory nextTo = null;
+					for(BlockFace face : faces){
+						if(block.getRelative(face).getType().equals(block.getType()) && block.getRelative(face).getState() instanceof Chest){
+							nextTo = ((Chest)block.getRelative(face).getState()).getBlockInventory();
+							break;
 						}
 					}
-					if(total > 0){
-						DecimateCore.getCore().eco.depositPlayer(event.getPlayer(), total);
-						total = total*100;
-						int fixed = (int) total;
-						total = fixed/100.0;
-						event.getPlayer().sendMessage(ChatColor.GREEN + "Sold " + totalItems + " item(s) for $" + total + "!");
+					if(nextTo == null){
+						work(event.getPlayer(), chest.getBlockInventory());
+					}else{
+						work(event.getPlayer(), chest.getBlockInventory(), nextTo);
 					}
 				}
+				if(block.getState() instanceof Hopper){
+					Hopper hopper = (Hopper) block.getState();
+					work(event.getPlayer(), hopper.getInventory());
+				}
 			}
+		}
+	}
+	
+	private void work(Player player, Inventory... invs){
+		double total = 0;
+		int totalItems = 0;
+		
+		for(Inventory inventory : invs){
+			for(int i = 0; i < inventory.getSize(); i++){
+				if(inventory.getItem(i) != null &&
+						isSellable(inventory.getItem(i).getType())){
+					total += getValue(inventory.getItem(i));
+					totalItems += inventory.getItem(i).getAmount();
+					inventory.setItem(i, new ItemStack(Material.AIR));
+				}
+			}
+		}
+		if(total > 0){
+			DecimateCore.getCore().eco.depositPlayer(player, total);
+			total = total*100;
+			int fixed = (int) total;
+			total = fixed/100.0;
+			player.sendMessage(ChatColor.GREEN + "Sold " + totalItems + " item(s) for $" + total + "!");
 		}
 	}
 	

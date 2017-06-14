@@ -27,6 +27,7 @@ import org.bukkit.inventory.ItemStack;
 import com.decimatepvp.abilities.AbstractPotionAbility;
 import com.decimatepvp.abilities.ShockwavePotion;
 import com.decimatepvp.core.DecimateCore;
+import com.decimatepvp.utils.PlayerUtils;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
@@ -51,9 +52,7 @@ public class PotionAbilityManager implements Listener, CommandExecutor, TabCompl
 			if((hand != null) && (hand.getType() == Material.POTION)) {
 				if(hand.containsEnchantment(Enchantment.ARROW_INFINITE)) {
 					Location loc = player.getLocation();
-					if(loc.getX() > -75 && loc.getX() < 77){
-						if(loc.getY() > 64){
-							if(loc.getZ() > -75 && loc.getZ() < 77){
+					if(PlayerUtils.isInSpawn(player)){
 								if(!player.getGameMode().equals(GameMode.CREATIVE)){
 									Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(DecimateCore.getCore(), new Runnable(){
 
@@ -67,8 +66,6 @@ public class PotionAbilityManager implements Listener, CommandExecutor, TabCompl
 								}
 								event.getEntity().remove();
 								return;
-							}
-						}
 					}
 					int id = hand.getEnchantmentLevel(Enchantment.ARROW_INFINITE);
 					proj.setCustomName("Custom Effect Id: " + id);

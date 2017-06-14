@@ -3,14 +3,15 @@ package com.decimatepvp.functions.pvp;
 import java.util.List;
 import java.util.Map;
 
+import org.bukkit.EntityEffect;
 import org.bukkit.GameMode;
-import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -24,6 +25,7 @@ import org.bukkit.inventory.ItemStack;
 import com.decimatepvp.core.DecimateCore;
 import com.decimatepvp.core.Manager;
 import com.decimatepvp.core.utils.Configuration;
+import com.decimatepvp.utils.PlayerUtils;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
@@ -99,9 +101,13 @@ public class PvPManager implements Manager, Listener, CommandExecutor {
 	@EventHandler
 	public void onEntityDamage(EntityDamageEvent event){
 		if(this.entities.containsKey(event.getEntity().getEntityId())){
+			event.setCancelled(true);
 			if(event.getCause().equals(DamageCause.FIRE_TICK)){
-				event.setCancelled(true);
+				return;
 			}
+			LivingEntity livingEntity = (LivingEntity) event.getEntity();
+			livingEntity.damage(event.getDamage());
+			livingEntity.playEffect(EntityEffect.HURT);
 		}
 	}
 	
@@ -147,13 +153,8 @@ public class PvPManager implements Manager, Listener, CommandExecutor {
 				player.getGameMode().equals(GameMode.SPECTATOR)){
 			return true;
 		}
-		Location loc = player.getLocation();
-		if(loc.getX() > -75 && loc.getX() < 77){
-			if(loc.getY() > 64){
-				if(loc.getZ() > -75 && loc.getZ() < 77){
-					return true;
-				}
-			}
+		if(PlayerUtils.isInSpawn(player)){
+			return true;
 		}
 		return false;
 	}

@@ -7,6 +7,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import com.decimatepvp.utils.BungeeUtils;
+import com.decimatepvp.utils.PlayerUtils;
 
 public class HubCommand implements CommandExecutor {
 	
@@ -15,6 +16,11 @@ public class HubCommand implements CommandExecutor {
 		
 		if(!(arg0 instanceof Player)){
 			arg0.sendMessage("This command is for players.");
+			return false;
+		}
+		
+		if(!PlayerUtils.isInSpawn((Player)arg0)){
+			arg0.sendMessage(ChatColor.RED + "This command is only usable in safezones. If you wish to use it here please type " + ChatColor.YELLOW + "/logout" + ChatColor.RED + "!");
 			return false;
 		}
 		

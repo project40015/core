@@ -8,12 +8,13 @@ import org.bukkit.OfflinePlayer;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
-import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import com.decimatepvp.core.DecimateCore;
+import com.decimatepvp.utils.BungeeUtils;
+import com.decimatepvp.utils.PlayerUtils;
 import com.google.common.collect.Maps;
 
 public class LogoutCommand implements CommandExecutor {
@@ -48,7 +49,7 @@ public class LogoutCommand implements CommandExecutor {
 							logoutL.remove(player);
 						}
 						else if(time != 5){
-							player.sendMessage(color("&6" + time + " seconds..."));
+							player.sendMessage(color("&e" + time + " seconds..."));
 						}
 
 						time--;
@@ -68,7 +69,9 @@ public class LogoutCommand implements CommandExecutor {
 		if(player.isOnline()) {
 			try {
 				player.getPlayer().setMetadata("LogoutCommand", new FixedMetadataValue(DecimateCore.getCore(), true));
-				((CraftPlayer) player.getPlayer()).getHandle().playerConnection.disconnect("You have logged out!");
+//				((CraftPlayer) player.getPlayer()).getHandle().playerConnection.disconnect("You have logged out!");
+				player.getPlayer().sendMessage(ChatColor.YELLOW + "Sent you to the hub!");
+				BungeeUtils.send(player.getPlayer(), "lobby");
 				DecimateCore.getCore().getPvpManager().removeFromList(player);
 			}
 			catch(Exception e) {
@@ -86,10 +89,13 @@ public class LogoutCommand implements CommandExecutor {
 					logoutT.remove(player);
 					logoutL.remove(player);
 				}
-				
-				player.sendMessage(color("&6Logging you out in 5 seconds. Please stay still..."));
-				logoutT.put(player, 5);
-				logoutL.put(player, player.getLocation());
+				if(!PlayerUtils.isInSpawn(player)){
+					player.sendMessage(color("&eSafely logging you out in 5 seconds. Please stay still..."));
+					logoutT.put(player, 5);
+					logoutL.put(player, player.getLocation());
+				}else{
+					logout(player);
+				}
 			}
 			else {
 				sender.sendMessage(color("&cOnly players may use this command."));
