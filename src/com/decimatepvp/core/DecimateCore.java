@@ -33,6 +33,7 @@ import com.decimatepvp.functions.crate.rewards.RewardListener;
 import com.decimatepvp.functions.misc.crophopper.CropHopperCommand;
 import com.decimatepvp.functions.misc.crophopper.CropHopperManager;
 import com.decimatepvp.functions.misc.decimatestop.DecimateStop;
+import com.decimatepvp.functions.misc.delhome.DeleteHome;
 import com.decimatepvp.functions.misc.harvester.HarvesterCommand;
 import com.decimatepvp.functions.misc.harvester.HarvesterManager;
 import com.decimatepvp.functions.misc.itemcooldown.ItemCooldownManager;
@@ -164,7 +165,8 @@ public class DecimateCore extends JavaPlugin implements PluginMessageListener {
 		loadCommands();
 		loadListeners(harvesterManager, staffChatManager, freezeManager, new PlayerBreakBlockListener(),
 				new EntityItemListener(), new PlayerUseItemListener(),
-				toggleChatManager, spectateManager, itemCooldownManager, new GlitchPatchManager(), new BottleExpCommand(),
+				toggleChatManager, spectateManager, itemCooldownManager, new GlitchPatchManager(),
+				new BottleExpCommand(), new ExplosionListener(), new DeleteHome(),
 				new AnvilDamageListener(), new BottleExpCommand(), new MiniEvents(), new FactionCommandListener(),
 				new FactionDamageListener(), staffCommandsManager, enderDelayManager, antiTntManager, worldBorder,
 				accountIpManager,  new EnchantListener(), new CustomEventCaller(), cropHopperManager, potionManager,

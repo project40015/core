@@ -75,6 +75,7 @@ public class OnlineCommand implements CommandExecutor {
 		return false;
 	}
 	
+	@SuppressWarnings("unused")
 	private void send(CommandSender sender, String message){
 		sender.sendMessage(ChatColor.translateAlternateColorCodes('&', message));
 	}

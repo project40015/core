@@ -67,7 +67,7 @@ public class ExplosionListener implements Listener {
 	    					}
 	    					if ((f1 > 0.0F) && (i1 < 256) && (i1 >= 0) && (k1 != 8) && (k1 != 9) && (k1 != 10)) {
 	    						org.bukkit.block.Block block = world.getBlockAt(l, i1, j1);
-	    						if(((k1 == (11)) || (k1 == (12))) &&
+	    						if(((k1 == (10)) || (k1 == (11))) &&
 	    								(!event.blockList().contains(block))) {
 	    							event.blockList().add(block);
 	    						}
