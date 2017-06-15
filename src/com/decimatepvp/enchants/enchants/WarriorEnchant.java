@@ -12,7 +12,8 @@ public class WarriorEnchant extends CustomEquipEnchant {
 	private final PotionEffect strength;
 	
 	private static String[] lore = new String[] {
-			DecimateUtils.color("&c&lThis enchantment channels your inner warrior giving you permanent Strength II.")
+			DecimateUtils.color("&c&lThis enchantment channels your"),
+			DecimateUtils.color("&c&linner warrior giving you permanent Strength II.")
 	};
 
 	public WarriorEnchant() {

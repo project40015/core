@@ -12,8 +12,8 @@ public class FishEnchant extends CustomEquipEnchant {
 	private final PotionEffect waterBreathing;
 	
 	private static String[] lore = new String[] {
-			DecimateUtils.color("&3&lWanna Aquaman?! Of course you don't but you can "
-					+ "breathe under water with this so that's nice.")
+			DecimateUtils.color("&3&lWanna Aquaman?! Of course you don't but you can "),
+			DecimateUtils.color("&3&lbreathe under water with this so that's nice.")
 	};
 
 	public FishEnchant() {

@@ -12,7 +12,8 @@ public class SwiftnessEnchant extends CustomEquipEnchant {
 	private final PotionEffect speed;
 	
 	private static String[] lore = new String[] {
-			DecimateUtils.color("&b&lThis enchantment allows ")
+			DecimateUtils.color("&b&lThis enchantment allows you to move at"),
+			DecimateUtils.color("&b&lspeeds Usain Bolt would laugh at but it is still fast.")
 	};
 
 	public SwiftnessEnchant() {

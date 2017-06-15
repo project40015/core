@@ -9,7 +9,8 @@ import com.decimatepvp.utils.DecimateUtils;
 public class ExtinguishEnchant extends CustomDamagedEnchant {
 	
 	private static String[] lore = new String[] {
-			DecimateUtils.color("&2&lOH NO!! I'M ON FIRE!! Oh wait, as soon as I take damage it goes away. Neat.")
+			DecimateUtils.color("&2&lOH NO!! I'M ON FIRE!!"),
+			DecimateUtils.color("&2&lOh wait, as soon as I take damage it goes away. Neat.")
 	};
 
 	public ExtinguishEnchant() {
