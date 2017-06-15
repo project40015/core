@@ -68,9 +68,9 @@ public class EnchantManager {
 				if(meta.hasLore()) {
 					lore.addAll(meta.getLore());
 				}
-				for(String str : enchantment.getLore()) {
-					lore.add(str);
-				}
+//				for(String str : enchantment.getLore()) {
+//					lore.add(str);
+//				}
 				meta.setLore(lore);
 				item.setItemMeta(meta);
 				return true;
