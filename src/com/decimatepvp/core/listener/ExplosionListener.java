@@ -39,7 +39,7 @@ public class ExplosionListener implements Listener {
 	@SuppressWarnings("deprecation")
 	private void correctExplosion(EntityExplodeEvent event, float power) {
 		org.bukkit.World world = event.getEntity().getWorld();
-	    event.blockList().clear();
+//	    event.blockList().clear();
 	    for (int i = 0; i < 16; i++) {
 	    	for (int j = 0; j < 16; j++) {
 	    		for (int k = 0; k < 16; k++) {
