@@ -79,3 +79,6 @@ commands:
     description: Give a sellwand.
   dstop:
     description: Turn the server off.
+  announcements:
+    description: Toggle announcements
+    aliases: [ta]

@@ -19,13 +19,15 @@ public class HubCommand implements CommandExecutor {
 			return false;
 		}
 		
-		if(!PlayerUtils.isInSpawn((Player)arg0)){
+		Player player = (Player) arg0;
+		
+		if(!PlayerUtils.isInSpawn(player)){
 			arg0.sendMessage(ChatColor.RED + "This command is only usable in safezones. If you wish to use it here please type " + ChatColor.YELLOW + "/logout" + ChatColor.RED + "!");
 			return false;
 		}
 		
-		((Player)arg0).sendMessage(ChatColor.YELLOW + "Returning you to the hub...");
-		BungeeUtils.send((Player) arg0, "lobby");
+		player.sendMessage(ChatColor.YELLOW + "Returning you to the hub...");
+		BungeeUtils.send(player, "lobby");
 		
 		return false;
 	}

@@ -227,6 +227,8 @@ public class DecimateCore extends JavaPlugin implements PluginMessageListener {
 		getCommand("dbroadcast").setExecutor(mc);
 		getCommand("trenchpickaxe").setExecutor(trenchPick);
 		getCommand("hub").setExecutor(new HubCommand());
+		getCommand("announcements").setExecutor(this.announcementManager);
+
 	}
 
 	public static DecimateCore getCore() {
