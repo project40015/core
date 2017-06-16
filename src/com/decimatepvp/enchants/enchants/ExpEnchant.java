@@ -8,8 +8,8 @@ import com.decimatepvp.utils.DecimateUtils;
 public class ExpEnchant extends CustomKillerEnchant {
 	
 	private static String[] lore = new String[] {
-			DecimateUtils.color("&a&lI'm too lazy to think of a lore right now. I'll do it later. Gives double exp."),
-			DecimateUtils.color("&a&lGives double exp.")
+//			DecimateUtils.color("&a&lI'm too lazy to think of a lore right now. I'll do it later. Gives double exp."),
+			DecimateUtils.color("&a&lGives double experience.")
 	};
 
 	public ExpEnchant() {

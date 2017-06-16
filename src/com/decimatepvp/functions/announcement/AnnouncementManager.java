@@ -5,14 +5,12 @@ import java.util.List;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.Sound;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
-import org.inventivetalent.bossbar.BossBarAPI;
 
 import com.decimatepvp.core.DecimateCore;
 import com.decimatepvp.core.utils.Configuration;
@@ -26,7 +24,7 @@ public class AnnouncementManager implements CommandExecutor {
 //	private final float pitch = 1;
 	
 	private List<String> announcements = Lists.newArrayList();
-	private int delay = 3600;
+	private int delay = 200;
 	
 	private List<String> disabledAnnouncements = new ArrayList<String>();
 	
@@ -49,7 +47,7 @@ public class AnnouncementManager implements CommandExecutor {
 //			Bukkit.broadcastMessage(string);
 //		}
 		
-		delay = config.getInt("Time-per-announcement") * 20;
+		delay = config.getInt("Time-per-announcement") * 6;
 	}
 
 	public BukkitRunnable getAnnouncementTimer() {
@@ -61,7 +59,8 @@ public class AnnouncementManager implements CommandExecutor {
 					String message = DecimateUtils.color(getNextAnnouncement());
 					for(Player player : Bukkit.getOnlinePlayers()) {
 						if(!disabledAnnouncements.contains(player.getUniqueId().toString())){
-							PlayerUtils.sendBossbar(player, message, BossBarAPI.Color.PINK, BossBarAPI.Style.PROGRESS, 20, 2);
+//							PlayerUtils.sendBossbar(player, message, BossBarAPI.Color.PINK, BossBarAPI.Style.PROGRESS, 20, 2);
+							PlayerUtils.sendActionbar(player, message);
 						}
 //						player.playSound(player.getEyeLocation(), sound, pitch, 1f);
 					}
@@ -90,11 +89,10 @@ public class AnnouncementManager implements CommandExecutor {
 			if(this.disabledAnnouncements.contains(player.getUniqueId().toString())){
 				this.disabledAnnouncements.remove(player.getUniqueId().toString());
 				player.sendMessage(ChatColor.GREEN + "Turned announcements on");
-				PlayerUtils.sendBossbar(player, DecimateUtils.color(announcements.get(currentAnnouncement)), BossBarAPI.Color.PINK, BossBarAPI.Style.PROGRESS, 20, 2);
+				PlayerUtils.sendActionbar(player, DecimateUtils.color(announcements.get(currentAnnouncement)));
 			}else{
 				this.disabledAnnouncements.add(player.getUniqueId().toString());
 				player.sendMessage(ChatColor.YELLOW + "Turned announcements off");
-				BossBarAPI.removeBar(player);
 			}
 		}
 		return false;

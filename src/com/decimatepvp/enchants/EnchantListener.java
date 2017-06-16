@@ -2,7 +2,9 @@ package com.decimatepvp.enchants;
 
 import java.util.List;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.Sound;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
@@ -34,7 +36,10 @@ public class EnchantListener implements Listener {
 	public void onBookEnchant(InventoryClickEvent event) {
 		ItemStack cursor = event.getCursor();
 		ItemStack clicked = event.getCurrentItem();
-		if(event.getClick() == ClickType.MIDDLE) {
+		if(cursor == null || clicked == null){
+			return;
+		}
+		if(event.getClick() == ClickType.SHIFT_LEFT) {
 			if(core.getEnchantManager().isEnchantedBook(cursor)) {
 				CustomEnchant enchantment = core.getEnchantManager().
 						getEnchantById(cursor.getEnchantmentLevel(Enchantment.ARROW_FIRE));
@@ -43,6 +48,11 @@ public class EnchantListener implements Listener {
 							cursor.getEnchantmentLevel(Enchantment.ARROW_DAMAGE));
 					cursor.setAmount(0);
 					event.setCursor(null);
+					if(event.getWhoClicked() instanceof Player){
+						Player player = (Player) event.getWhoClicked();
+						player.playSound(player.getLocation(), Sound.ANVIL_USE, 1, 1);
+					}
+					event.setCancelled(true);
 				}
 			}
 		}

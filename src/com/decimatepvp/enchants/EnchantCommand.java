@@ -42,9 +42,9 @@ public class EnchantCommand implements CommandExecutor, TabCompleter {
 	@SuppressWarnings("deprecation")
 	@Override
 	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-		if(sender instanceof Player) {
-			Player player = (Player) sender;
-			if(player.hasPermission("Decimate.enchant.book")) {
+//		if(sender instanceof Player) {
+//			Player player = (Player) sender;
+			if(sender.hasPermission("Decimate.enchant.book")) {
 				if(args.length == 3) {
 					OfflinePlayer op = Bukkit.getOfflinePlayer(args[0]);
 					if(op.isOnline()) {
@@ -56,8 +56,8 @@ public class EnchantCommand implements CommandExecutor, TabCompleter {
 									ItemStack book = core.getEnchantManager().getEnchantedBook(enchant, level);
 									if(book != null) {
 										sender.sendMessage(ChatColor.GOLD + "You have been given an enchanted book!");
-										giveBook(book, player);
-										player.updateInventory();
+										giveBook(book, op.getPlayer());
+										op.getPlayer().updateInventory();
 									}
 									else {
 										sender.sendMessage(ChatColor.RED + "This enchantment cannot be set on this item!");
@@ -86,16 +86,16 @@ public class EnchantCommand implements CommandExecutor, TabCompleter {
 					}
 				}
 				else {
-					sender.sendMessage(ChatColor.GOLD + "Proper Usage: /applyenchant [player] [enchant] [level]");
+					sender.sendMessage(ChatColor.GOLD + "Proper Usage: /giveenchantment [player] [enchant] [level]");
 				}
 			}
 			else {
 				sender.sendMessage(ChatColor.RED + "You do not have the proper permissions.");
 			}
-		}
-		else {
-			sender.sendMessage(ChatColor.RED + "Only players may use this command.");
-		}
+//		}
+//		else {
+//			sender.sendMessage(ChatColor.RED + "Only players may use this command.");
+//		}
 		return false;
 	}
 

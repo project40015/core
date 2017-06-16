@@ -3,7 +3,6 @@ package com.decimatepvp.utils;
 import java.util.HashSet;
 
 import net.md_5.bungee.api.chat.TextComponent;
-import net.minecraft.server.v1_8_R3.Entity;
 import net.minecraft.server.v1_8_R3.IChatBaseComponent;
 import net.minecraft.server.v1_8_R3.IChatBaseComponent.ChatSerializer;
 import net.minecraft.server.v1_8_R3.Packet;
@@ -11,7 +10,6 @@ import net.minecraft.server.v1_8_R3.PacketPlayOutChat;
 import net.minecraft.server.v1_8_R3.PacketPlayOutTitle;
 import net.minecraft.server.v1_8_R3.PacketPlayOutTitle.EnumTitleAction;
 
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -25,8 +23,6 @@ import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionDefault;
 import org.inventivetalent.bossbar.BossBar;
 import org.inventivetalent.bossbar.BossBarAPI;
-
-import com.decimatepvp.core.DecimateCore;
 
 public class PlayerUtils {
 	
@@ -49,10 +45,20 @@ public class PlayerUtils {
 	
 	public static boolean isInSpawn(Player player){
 		Location loc = player.getLocation();
-		if(loc.getX() > -75 && loc.getX() < 77){
-			if(loc.getY() > 64){
-				if(loc.getZ() > -75 && loc.getZ() < 77){
-					return true;
+		if(loc.getWorld().getName().equals("world")){
+			if(loc.getX() > -75 && loc.getX() < 77){
+				if(loc.getY() > 64){
+					if(loc.getZ() > -75 && loc.getZ() < 77){
+						return true;
+					}
+				}
+			}
+		}else if(loc.getWorld().getName().equals("world_the_end")){
+			if(loc.getX() > -7 && loc.getX() < 8){
+				if(loc.getY() > 68){
+					if(loc.getZ() > -7 && loc.getZ() < 8){
+						return true;
+					}
 				}
 			}
 		}
@@ -148,7 +154,7 @@ public class PlayerUtils {
         IChatBaseComponent icbc = IChatBaseComponent.ChatSerializer.a("{\"text\": \"" +
                 ChatColor.translateAlternateColorCodes('&', message) + "\"}");
         PacketPlayOutChat bar = new PacketPlayOutChat(icbc, (byte)2);
-            ((CraftPlayer)p).getHandle().playerConnection.sendPacket(bar);
+        ((CraftPlayer)p).getHandle().playerConnection.sendPacket(bar);
     }
 	
 	

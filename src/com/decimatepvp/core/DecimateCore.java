@@ -15,6 +15,7 @@ import com.decimatepvp.core.commands.LogoutCommand;
 import com.decimatepvp.core.listener.AnvilDamageListener;
 import com.decimatepvp.core.listener.EntityItemListener;
 import com.decimatepvp.core.listener.ExplosionListener;
+import com.decimatepvp.core.listener.KillRewardListener;
 import com.decimatepvp.core.listener.PlayerBreakBlockListener;
 import com.decimatepvp.core.listener.PlayerUseItemListener;
 import com.decimatepvp.core.utils.DecimateConfig;
@@ -30,6 +31,7 @@ import com.decimatepvp.functions.bookCommand.CommandBookManager;
 import com.decimatepvp.functions.crate.CrateKeyCommand;
 import com.decimatepvp.functions.crate.CrateManager;
 import com.decimatepvp.functions.crate.rewards.RewardListener;
+import com.decimatepvp.functions.disabletnt.TntDisableManager;
 import com.decimatepvp.functions.misc.crophopper.CropHopperCommand;
 import com.decimatepvp.functions.misc.crophopper.CropHopperManager;
 import com.decimatepvp.functions.misc.decimatestop.DecimateStop;
@@ -171,7 +173,8 @@ public class DecimateCore extends JavaPlugin implements PluginMessageListener {
 				new FactionDamageListener(), staffCommandsManager, enderDelayManager, antiTntManager, worldBorder,
 				accountIpManager,  new EnchantListener(), new CustomEventCaller(), cropHopperManager, potionManager,
 				crateManager, comboManager, pvpManager, new EnchantmentLimitManager(), commandBookManager,
-				new RewardListener(), trenchPick, sellWandManager, new ExplosionListener(), new DecimateStop());
+				new RewardListener(), trenchPick, sellWandManager, new ExplosionListener(), new DecimateStop(),
+				new TntDisableManager(), new KillRewardListener());
 	}
 	
 	@Override
