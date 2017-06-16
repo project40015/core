@@ -64,6 +64,7 @@ public class AccountIPManager implements Manager, Listener, CommandExecutor {
 		if(sender.hasPermission("Decimate.staff.iplist")) {
 			if(args.length == 0) {
 				sender.sendMessage(ChatColor.GOLD + "Proper Usage: /iplist [player]");
+				return false;
 			}
 			OfflinePlayer plyr = Bukkit.getOfflinePlayer(args[0]);
 			InetAddress ip = plyr.isOnline() ? plyr.getPlayer().getAddress().getAddress() : getPlayerAddress(plyr);
