@@ -1,6 +1,7 @@
 package com.decimatepvp.functions.staff.mcips;
 
 import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.text.SimpleDateFormat;
 import java.util.GregorianCalendar;
 import java.util.List;
@@ -8,6 +9,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.TimeZone;
+import java.util.UUID;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -15,21 +17,45 @@ import org.bukkit.OfflinePlayer;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 
+import com.decimatepvp.core.DecimateCore;
+import com.decimatepvp.core.Manager;
+import com.decimatepvp.core.utils.Configuration;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
-public class AccountIPManager implements Listener, CommandExecutor {
+public class AccountIPManager implements Manager, Listener, CommandExecutor {
 	
 	private Map<InetAddress, List<OfflinePlayer>> sharedIps = Maps.newHashMap();
 	
 	public AccountIPManager() {
+		loadSavedPlayers();
 		loadOnlinePlayers();
+	}
+
+	private void loadSavedPlayers() {
+		Configuration cfg = new Configuration(DecimateCore.getCore(), "ipAddresses.yml");
+		FileConfiguration config = cfg.getData();
+		
+		for(String str : config.getKeys(false)) {
+			try {
+				InetAddress ip = InetAddress.getByName(str.replaceAll("_", "."));
+				List<OfflinePlayer> players = Lists.newArrayList();
+				for(String plyr : config.getStringList(str + ".players")) {
+					players.add(Bukkit.getOfflinePlayer(UUID.fromString(plyr)));
+				}
+				sharedIps.put(ip, players);
+			}
+			catch (UnknownHostException e) {
+//				e.printStackTrace();
+			}
+		}
 	}
 
 	@SuppressWarnings("deprecation")
@@ -38,6 +64,7 @@ public class AccountIPManager implements Listener, CommandExecutor {
 		if(sender.hasPermission("Decimate.staff.iplist")) {
 			if(args.length == 0) {
 				sender.sendMessage(ChatColor.GOLD + "Proper Usage: /iplist [player]");
+				return false;
 			}
 			OfflinePlayer plyr = Bukkit.getOfflinePlayer(args[0]);
 			InetAddress ip = plyr.isOnline() ? plyr.getPlayer().getAddress().getAddress() : getPlayerAddress(plyr);
@@ -129,6 +156,28 @@ public class AccountIPManager implements Listener, CommandExecutor {
 		calendar.setTimeInMillis(time);
 		
 		return sdf.format(calendar.getTime());
+	}
+
+	@Override
+	public void disable() {
+		savePlayers();
+	}
+
+	private void savePlayers() {
+		Configuration cfg = new Configuration(DecimateCore.getCore(), "ipAddresses.yml");
+		cfg.reset();
+		FileConfiguration config = cfg.getData();
+		
+		for(InetAddress ip : sharedIps.keySet()) {
+			List<String> players = Lists.newArrayList();
+			for(OfflinePlayer plyr : sharedIps.get(ip)) {
+				players.add(plyr.getUniqueId().toString());
+			}
+			
+			config.set(ip.getHostAddress().replaceAll("\\.", "_") + ".players", players);
+		}
+		
+		cfg.saveData();
 	}
 	
 }
