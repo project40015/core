@@ -87,11 +87,14 @@ public class AnnouncementManager implements CommandExecutor {
 	public boolean onCommand(CommandSender arg0, Command arg1, String arg2, String[] arg3) {
 		if(arg0 instanceof Player){
 			Player player = (Player) arg0;
-			player.sendMessage(ChatColor.YELLOW + "Toggled announcements");
 			if(this.disabledAnnouncements.contains(player.getUniqueId().toString())){
 				this.disabledAnnouncements.remove(player.getUniqueId().toString());
+				player.sendMessage(ChatColor.GREEN + "Turned announcements on");
+				PlayerUtils.sendBossbar(player, DecimateUtils.color(announcements.get(currentAnnouncement)), BossBarAPI.Color.PINK, BossBarAPI.Style.PROGRESS, 20, 2);
 			}else{
 				this.disabledAnnouncements.add(player.getUniqueId().toString());
+				player.sendMessage(ChatColor.YELLOW + "Turned announcements off");
+				BossBarAPI.removeBar(player);
 			}
 		}
 		return false;

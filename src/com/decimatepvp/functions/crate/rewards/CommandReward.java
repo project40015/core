@@ -18,14 +18,18 @@ public class CommandReward extends CrateReward {
 	private CommandBook commandBook;
 	
 	public CommandReward(String name, ItemStack icon, Rarity rarity, int chance, String command, boolean book) {
-		this(name, icon, rarity, chance, command, book, "", "");
+		this(name, icon, rarity, chance, command, book, "", "", "");
 	}
 	
 	public CommandReward(String name, ItemStack icon, Rarity rarity, int chance, String command, boolean book, String description) {
-		this(name, icon, rarity, chance, command, book, description, "");
+		this(name, icon, rarity, chance, command, book, description, "", "");
 	}
 	
 	public CommandReward(String name, ItemStack icon, Rarity rarity, int chance, String command, boolean book, String description, String itemDesc) {
+		this(name, icon, rarity, chance, command, book, description, itemDesc, "");
+	}
+	
+	public CommandReward(String name, ItemStack icon, Rarity rarity, int chance, String command, boolean book, String description, String itemDesc, String permission) {
 		super(name, icon, rarity, chance, description);
 		this.command = command;
 		if(book){
@@ -33,7 +37,7 @@ public class CommandReward extends CrateReward {
 			ItemMeta im = commandBookIcon.getItemMeta();
 			im.setDisplayName(rarity.getColor() + name + ChatColor.GRAY + " (Right Click)");
 			commandBookIcon.setItemMeta(im);
-			this.commandBook = itemDesc.equals("") ? new CommandBook(commandBookIcon, command) : new CommandBook(commandBookIcon, command, itemDesc);
+			this.commandBook = itemDesc.equals("") ? new CommandBook(commandBookIcon, command) : (permission.equals("") ? new CommandBook(commandBookIcon, command, itemDesc) : new CommandBook(commandBookIcon, command, itemDesc, permission));
 			DecimateCore.getCore().getCommandBookManager().addCommandBook(commandBook);
 		}
 	}

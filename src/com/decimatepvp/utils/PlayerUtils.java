@@ -30,22 +30,22 @@ import com.decimatepvp.core.DecimateCore;
 
 public class PlayerUtils {
 	
-	public static void broadcastBossbar(String message, BossBarAPI.Color color, BossBarAPI.Style style,
-			int timeout, int interval) {
-		for(Player player : Bukkit.getOnlinePlayers()) {
-			boolean bool = true;
-			entities: for(Entity entity : DecimateCore.getCore().getEntityManager().getEntities()) {
-				if(entity.getBukkitEntity().getLocation().distance(player.getLocation()) <= 64) {
-					bool = false;
-					break entities;
-				}
-			}
-			
-			if(bool) {
-				sendBossbar(player, message, color, style, timeout, interval);
-			}
-		}
-	}
+//	public static void broadcastBossbar(String message, BossBarAPI.Color color, BossBarAPI.Style style,
+//			int timeout, int interval) {
+//		for(Player player : Bukkit.getOnlinePlayers()) {
+//			boolean bool = true;
+//			entities: for(Entity entity : DecimateCore.getCore().getEntityManager().getEntities()) {
+//				if(entity.getBukkitEntity().getLocation().distance(player.getLocation()) <= 64) {
+//					bool = false;
+//					break entities;
+//				}
+//			}
+//			
+//			if(bool) {
+//				sendBossbar(player, message, color, style, timeout, interval);
+//			}
+//		}
+//	}
 	
 	public static boolean isInSpawn(Player player){
 		Location loc = player.getLocation();

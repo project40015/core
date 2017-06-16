@@ -1,6 +1,7 @@
 package com.decimatepvp.functions.bookCommand;
 
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
@@ -11,6 +12,7 @@ public class CommandBook {
 	private ItemStack item;
 	private String command;
 	private String message = "";
+	private String noPermission = "";
 	
 	public CommandBook(ItemStack item, String command){
 		this.item = item;
@@ -22,6 +24,12 @@ public class CommandBook {
 		this.message = message;
 	}
 	
+	public CommandBook(ItemStack item, String command, String message, String noPermission){
+		this(item, command);
+		this.message = message;
+		this.noPermission = noPermission;
+	}
+	
 	public ItemStack getItem(){
 		return item;
 	}
@@ -31,6 +39,10 @@ public class CommandBook {
 	}
 	
 	public void run(Player player){
+		if(!noPermission.equals("") && player.hasPermission(noPermission)){
+			player.sendMessage(ChatColor.YELLOW + "You already have this.");
+			return;
+		}
 		int am = player.getItemInHand().getAmount();
 		if(am <= 1){
 			player.getInventory().setItemInHand(new ItemStack(Material.AIR));
@@ -45,6 +57,10 @@ public class CommandBook {
 		if(!this.message.equals("")){
 			player.sendMessage(message);
 		}
+	}
+	
+	public String getNoPermission(){
+		return this.noPermission;
 	}
 	
 }

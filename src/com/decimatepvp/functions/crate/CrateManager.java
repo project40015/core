@@ -7,6 +7,7 @@ import java.util.List;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Color;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.ArmorStand;
@@ -98,11 +99,15 @@ public class CrateManager implements Manager, Listener {
 		return new SummerCrate(Arrays.asList(
 				new CommandReward("Summer Kit (PERM)", Skull.getPlayerSkull("MHF_Present2"), Rarity.EPIC, 14, "manuaddp %player% essentials.kits.summer", true,
 						ChatColor.GRAY + "Gives you access to " + ChatColor.GOLD + "Summer Kit" + ChatColor.GRAY + " (weekly):~ ~" + ChatColor.GRAY +
-						"1 x " + ChatColor.GOLD + "Aestas's Helmet" + ChatColor.GRAY + ": Diamond helmet that absorbs 20% of damage while you are in the sun.",
-						ChatColor.GRAY + "You have unlocked the " + ChatColor.GOLD + "Summer " + ChatColor.GRAY + "kit!"),
-				new CommandReward("Decimate Rank", Skull.getPlayerSkull("MHF_Present1"), Rarity.MYTHICAL, 1, "manuadd %player% decimate", true, ChatColor.GRAY +
+						"1 x " + ChatColor.GOLD + "Aestas's Helmet" + ChatColor.GRAY + ": Protection V unbreaking V diamond helmet that absorbs 20% of damage while you are in the sun.~" +
+								ChatColor.GRAY + "1 x " + ChatColor.GOLD + "Summer Chestplate" + ChatColor.GRAY + "Protection IV unbreaking III~" +
+								ChatColor.GRAY + "1 x " + ChatColor.GOLD + "Summer Leggings" + ChatColor.GRAY + "Protection IV unbreaking III~" +
+								ChatColor.GRAY + "1 x " + ChatColor.GOLD + "Summer Boots" + ChatColor.GRAY + "Protection IV unbreaking III~" +
+								ChatColor.GRAY + "1 x " + ChatColor.GOLD + "Summer Sword" + ChatColor.GRAY + "Sharpness V unbreaking III fire aspect II",
+						ChatColor.GRAY + "You have unlocked the " + ChatColor.GOLD + "Summer " + ChatColor.GRAY + "kit!", "essentials.kits.summer"),
+				new CommandReward("Decimate Rank", new ItemStack(Material.BEDROCK), Rarity.MYTHICAL, 1, "manuadd %player% decimate", true, ChatColor.GRAY +
 						"Receive the " + DecimateCore.getCore().getColoredDecimate() + ChatColor.GRAY + " rank!",
-						ChatColor.GRAY + "You have unlocked the " + DecimateCore.getCore().getColoredDecimate() + ChatColor.GRAY + " rank!"),
+						ChatColor.GRAY + "You have unlocked the " + DecimateCore.getCore().getColoredDecimate() + ChatColor.GRAY + " rank!", "decimate.rank.decimate"),
 				new CommandReward("Blaze Spawner (4)", new ItemStack(Material.MOB_SPAWNER), Rarity.RARE, 25, "es give %player% BLAZE 0 4", false),
 				new CommandReward("Iron Golem Spawner (2)", new ItemStack(Material.MOB_SPAWNER), Rarity.RARE, 20, "es give %player% IRON_GOLEM 0 2", false),
 				new CashReward("$3,500,000", new ItemStack(Material.PAPER), Rarity.COMMON, 40, 3500000) 
@@ -124,9 +129,9 @@ public class CrateManager implements Manager, Listener {
 				new CommandReward("Blaze Spawner (3)", new ItemStack(Material.MOB_SPAWNER), Rarity.RARE, 25, "es give %player% BLAZE 0 3", false),
 				new CommandReward("Iron Golem Spawner (2)",new ItemStack(Material.MOB_SPAWNER), Rarity.RARE, 22, "es give %player% IRON_GOLEM 0 2", false),
 				new CommandReward("Creeper Spawner (2)", new ItemStack(Material.MOB_SPAWNER), Rarity.RARE, 22, "es give %player% CREEPER 0 2", false),
-				new CommandReward("Decimate Rank", Skull.getPlayerSkull("MHF_Present1"), Rarity.MYTHICAL, 1, "manuadd %player% decimate", true, ChatColor.GRAY +
+				new CommandReward("Decimate Rank", new ItemStack(Material.BEDROCK), Rarity.MYTHICAL, 1, "manuadd %player% decimate", true, ChatColor.GRAY +
 						"Receive the " + DecimateCore.getCore().getColoredDecimate() + ChatColor.GRAY + " rank!",
-						ChatColor.GRAY + "You have unlocked the " + DecimateCore.getCore().getColoredDecimate() + ChatColor.GRAY + " rank!"),
+						ChatColor.GRAY + "You have unlocked the " + DecimateCore.getCore().getColoredDecimate() + ChatColor.GRAY + " rank!", "decimate.rank.decimate"),
 				new CommandReward("Protection V Kit (1)", new ItemStack(Material.BOOK), Rarity.COMMON, 30, "kit protectionv %player%", true)
 				));
 	}
