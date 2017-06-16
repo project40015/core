@@ -90,7 +90,7 @@ public class DecimateCore extends JavaPlugin implements PluginMessageListener {
 	/*
 	 * Managers
 	 */
-	private Manager[] managers = new Manager[18];
+	private Manager[] managers = new Manager[20];
 	
 	private FreezeManager freezeManager;
 	private TntFillManager tntFillManager;
@@ -112,12 +112,12 @@ public class DecimateCore extends JavaPlugin implements PluginMessageListener {
 	private AnimationManager animationManager;
 	private CommandBookManager commandBookManager;
 	private SellWandManager sellWandManager;
+	private AccountIPManager accountIpManager;
 	
 	/*
 	 * Other
 	 */
 	private WorldBorderManager worldBorder;
-	private AccountIPManager accountIpManager;
 	private EnchantManager enchantManager;
 	private PotionAbilityManager potionManager;
 	private AnnouncementManager announcementManager;
@@ -134,7 +134,6 @@ public class DecimateCore extends JavaPlugin implements PluginMessageListener {
 //	    this.getServer().getMessenger().registerIncomingPluginChannel(this, "BungeeCord", this);
 		
 		worldBorder = new WorldBorderManager(); // Not a Real Man-ager
-		accountIpManager = new AccountIPManager();
 		enchantManager = new EnchantManager();
 		potionManager = new PotionAbilityManager();
 		announcementManager = new AnnouncementManager();
@@ -160,6 +159,8 @@ public class DecimateCore extends JavaPlugin implements PluginMessageListener {
 		managers[n++] = comboManager = new ComboManager();
 		managers[n++] = animationManager = new AnimationManager();
 		managers[n++] = sellWandManager = new SellWandManager();
+		managers[n++] = blacklistManager = new BlacklistManager();
+		managers[n++] = accountIpManager = new AccountIPManager();
 				
 		setupEco();
 		loadCommands();

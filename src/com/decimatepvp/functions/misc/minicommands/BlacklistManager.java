@@ -34,7 +34,7 @@ public class BlacklistManager implements Manager, CommandExecutor {
 		if(sender.hasPermission("Decimate.staff.blacklist")) {
 			if(command.getName().equalsIgnoreCase("blacklist")) {
 				if(args.length == 0) {
-					sender.sendMessage(ChatColor.GOLD + "Proper Usage: /blacklist [player] [reason");
+					sender.sendMessage(ChatColor.GOLD + "Proper Usage: /blacklist [player] [reason]");
 				}
 				else if(args.length == 1) {
 					OfflinePlayer plyr = Bukkit.getOfflinePlayer(args[0]);
@@ -45,7 +45,7 @@ public class BlacklistManager implements Manager, CommandExecutor {
 					broadcast(sender, plyr, "");
 					sender.sendMessage(ChatColor.GREEN + "Player has been banned.");
 				}
-				else if(args.length == 2) {
+				else {
 					OfflinePlayer plyr = Bukkit.getOfflinePlayer(args[0]);
 					String reason = buildArgs(1, args);
 					
@@ -56,7 +56,7 @@ public class BlacklistManager implements Manager, CommandExecutor {
 					sender.sendMessage(ChatColor.GREEN + "Player has been banned.");
 				}
 			}
-			else if (command.getName().equalsIgnoreCase("blacklistpardon")) {
+			else if(command.getName().equalsIgnoreCase("blacklistpardon")) {
 				if(args.length == 0) {
 					sender.sendMessage(ChatColor.GOLD + "Proper Usage: /blacklistpardon [player]");
 				}
