@@ -35,10 +35,10 @@ public class DeleteHome implements Listener {
 		Player player = event.getPlayer();
 		
 		if(lastHomeCommand.containsKey(player.getName())) {
-			Faction territory = FactionUtils.getFactionByLoc(player.getLocation());
+			Faction territory = FactionUtils.getFactionByLoc(event.getTo());
 			Relation rel = FactionUtils.getFaction(player).
 					getRelationTo(territory);
-			if(!((rel == Relation.MEMBER) || (territory == FactionUtils.getWilderness()))
+			if(!((rel == Relation.MEMBER) && (territory != FactionUtils.getWilderness()))
 					&& (!player.hasPermission("Decimate.staff.home"))) {
 				player.performCommand("delhome " + lastHomeCommand.get(player.getName()));
 				player.sendMessage(ChatColor.RED + "You cannot teleport there!");
