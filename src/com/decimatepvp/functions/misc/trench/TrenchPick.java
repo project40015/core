@@ -5,6 +5,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
+import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -67,10 +68,11 @@ public class TrenchPick implements Listener, CommandExecutor{
 			for(int y = -RADIUS; y <= RADIUS; y++) {
 				for(int z = -RADIUS; z <= RADIUS; z++) {
 					Location location = add.clone().add(x, y, z);
-					if(location.getBlock().getType().equals(Material.BEDROCK)){
-						return;
+					Block block = location.getBlock();
+
+					if((block.getType() != Material.BEDROCK) && (block.getType() != Material.AIR)) {
+						block.breakNaturally(pickaxe);
 					}
-					location.getBlock().breakNaturally(pickaxe);
 				}
 			}
 		}
