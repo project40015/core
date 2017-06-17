@@ -144,7 +144,7 @@ public class CrateManager implements Manager, Listener {
 				new CommandReward("Skeleton Spawner (1)", new ItemStack(Material.MOB_SPAWNER), Rarity.COMMON, 20, "es give %player% SKELETON 0 1", false),
 				new CommandReward("Cow Spawner (1)", new ItemStack(Material.MOB_SPAWNER), Rarity.EPIC, 5, "es give %player% COW 0 1", false),
 				new ItemReward("God Apple (4)", item(Material.GOLDEN_APPLE, 1, 4), Rarity.COMMON, 20),
-				new CashReward("$100,000", new ItemStack(Material.PAPER), Rarity.RARE, 17, 500000)
+				new CashReward("$100,000", new ItemStack(Material.PAPER), Rarity.RARE, 17, 100000)
 				));
 	}
 	
