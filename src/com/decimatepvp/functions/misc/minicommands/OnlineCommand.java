@@ -18,48 +18,50 @@ public class OnlineCommand implements CommandExecutor {
 	@Override
 	public boolean onCommand(CommandSender arg0, Command arg1, String arg2, String[] arg3) {
 		
-		List<String> staff, donors, youtuber, regular;
-		
-		staff = new ArrayList<>();
-		donors = new ArrayList<>();
-		youtuber = new ArrayList<>();
-		regular = new ArrayList<>();
-		
-		int specs = 0;
-		
-		for(Player player : Bukkit.getServer().getOnlinePlayers()){
-			if(DecimateCore.getCore().getSpectateManager().isSpectating(player)){
-				specs++;
-				continue;
-			}
-			if(PlayerUtils.hasPermission(player, "Decimate.owner")){
-				staff.add(player.getName());
-			}else if(PlayerUtils.hasPermission(player, "Decimate.developer")){
-				staff.add(player.getName());
-			}else if(PlayerUtils.hasPermission(player, "Decimate.youtuber")){
-				youtuber.add(player.getName());
-			}else if(PlayerUtils.hasPermission(player, "Decimate.moderator")){
-				staff.add(player.getName());
-			}else if(PlayerUtils.hasPermission(player, "Decimate.helper")){
-				staff.add(player.getName());
-			}else if(PlayerUtils.hasPermission(player, "Decimate.donor")){
-				donors.add(player.getName());
-			}else{
-				regular.add(player.getName());
-			}
-		}
+//		List<String> staff, donors, youtuber, regular;
+//		
+//		staff = new ArrayList<>();
+//		donors = new ArrayList<>();
+//		youtuber = new ArrayList<>();
+//		regular = new ArrayList<>();
+//		
+//		int specs = 0;
+//		
+//		for(Player player : Bukkit.getServer().getOnlinePlayers()){
+//			if(DecimateCore.getCore().getSpectateManager().isSpectating(player)){
+//				specs++;
+//				continue;
+//			}
+//			if(PlayerUtils.hasPermission(player, "Decimate.owner")){
+//				staff.add(player.getName());
+//			}else if(PlayerUtils.hasPermission(player, "Decimate.developer")){
+//				staff.add(player.getName());
+//			}else if(PlayerUtils.hasPermission(player, "Decimate.youtuber")){
+//				youtuber.add(player.getName());
+//			}else if(PlayerUtils.hasPermission(player, "Decimate.moderator")){
+//				staff.add(player.getName());
+//			}else if(PlayerUtils.hasPermission(player, "Decimate.helper")){
+//				staff.add(player.getName());
+//			}else if(PlayerUtils.hasPermission(player, "Decimate.donor")){
+//				donors.add(player.getName());
+//			}else{
+//				regular.add(player.getName());
+//			}
+//		}
 
 		//_Ug's clean version:
 		
 		String serverName = ChatColor.translateAlternateColorCodes('&', "&cD&6E&eC&aI&bM&9A&5T&cE&FP&fV&fP");
 		
-		arg0.sendMessage(ChatColor.DARK_GRAY.toString() + ChatColor.STRIKETHROUGH + "----------------" + ChatColor.LIGHT_PURPLE + " " + serverName + " " 
-		+ ChatColor.GRAY + "(" + ChatColor.WHITE + (Bukkit.getServer().getOnlinePlayers().size() - specs) + ChatColor.GRAY + ") " + ChatColor.DARK_GRAY.toString() + ChatColor.STRIKETHROUGH + "----------------");
-		arg0.sendMessage("");
-		arg0.sendMessage(" " + ChatColor.GRAY + "Staff: " + formatList(staff, ChatColor.YELLOW));
-		arg0.sendMessage(" " + ChatColor.GRAY + "Youtubers: " + formatList(youtuber, ChatColor.RED));
-		arg0.sendMessage(" " + ChatColor.GRAY + "Donors: " + formatList(donors, ChatColor.GOLD));
-		arg0.sendMessage(" " + ChatColor.GRAY + "Players: " + formatList(regular, ChatColor.WHITE));
+//		arg0.sendMessage(ChatColor.DARK_GRAY.toString() + ChatColor.STRIKETHROUGH + "----------------" + ChatColor.LIGHT_PURPLE + " " + serverName + " "
+//		+ ChatColor.GRAY + "(" + ChatColor.WHITE + (Bukkit.getServer().getOnlinePlayers().size() - specs) + ChatColor.GRAY + ") " + ChatColor.DARK_GRAY.toString() + ChatColor.STRIKETHROUGH + "----------------");
+//		arg0.sendMessage("");
+//		arg0.sendMessage(" " + ChatColor.GRAY + "Staff: " + formatList(staff, ChatColor.YELLOW));
+//		arg0.sendMessage(" " + ChatColor.GRAY + "Youtubers: " + formatList(youtuber, ChatColor.RED));
+//		arg0.sendMessage(" " + ChatColor.GRAY + "Donors: " + formatList(donors, ChatColor.GOLD));
+//		arg0.sendMessage(" " + ChatColor.GRAY + "Players: " + formatList(regular, ChatColor.WHITE));
+		
+		arg0.sendMessage(serverName + ChatColor.GRAY + ": " + Bukkit.getServer().getOnlinePlayers().size());
 		
 		//Farm's ugly version:
 		
