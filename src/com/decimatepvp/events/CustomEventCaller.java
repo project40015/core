@@ -62,25 +62,25 @@ public class CustomEventCaller implements Listener {
 		if(event.getClick().equals(ClickType.SHIFT_LEFT) || event.getClick().equals(ClickType.SHIFT_RIGHT) || event.getClick().equals(num)){
 			Player player = (Player) event.getWhoClicked();
 			ItemType type = getArmour(current);
-			if(type.equals(ItemType.HELMET) && (num || player.getInventory().getHelmet() == null || player.getInventory().getHelmet().getType().equals(Material.AIR))){
+			if(type != null && type.equals(ItemType.HELMET) && (num || player.getInventory().getHelmet() == null || player.getInventory().getHelmet().getType().equals(Material.AIR))){
 				if(!callEquip((Player) event.getWhoClicked(), current, 5)) {
 					event.setCancelled(true);
 					return;
 				}
 			}
-			if(type.equals(ItemType.CHESTPLATE) && (num || player.getInventory().getChestplate() == null || player.getInventory().getChestplate().getType().equals(Material.AIR))){
+			if(type != null && type.equals(ItemType.CHESTPLATE) && (num || player.getInventory().getChestplate() == null || player.getInventory().getChestplate().getType().equals(Material.AIR))){
 				if(!callEquip((Player) event.getWhoClicked(), current, 6)) {
 					event.setCancelled(true);
 					return;
 				}
 			}
-			if(type.equals(ItemType.LEGGINGS) && (num || player.getInventory().getLeggings() == null || player.getInventory().getLeggings().getType().equals(Material.AIR))){
+			if(type != null && type.equals(ItemType.LEGGINGS) && (num || player.getInventory().getLeggings() == null || player.getInventory().getLeggings().getType().equals(Material.AIR))){
 				if(!callEquip((Player) event.getWhoClicked(), current, 7)) {
 					event.setCancelled(true);
 					return;
 				}
 			}
-			if(type.equals(ItemType.BOOTS) && (num || player.getInventory().getBoots() == null || player.getInventory().getBoots().getType().equals(Material.AIR))){
+			if(type != null && type.equals(ItemType.BOOTS) && (num || player.getInventory().getBoots() == null || player.getInventory().getBoots().getType().equals(Material.AIR))){
 				if(!callEquip((Player) event.getWhoClicked(), current, 8)) {
 					event.setCancelled(true);
 					return;

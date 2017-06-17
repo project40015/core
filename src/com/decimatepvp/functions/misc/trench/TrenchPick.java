@@ -67,6 +67,9 @@ public class TrenchPick implements Listener, CommandExecutor{
 			for(int y = -RADIUS; y <= RADIUS; y++) {
 				for(int z = -RADIUS; z <= RADIUS; z++) {
 					Location location = add.clone().add(x, y, z);
+					if(location.getBlock().getType().equals(Material.BEDROCK)){
+						return;
+					}
 					location.getBlock().breakNaturally(pickaxe);
 				}
 			}
