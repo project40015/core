@@ -98,6 +98,13 @@ public class PvPManager implements Manager, Listener, CommandExecutor {
 		cp.remove();
 	}
 	
+//	@EventHandler
+//	public void onKick(PlayerKickEvent event) {
+//		Player player = event.getPlayer();
+//
+//		player.getPlayer().setMetadata("LogoutCommand", new FixedMetadataValue(DecimateCore.getCore(), true));
+//	}
+	
 	@EventHandler
 	public void onEntityDamage(EntityDamageEvent event){
 		if(this.entities.containsKey(event.getEntity().getEntityId())){
@@ -163,7 +170,8 @@ public class PvPManager implements Manager, Listener, CommandExecutor {
 		Configuration cfg = new Configuration(DecimateCore.getCore(), "KillList.yml");
 		FileConfiguration config = cfg.getData();
 		
-		this.killList = config.getStringList("KillList");
+		this.killList = Lists.newArrayList();
+		this.killList.addAll(config.getStringList("KillList"));
 	}
 
 	@Override
@@ -173,10 +181,12 @@ public class PvPManager implements Manager, Listener, CommandExecutor {
 		FileConfiguration config = cfg.getData();
 		
 		config.set("KillList", killList);
+		cfg.saveData();
 		
 		for(CombatPlayer cp : players.values()) {
 			cp.remove();
 		}
+		
 	}
 
 }
