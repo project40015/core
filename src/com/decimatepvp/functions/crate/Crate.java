@@ -204,14 +204,14 @@ public abstract class Crate {
 	
 	public void clearStands(){
 		if(this.nameStand != null){
-			if(!this.nameStand.isDead()){
+//			if(!this.nameStand.isDead()){
 				this.nameStand.remove();
-			}
+//			}
 		}
 		if(this.timeStand != null){
-			if(!this.timeStand.isDead()){
+//			if(!this.timeStand.isDead()){
 				this.timeStand.remove();
-			}
+//			}
 		}
 	}
 	

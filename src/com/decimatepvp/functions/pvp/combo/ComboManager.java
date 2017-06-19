@@ -125,6 +125,9 @@ public class ComboManager implements Manager, Listener {
 		if(event.isCancelled()){
 			return;
 		}
+		if(event.getDamage() <= 0){
+			return;
+		}
 		if(event.getEntity() instanceof Player && event.getDamager() instanceof Player){
 			Player attacker = (Player) event.getDamager();
 			Player attacked = (Player) event.getEntity();

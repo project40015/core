@@ -2,6 +2,7 @@ package com.decimatepvp.functions.disabletnt;
 
 import java.util.Date;
 
+import org.bukkit.entity.Creeper;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityExplodeEvent;
@@ -17,6 +18,12 @@ public class TntDisableManager implements Listener {
 	
 	@EventHandler
 	public void onExplode(EntityExplodeEvent event){
+		if(event.getEntity() instanceof Creeper){
+			Creeper cr = (Creeper) event.getEntity();
+			if(cr.isPowered()){
+				return;
+			}
+		}
 		if(then > System.currentTimeMillis()){
 			event.setCancelled(true);
 		}

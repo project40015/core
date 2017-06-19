@@ -32,7 +32,7 @@ public class SpectateManager implements Listener, Manager {
 		
 	}
 	
-	public void toggleSpectator(Player player){
+	public void toggleSpectator(Player player, boolean reload){
 		if(!this.isSpectating(player)){
 			player.sendMessage(ChatColor.GREEN + "Enabled spectator mode!");
 			spectators.add(new Spectator(player));
@@ -56,7 +56,11 @@ public class SpectateManager implements Listener, Manager {
 				}
 			}
 		}else{
-			player.sendMessage(ChatColor.YELLOW + "Disabled spectator mode!");
+			if(!reload){
+				player.sendMessage(ChatColor.YELLOW + "Disabled spectator mode!");
+			}else{
+				player.sendMessage(ChatColor.YELLOW + "Server disabled your spectator mode (reload/restart)!");
+			}
 			getSpectator(player).getInventory().paste(player);
 			spectators.remove(getSpectator(player));
 			for(Player p : Bukkit.getServer().getOnlinePlayers()){
@@ -125,7 +129,7 @@ public class SpectateManager implements Listener, Manager {
 	private void quit(Player player){
 		for(Spectator sp : spectators){
 			if(sp.getPlayer().equals(player)){
-				this.toggleSpectator(sp.getPlayer());
+				this.toggleSpectator(sp.getPlayer(), false);
 			}else{
 				player.showPlayer(sp.getPlayer());
 			}
@@ -134,8 +138,8 @@ public class SpectateManager implements Listener, Manager {
 
 	@Override
 	public void disable() {
-		for(Spectator sp : this.spectators){
-			this.toggleSpectator(sp.getPlayer());
+		while(this.spectators.size() != 0){
+			this.toggleSpectator(this.spectators.get(0).getPlayer(), true);
 		}
 	}
 	

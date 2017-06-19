@@ -47,7 +47,7 @@ public class SpectateCommand implements CommandExecutor {
 					player.teleport(Bukkit.getServer().getPlayer(arg3[1]).getLocation());
 					player.sendMessage(ChatColor.GREEN + "Teleported to " + ChatColor.AQUA + Bukkit.getServer().getPlayer(arg3[1]).getName() + ChatColor.GREEN + "!");
 				}else{
-					core.getSpectateManager().toggleSpectator(player);
+					core.getSpectateManager().toggleSpectator(player, false);
 					player.teleport(Bukkit.getServer().getPlayer(arg3[1]).getLocation());
 					player.sendMessage(ChatColor.GREEN + "Teleported to " + ChatColor.AQUA + Bukkit.getServer().getPlayer(arg3[1]).getName() + ChatColor.GREEN + "!");
 				}
@@ -59,7 +59,7 @@ public class SpectateCommand implements CommandExecutor {
 		}
 		
 		if(arg3[0].equalsIgnoreCase("toggle")){
-			core.getSpectateManager().toggleSpectator(player);
+			core.getSpectateManager().toggleSpectator(player, false);
 			return false;
 		}
 		

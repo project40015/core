@@ -11,6 +11,8 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.entity.ExplosionPrimeEvent;
 
+import com.decimatepvp.core.DecimateCore;
+import com.decimatepvp.functions.extraexplodables.ExplodableManager;
 import com.google.common.collect.Maps;
 
 import net.minecraft.server.v1_8_R3.MathHelper;
@@ -19,6 +21,7 @@ public class ExplosionListener implements Listener {
 	
 	private Random random = new Random();
 	private HashMap<Integer, Float> entityPowerMap = Maps.newHashMap();
+	private ExplodableManager explodableManager = DecimateCore.getCore().getExplodableManager();
 	
 	@EventHandler(priority=EventPriority.HIGHEST)
 	public void OnExplosionPrime(ExplosionPrimeEvent event) {
@@ -67,9 +70,14 @@ public class ExplosionListener implements Listener {
 	    					}
 	    					if ((f1 > 0.0F) && (i1 < 256) && (i1 >= 0) && (k1 != 8) && (k1 != 9) && (k1 != 10)) {
 	    						org.bukkit.block.Block block = world.getBlockAt(l, i1, j1);
-	    						if(((k1 == (10)) || (k1 == (11))) &&
-	    								(!event.blockList().contains(block))) {
-	    							event.blockList().add(block);
+	    						if(!event.blockList().contains(block)){
+	    							if(k1 == 10 || k1 == 11 || k1 == 7){
+	    								event.blockList().add(block);
+	    							}else if(explodableManager.isExplodable(k1)){
+	    								if(explodableManager.getExplodable(world.getName(), l, i1, j1, k1).hit()){
+	    									event.blockList().add(block);
+	    								}
+	    							}
 	    						}
 	    					}
 	    					d0 += d3 * f2;

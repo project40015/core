@@ -102,7 +102,7 @@ public class PvPManager implements Manager, Listener, CommandExecutor {
 	public void onEntityDamage(EntityDamageEvent event){
 		if(this.entities.containsKey(event.getEntity().getEntityId())){
 			event.setCancelled(true);
-			if(event.getCause().equals(DamageCause.FIRE_TICK)){
+			if(event.getCause().equals(DamageCause.FIRE_TICK) || event.getCause().equals(DamageCause.FALL)){
 				return;
 			}
 			LivingEntity livingEntity = (LivingEntity) event.getEntity();

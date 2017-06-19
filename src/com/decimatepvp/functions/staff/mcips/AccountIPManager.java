@@ -131,7 +131,9 @@ public class AccountIPManager implements Manager, Listener, CommandExecutor {
 	private void addPlayerToList(Player player) {
 		if(sharedIps.containsKey(player.getAddress().getAddress())) {
 			if(sharedIps.get(player.getAddress().getAddress()).contains(player)) {
-				sharedIps.get(player.getAddress().getAddress()).add(player);
+				List<OfflinePlayer> newList = sharedIps.get(player.getAddress().getAddress());
+				newList.add(player);
+				sharedIps.put(player.getAddress().getAddress(), newList);
 			}
 		}
 		else {

@@ -195,7 +195,10 @@ public class CropHopperManager implements Listener, Manager {
 			if(type == Material.ROTTEN_FLESH || type == Material.IRON_INGOT
 					 || type == Material.BONE || type == Material.ARROW ||
 					 type == Material.RAW_BEEF || type == Material.LEATHER ||
-					 type == Material.PORK){
+					 type == Material.PORK || type == Material.SULPHUR ||
+					 type == Material.TNT || type == Material.STRING ||
+					 type == Material.SPIDER_EYE || type == Material.RAW_CHICKEN ||
+					 type == Material.EGG){
 				event.setCancelled(fill(i.getLocation(), i.getItemStack(), false));
 			}
 		}

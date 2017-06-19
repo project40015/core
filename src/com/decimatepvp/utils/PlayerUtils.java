@@ -150,6 +150,17 @@ public class PlayerUtils {
 		}
 	}
 	
+	public static void removeItems(Player player, Material material){
+		for(int i = 0; i < player.getInventory().getSize(); i++){
+			if(player.getInventory().getItem(i) == null){
+				continue;
+			}
+			if(player.getInventory().getItem(i).getType().equals(material)){
+				player.getInventory().setItem(i, new ItemStack(Material.AIR));
+			}
+		}
+	}
+	
 	public static void sendActionbar(Player p, String message) {
         IChatBaseComponent icbc = IChatBaseComponent.ChatSerializer.a("{\"text\": \"" +
                 ChatColor.translateAlternateColorCodes('&', message) + "\"}");

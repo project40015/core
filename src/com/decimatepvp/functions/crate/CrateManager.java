@@ -115,9 +115,9 @@ public class CrateManager implements Manager, Listener {
 	
 	private GodCrate setupGodCrate(){
 		return new GodCrate(Arrays.asList(
-				new CommandReward("Blaze Spawner (2)", new ItemStack(Material.MOB_SPAWNER), Rarity.COMMON, 25+3+3, "es give %player% BLAZE 0 3", false),
-				new CommandReward("Iron Golem Spawner (1)",new ItemStack(Material.MOB_SPAWNER), Rarity.RARE, 22-3, "es give %player% IRON_GOLEM 0 2", false),
-				new CommandReward("Creeper Spawner (1)", new ItemStack(Material.MOB_SPAWNER), Rarity.RARE, 22-3, "es give %player% CREEPER 0 2", false),
+				new CommandReward("Blaze Spawner (2)", new ItemStack(Material.MOB_SPAWNER), Rarity.COMMON, 25+3+3, "es give %player% BLAZE 0 2", false),
+				new CommandReward("Iron Golem Spawner (1)",new ItemStack(Material.MOB_SPAWNER), Rarity.RARE, 22-3, "es give %player% IRON_GOLEM 0 1", false),
+				new CommandReward("Creeper Spawner (1)", new ItemStack(Material.MOB_SPAWNER), Rarity.RARE, 22-3, "es give %player% CREEPER 0 1", false),
 				new CommandReward("Decimate Key (1)", glowItem(Material.TRIPWIRE_HOOK, 1, true), Rarity.MYTHICAL, 1, "cratekey %player% decimate_key 1", false),
 				new CommandReward("Decimate Kit (1)", new ItemStack(Material.BOOK), Rarity.COMMON, 30, "kit decimate %player%", true)
 				));
@@ -317,7 +317,11 @@ public class CrateManager implements Manager, Listener {
 	
 	private CrateReward getCrateReward(Crate crate, ItemStack item){
 		for(CrateReward cr : crate.getRewards()){
-			if(cr.getIcon(1).getItemMeta().getDisplayName().equals(item.getItemMeta().getDisplayName())){
+			ItemStack icon = cr.getIcon(1);
+			if(cr == null || icon == null || icon.getItemMeta() == null || item == null || item.getItemMeta() == null){
+				continue;
+			}
+			if(icon.getItemMeta().getDisplayName().equals(item.getItemMeta().getDisplayName())){
 				return cr;
 			}
 		}

@@ -37,7 +37,8 @@ public class DecimateStop implements Listener, CommandExecutor {
 
 			@Override
 			public void run() {
-				Bukkit.getServer().shutdown();
+//				Bukkit.getServer().shutdown();
+				Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), "stop");
 			}
 			
 		}, 20*1);

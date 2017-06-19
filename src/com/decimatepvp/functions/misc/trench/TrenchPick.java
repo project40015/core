@@ -13,11 +13,14 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.inventory.ItemStack;
 
+import com.decimatepvp.utils.FactionUtils;
 import com.decimatepvp.utils.ItemUtils;
+import com.massivecraft.factions.Faction;
 
 public class TrenchPick implements Listener, CommandExecutor{
 	
@@ -35,31 +38,42 @@ public class TrenchPick implements Listener, CommandExecutor{
 	}
 	
 	private BlockFace getBlockFace(double yaw, double pitch){
-		yaw = yaw + 180;
+		if(yaw > 0){
+			yaw -= 360;
+		}
+//		yaw = yaw + 180;
 		if(pitch < -45){
 			return BlockFace.UP;
 		}
 		if(pitch > 45){
 			return BlockFace.DOWN;
 		}
-		if(yaw <= 135 && yaw > 45){
+		if(between(yaw, -135, -45)){
 			return BlockFace.EAST;
 		}
-		if(yaw <= 45 && yaw > -45){
+		if(between(yaw, -225, -135)){
 			return BlockFace.NORTH;
 		}
-		if(yaw <= -45 && yaw > -135){
+		if(between(yaw, -315, -225)){
 			return BlockFace.WEST;
 		}
 		return BlockFace.SOUTH;
 	}
 	
-	@EventHandler
+	private boolean between(double n, int low, int high){
+		return n >= low && n <= high;
+	}
+	
+	@EventHandler(priority = EventPriority.LOWEST)
 	public void onBlockBreak(BlockBreakEvent event) {
 		ItemStack item = event.getPlayer().getItemInHand();
 		if(isTrenchPickaxe(item) && !event.isCancelled()) {
-			breakArea(event.getBlock().getRelative(getBlockFace(event.getPlayer().getLocation().getYaw(),
-					event.getPlayer().getLocation().getPitch())).getLocation().clone());
+			Player player = event.getPlayer();
+			Faction faction = FactionUtils.getFactionByLoc(event.getBlock().getLocation()); 
+			if(faction.isWilderness() || FactionUtils.getFaction(player).equals(faction)){
+				breakArea(event.getBlock().getRelative(getBlockFace(event.getPlayer().getLocation().getYaw(),
+						event.getPlayer().getLocation().getPitch())).getLocation().clone());
+			}
 		}
 	}
 	

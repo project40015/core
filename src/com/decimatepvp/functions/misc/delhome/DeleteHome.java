@@ -16,7 +16,7 @@ import com.massivecraft.factions.struct.Relation;
 
 public class DeleteHome implements Listener {
 	
-	private Map<String, String> lastHomeCommand = Maps.newHashMap();
+	private Map<String, Home> lastHomeCommand = Maps.newHashMap();
 	
 	public static void main(String[] args) {
 		String command = "/home     end";
@@ -38,13 +38,14 @@ public class DeleteHome implements Listener {
 			Faction territory = FactionUtils.getFactionByLoc(event.getTo());
 			Relation rel = FactionUtils.getFaction(player).
 					getRelationTo(territory);
-			if(!((rel == Relation.MEMBER) && (territory != FactionUtils.getWilderness()))
+			if(rel != Relation.MEMBER && (territory != FactionUtils.getWilderness()) 
 					&& (!player.hasPermission("Decimate.staff.home"))) {
-				player.performCommand("delhome " + lastHomeCommand.get(player.getName()));
-				player.sendMessage(ChatColor.RED + "You cannot teleport there!");
-
+				if((System.currentTimeMillis() - lastHomeCommand.get(player.getName()).l)/1000 <= 6){
+//				player.performCommand("delhome " + lastHomeCommand.get(player.getName()).n);
+					player.sendMessage(ChatColor.RED + "You cannot teleport there!");
+					event.setCancelled(true);
+				}
 				lastHomeCommand.remove(player.getName());
-				event.setCancelled(true);
 			}
 		}
 	}
@@ -59,7 +60,7 @@ public class DeleteHome implements Listener {
 		
 		if(((cmd.equalsIgnoreCase("home")) || (cmd.equalsIgnoreCase("ehome")))
 				&& (args.length > 1)) {
-			lastHomeCommand.put(event.getPlayer().getName(), args[1]);
+			lastHomeCommand.put(event.getPlayer().getName(), new Home(args[1], System.currentTimeMillis()));
 		}
 	}
 

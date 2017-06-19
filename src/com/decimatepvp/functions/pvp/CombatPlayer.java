@@ -1,5 +1,6 @@
 package com.decimatepvp.functions.pvp;
 
+import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.EntityType;
@@ -30,7 +31,7 @@ public class CombatPlayer {
 		zombie = (Zombie) player.getWorld().spawnEntity(player.getLocation(), EntityType.ZOMBIE);
 		zombie.setHealth(player.getHealth());
 		zombie.setFallDistance(player.getFallDistance());
-		zombie.setVelocity(player.getVelocity());
+//		zombie.setVelocity(player.getVelocity());
 		uuid = player.getUniqueId().toString();
 		EntityEquipment equip = zombie.getEquipment();
 		equip.setArmorContents(player.getEquipment().getArmorContents());
@@ -42,8 +43,8 @@ public class CombatPlayer {
 		equip.setItemInHandDropChance(0);
 		zombie.setBaby(false);
 		zombie.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, Integer.MAX_VALUE, 255));
+		zombie.setCustomName(ChatColor.RED + "(Logged Player) " + ChatColor.YELLOW + player.getName());
 		zombie.setCustomNameVisible(true);
-		zombie.setCustomName(player.getPlayerListName());
 		
 		armor = player.getEquipment().getArmorContents();
 
@@ -84,9 +85,9 @@ public class CombatPlayer {
 	}
 
 	public void remove() {
-		if(!zombie.isDead()) {
+//		if(!zombie.isDead()) {
 			zombie.remove();
-		}
+//		}
 	}
 	
 	public int getId() {
