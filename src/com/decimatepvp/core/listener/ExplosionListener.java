@@ -3,6 +3,9 @@ package com.decimatepvp.core.listener;
 import java.util.HashMap;
 import java.util.Random;
 
+import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
+import org.bukkit.Material;
 import org.bukkit.craftbukkit.v1_8_R3.entity.CraftEntity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.event.EventHandler;
@@ -71,10 +74,17 @@ public class ExplosionListener implements Listener {
 	    					if ((f1 > 0.0F) && (i1 < 256) && (i1 >= 0) && (k1 != 8) && (k1 != 9) && (k1 != 10)) {
 	    						org.bukkit.block.Block block = world.getBlockAt(l, i1, j1);
 	    						if(!event.blockList().contains(block)){
-	    							if(k1 == 10 || k1 == 11 || k1 == 7){
+	    							Bukkit.broadcastMessage(ChatColor.RED.toString() + k1);
+	    							if(k1 == 7){
+	    								block.setType(Material.AIR);
+	    								Bukkit.broadcastMessage("l");
+	    							}else if(k1 == 10 || k1 == 11){
+	    								Bukkit.broadcastMessage("n");
 	    								event.blockList().add(block);
 	    							}else if(explodableManager.isExplodable(k1)){
+	    								Bukkit.broadcastMessage("d");
 	    								if(explodableManager.getExplodable(world.getName(), l, i1, j1, k1).hit()){
+	    									Bukkit.broadcastMessage("c");
 	    									event.blockList().add(block);
 	    								}
 	    							}
