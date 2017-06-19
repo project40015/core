@@ -81,8 +81,10 @@ public class Configuration
 	}
 
 	public void reset() {
-		File file = getFile();
-		file.delete();
-		createData();
+		FileConfiguration config = getData();
+		for(String key : config.getKeys(false)) {
+			config.set(key, null);
+		}
+		saveData();
 	}
 }

@@ -48,7 +48,7 @@ public class SellWandManager implements Manager, Listener {
 		this.sellableItems.add(new SellableItem(Material.IRON_INGOT, 26.00));
 		this.sellableItems.add(new SellableItem(Material.GOLD_INGOT, 24.00));
 		this.sellableItems.add(new SellableItem(Material.RAW_CHICKEN, 1.00));
-		this.sellableItems.add(new SellableItem(Material.CACTUS, 6.25));
+		this.sellableItems.add(new SellableItem(Material.CACTUS, 4.29));
 		this.sellableItems.add(new SellableItem(Material.SUGAR_CANE, 5.08));
 
 	}

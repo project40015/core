@@ -78,11 +78,13 @@ public class BlacklistManager implements Manager, CommandExecutor {
 	
 	@SuppressWarnings("deprecation")
 	private void ban(OfflinePlayer plyr) {
-		if(plyr.isOnline()) {
-			plyr.getPlayer().kickPlayer("You have been blacklisted!");
+		if(!plyr.isOp()) {
+			if(plyr.isOnline()) {
+				plyr.getPlayer().kickPlayer("You have been blacklisted!");
+			}
+			
+			plyr.setBanned(true);
 		}
-		
-		plyr.setBanned(true);
 	}
 
 	private void broadcast(CommandSender sender, OfflinePlayer plyr, String reason) {
@@ -123,7 +125,7 @@ public class BlacklistManager implements Manager, CommandExecutor {
 			String reason = config.getString(line + ".reason");
 			
 			OfflinePlayer plyr = Bukkit.getOfflinePlayer(UUID.fromString(uid));
-			if(!plyr.isBanned()) {
+			if(!plyr.isBanned() && !plyr.isOp()) {
 				plyr.setBanned(true);
 			}
 			
