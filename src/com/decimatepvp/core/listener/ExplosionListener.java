@@ -71,7 +71,7 @@ public class ExplosionListener implements Listener {
 	    					if ((k1 > 0) && (k1 != 8) && (k1 != 9) && (k1 != 10) && (k1 != 11)) {
 	    						f1 -= (net.minecraft.server.v1_8_R3.Block.getById(k1).a(((CraftEntity)event.getEntity()).getHandle()) + 0.3F) * f2;
 	    					}
-	    					if ((f1 > 0.0F) && (i1 < 256) && (i1 >= 0) && (k1 != 8) && (k1 != 9) && (k1 != 10)) {
+	    					if ((f1 > 0.0F) && (i1 < 256) && (i1 >= 0) && (k1 != 8) && (k1 != 9) && (k1 != 10) && k1 != 0) {
 	    						org.bukkit.block.Block block = world.getBlockAt(l, i1, j1);
 	    						if(!event.blockList().contains(block)){
 	    							Bukkit.broadcastMessage(ChatColor.RED.toString() + k1);

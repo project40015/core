@@ -116,7 +116,16 @@ public class EnchantListener implements Listener {
 							}							
 						}
 						
-					}, 10);					
+					}, 2);		
+					
+					Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(DecimateCore.getCore(), new Runnable(){
+
+						@Override
+						public void run() {
+							((Player)e.getWhoClicked()).updateInventory();
+						}
+						
+					}, 3);	
 //					for (Material m : swords) {
 //						if (itemsInAnvil[0].getType() == m && itemsInAnvil[1].getType() == m) {
 //							ItemStack slot1 = itemsInAnvil[0];
