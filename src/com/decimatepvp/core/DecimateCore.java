@@ -1,8 +1,5 @@
 package com.decimatepvp.core;
 
-import net.md_5.bungee.api.ChatColor;
-import net.milkbowl.vault.economy.Economy;
-
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.RegisteredServiceProvider;
@@ -76,6 +73,9 @@ import com.decimatepvp.functions.tntfill.TntFillManager;
 import com.decimatepvp.minievents.MiniEvents;
 import com.google.common.io.ByteArrayDataInput;
 import com.google.common.io.ByteStreams;
+
+import net.md_5.bungee.api.ChatColor;
+import net.milkbowl.vault.economy.Economy;
 
 public class DecimateCore extends JavaPlugin implements PluginMessageListener {
 	
