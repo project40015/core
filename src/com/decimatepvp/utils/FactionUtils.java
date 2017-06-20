@@ -59,13 +59,11 @@ public class FactionUtils {
 		Faction faction = board.getFactionAt(new FLocation(location));
 		for(FLocation loc : faction.getClaimOwnership().keySet()){
 			if(loc.isInChunk(location)){
-				Bukkit.broadcastMessage(faction.getClaimOwnership().get(loc).size() + "");
-				if(faction.getClaimOwnership().get(loc).size() == 0){
+				if(!faction.getClaimOwnership().containsKey(loc)){
 					return true;
 				}
 				for(String str : faction.getClaimOwnership().get(loc)){
 					if(str.equalsIgnoreCase(player.getUniqueId().toString())){
-						Bukkit.broadcastMessage(str);
 						return true;
 					}
 				}
