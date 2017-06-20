@@ -112,7 +112,6 @@ public class WitherBoss extends EntityMonster implements IRangedEntity {
 	    this.targetSelector.a(1, new PathfinderGoalHurtByTarget(this, false, new Class[0]));
 	    this.targetSelector.a(2, new PathfinderGoalNearestAttackableTarget(this, EntityInsentient.class, 0, false, false, bq));
 	    this.b_ = 50;
-	  
   }
   
   public WitherBoss(World world) {

@@ -5,13 +5,15 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
+import org.bukkit.World;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
@@ -23,6 +25,8 @@ import net.minecraft.server.v1_8_R3.Entity;
 import net.minecraft.server.v1_8_R3.EntityTypes;
 
 public class EntityManager implements Listener, CommandExecutor {
+	
+	private static Random random = new Random();
 	
 	private List<Entity> entities = Lists.newArrayList();
 	
@@ -45,17 +49,25 @@ public class EntityManager implements Listener, CommandExecutor {
 	public boolean onCommand(CommandSender sender, Command paramCommand, String paramString,
 			String[] paramArrayOfString) {
 		if(sender.hasPermission("Decimate.staff.witherboss")) {
-			if(sender instanceof Player) {
-				Location loc = ((Player) sender).getLocation();
-				entities.add(spawnWitherBoss(loc));
-			}
-			else {
-				sender.sendMessage(ChatColor.RED + "Only players may use this command.");
-			}
+			Location loc = getLocationNearSpawn();
+			entities.add(spawnWitherBoss(loc));
 		}
+		else {
+			sender.sendMessage(ChatColor.RED + "You do not have the proper permissions.");
+		}
+		
 		return false;
 	}
 	
+	private Location getLocationNearSpawn() {
+		World world = Bukkit.getServer().getWorlds().get(0);
+		int x = random.nextInt(200) - 100;
+		int z = (random.nextInt(200) - 200) + 100;
+		int y = world.getHighestBlockYAt(x, z);
+		
+		return null;
+	}
+
 	public WitherBoss spawnWitherBoss(Location location) {
 		WitherBoss boss = new WitherBoss(location.getWorld());
 		boss.spawn(location);
