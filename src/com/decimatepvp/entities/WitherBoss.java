@@ -424,26 +424,31 @@ public class WitherBoss extends EntityMonster implements IRangedEntity {
 
 			@Override
 			public void run() {
-				double[][] effect = spiral[i];
-				for(double[] d : effect) {
+				if(i < spiral.length) {
+					double[][] effect = spiral[i];
+					for(double[] d : effect) {
 
-					Firework fw = (Firework) world.getWorld().spawnEntity(center.clone().add(d[0], 0, d[1]),
-							EntityType.FIREWORK);
+						Firework fw = (Firework) world.getWorld().spawnEntity(center.clone().add(d[0], 0, d[1]),
+								EntityType.FIREWORK);
 
-					FireworkMeta meta = fw.getFireworkMeta();
-					Builder a = FireworkEffect.builder();
-					a.withColor(getRandomColor());
-					a.with(random.nextBoolean() ? Type.BURST : Type.STAR);
-					a.withFade(Color.PURPLE, Color.BLUE, Color.BLACK, Color.FUCHSIA);
-					a.trail(true);
-					meta.addEffects(a.build());
-					if(random.nextBoolean()) {
-						meta.setPower(1);
+						FireworkMeta meta = fw.getFireworkMeta();
+						Builder a = FireworkEffect.builder();
+						a.withColor(getRandomColor());
+						a.with(random.nextBoolean() ? Type.BURST : Type.STAR);
+						a.withFade(Color.PURPLE, Color.BLUE, Color.BLACK, Color.FUCHSIA);
+						a.trail(true);
+						meta.addEffects(a.build());
+						if(random.nextBoolean()) {
+							meta.setPower(1);
+						}
+						else {
+							meta.setPower(0);
+						}
+						fw.setFireworkMeta(meta);
 					}
-					else {
-						meta.setPower(0);
-					}
-					fw.setFireworkMeta(meta);
+				}
+				else {
+					cancel();
 				}
 
 				i++;
