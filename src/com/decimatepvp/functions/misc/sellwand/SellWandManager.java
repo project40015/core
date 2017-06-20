@@ -20,6 +20,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 
 import com.decimatepvp.core.DecimateCore;
 import com.decimatepvp.core.Manager;
+import com.decimatepvp.utils.FactionUtils;
 
 public class SellWandManager implements Manager, Listener {
 
@@ -81,6 +82,14 @@ public class SellWandManager implements Manager, Listener {
 					&& event.getItem().getItemMeta().getDisplayName() != null &&
 					event.getItem().getItemMeta().getDisplayName().equals(wand.getItemMeta().getDisplayName())){
 				Block block = event.getClickedBlock();
+				if(!FactionUtils.getFactionByLoc(block.getLocation()).equals(FactionUtils.getFaction(event.getPlayer()))){
+					event.getPlayer().sendMessage(ChatColor.RED + "You can only use a sell wand in your territory.");
+					return;
+				}
+				if(!FactionUtils.isOwner(event.getPlayer(), block.getLocation())){
+					event.getPlayer().sendMessage(ChatColor.RED + "You do not have permission to sell an inventory in this claim.");
+					return;
+				}
 				if(block.getState() instanceof Chest){
 					BlockFace[] faces = new BlockFace[] {BlockFace.NORTH, BlockFace.SOUTH, BlockFace.EAST, BlockFace.WEST};
 					Chest chest = (Chest) block.getState();
