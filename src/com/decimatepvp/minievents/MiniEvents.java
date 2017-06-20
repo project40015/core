@@ -4,6 +4,8 @@ import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Chicken;
 import org.bukkit.entity.Creeper;
+import org.bukkit.entity.EntityType;
+import org.bukkit.entity.Monster;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -12,6 +14,7 @@ import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.event.entity.CreatureSpawnEvent.SpawnReason;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
+import org.bukkit.event.entity.EntityTargetLivingEntityEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.InventoryOpenEvent;
@@ -86,6 +89,15 @@ public class MiniEvents implements Listener {
 	@EventHandler
 	public void onKick(PlayerKickEvent event){
 		event.setLeaveMessage("");
+	}
+	
+	@EventHandler
+	public void onTarget(EntityTargetLivingEntityEvent event){
+		if(event.getTarget() instanceof Player){
+			if(event.getEntity() instanceof Monster && !event.getEntity().equals(EntityType.WITHER)){
+				event.setCancelled(true);
+			}
+		}
 	}
 	
 	@SuppressWarnings("deprecation")

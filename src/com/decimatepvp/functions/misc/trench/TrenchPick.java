@@ -20,7 +20,10 @@ import org.bukkit.inventory.ItemStack;
 
 import com.decimatepvp.utils.FactionUtils;
 import com.decimatepvp.utils.ItemUtils;
+import com.massivecraft.factions.Board;
+import com.massivecraft.factions.FLocation;
 import com.massivecraft.factions.Faction;
+import com.massivecraft.factions.Factions;
 
 public class TrenchPick implements Listener, CommandExecutor{
 	
@@ -69,8 +72,8 @@ public class TrenchPick implements Listener, CommandExecutor{
 		ItemStack item = event.getPlayer().getItemInHand();
 		if(isTrenchPickaxe(item) && !event.isCancelled()) {
 			Player player = event.getPlayer();
-			Faction faction = FactionUtils.getFactionByLoc(event.getBlock().getLocation()); 
-			if(faction.isWilderness() || FactionUtils.getFaction(player).equals(faction)){
+			Faction faction = FactionUtils.getFactionByLoc(event.getBlock().getLocation());
+			if(faction.isWilderness() || (FactionUtils.getFaction(player).equals(faction) && (FactionUtils.isOwner(player, event.getBlock().getLocation())))){
 				breakArea(event.getBlock().getRelative(getBlockFace(event.getPlayer().getLocation().getYaw(),
 						event.getPlayer().getLocation().getPitch())).getLocation().clone());
 			}

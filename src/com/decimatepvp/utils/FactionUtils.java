@@ -1,5 +1,6 @@
 package com.decimatepvp.utils;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
@@ -51,6 +52,26 @@ public class FactionUtils {
 			return true;
 		}
 		
+		return false;
+	}
+	
+	public static boolean isOwner(Player player, Location location){
+		Faction faction = board.getFactionAt(new FLocation(location));
+		for(FLocation loc : faction.getClaimOwnership().keySet()){
+			if(loc.isInChunk(location)){
+				Bukkit.broadcastMessage(faction.getClaimOwnership().get(loc).size() + "");
+				if(faction.getClaimOwnership().get(loc).size() == 0){
+					return true;
+				}
+				for(String str : faction.getClaimOwnership().get(loc)){
+					if(str.equalsIgnoreCase(player.getUniqueId().toString())){
+						Bukkit.broadcastMessage(str);
+						return true;
+					}
+				}
+				break;
+			}
+		}
 		return false;
 	}
 	
