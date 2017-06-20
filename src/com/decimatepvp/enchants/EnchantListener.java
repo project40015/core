@@ -2,9 +2,7 @@ package com.decimatepvp.enchants;
 
 import java.util.List;
 
-import org.bukkit.Bukkit;
 import org.bukkit.Material;
-import org.bukkit.Sound;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
@@ -13,12 +11,12 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
-import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.AnvilInventory;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.scheduler.BukkitRunnable;
 
 import com.decimatepvp.core.DecimateCore;
 import com.decimatepvp.enchants.types.CustomAttackEnchant;
@@ -61,88 +59,142 @@ public class EnchantListener implements Listener {
 //	}
 	
 	@EventHandler
-	public void onBookEnchant(InventoryClickEvent e) {
-		if (e.getWhoClicked() instanceof Player) {
-			if (e.getView().getType() == InventoryType.ANVIL || ((Player)e.getWhoClicked()).getOpenInventory().getType() == InventoryType.ANVIL) {
-				AnvilInventory anvilInv;
-				if(e.getView().getType() == InventoryType.ANVIL){
-					anvilInv = (AnvilInventory) e.getInventory();
-				}else{
-					anvilInv = (AnvilInventory) ((Player)e.getWhoClicked()).getOpenInventory();
-				}
-				int slot = e.getRawSlot();				
+	public void onAnvilClick(InventoryClickEvent event) {
+		if(event.getWhoClicked() instanceof Player) {
+			Player player = (Player) event.getWhoClicked();
+			if(event.getInventory().getType() == InventoryType.ANVIL ||
+					player.getOpenInventory().getType() == InventoryType.ANVIL) {
 
-				if (slot == 2 || slot == 1 || slot == 0 || e.getView().getType() != InventoryType.ANVIL) {
+				AnvilInventory ai =
+						player.getOpenInventory().getType() == InventoryType.ANVIL ?
+								(AnvilInventory) player.getOpenInventory().getTopInventory() :
+									(AnvilInventory) event.getInventory();
+
+				new BukkitRunnable() {
+					
+					@Override
+					public void run() {
+						ItemStack a = ai.getItem(0);
+						ItemStack b = ai.getItem(1);
+	//					if(slot == 0){
+	//						a = e.getCursor();
+	//					}
+	//					if(slot == 1){
+	//						b = e.getCursor();
+	//					}
+						if(a == null || b == null){
+							return;
+						}
+						
+						if(!core.getEnchantManager().isEnchantedBook(b)){
+							return;
+						}
+						
+						CustomEnchant enchantment = core.getEnchantManager().
+								getEnchantById(b.getEnchantmentLevel(Enchantment.ARROW_FIRE));
+
+						
+						if(!enchantment.isItemApplicable(a)){
+							return;
+						}
+						
+						ItemStack result = a.clone();
+						core.getEnchantManager().addEnchantToItem(result,
+								enchantment.getEnchantName(), b.getEnchantmentLevel(Enchantment.ARROW_DAMAGE));
+
+						ai.setItem(2, result);
+						player.updateInventory();
+						
+	//					if(slot == 2){
+	//						ItemStack air = new ItemStack(Material.AIR);
+	//						event.setCurrentItem(air);
+	//						ai.setItem(0, air);
+	//						ai.setItem(1, air);
+	//						player.setItemOnCursor(result);
+	//					}
+					}
+				}.runTaskLater(core, 1l);
 				
-					
-					Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(DecimateCore.getCore(), new Runnable(){
-
-						@Override
-						public void run() {
-							ItemStack a = anvilInv.getItem(0);
-							ItemStack b = anvilInv.getItem(1);
-//							if(slot == 0){
-//								a = e.getCursor();
-//							}
-//							if(slot == 1){
-//								b = e.getCursor();
-//							}
-							if(a == null || b == null){
-								return;
-							}
-							
-							if(!core.getEnchantManager().isEnchantedBook(b)){
-								return;
-							}
-							
-							CustomEnchant enchantment = core.getEnchantManager().getEnchantById(b.getEnchantmentLevel(Enchantment.ARROW_FIRE));
-							
-							if(!enchantment.isItemApplicable(a)){
-								return;
-							}
-							
-							ItemStack result = a.clone();
-							core.getEnchantManager().addEnchantToItem(result, enchantment.getEnchantName(), b.getEnchantmentLevel(Enchantment.ARROW_DAMAGE));
-
-							anvilInv.setItem(2, result);
-							((Player)e.getWhoClicked()).updateInventory();
-							
-							if(slot == 2){
-								ItemStack air = new ItemStack(Material.AIR);
-								e.setCurrentItem(air);
-								anvilInv.setItem(0, air);
-								anvilInv.setItem(1, air);
-								((Player)e.getWhoClicked()).setItemOnCursor(result);
-							}							
-						}
-						
-					}, 2);		
-					
-					Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(DecimateCore.getCore(), new Runnable(){
-
-						@Override
-						public void run() {
-							((Player)e.getWhoClicked()).updateInventory();
-						}
-						
-					}, 3);	
-//					for (Material m : swords) {
-//						if (itemsInAnvil[0].getType() == m && itemsInAnvil[1].getType() == m) {
-//							ItemStack slot1 = itemsInAnvil[0];
-//							ItemStack slot2 = itemsInAnvil[1];
-//
-//							if (slot1.getEnchantmentLevel(Enchantment.FIRE_ASPECT) == 1
-//									&& slot2.getEnchantmentLevel(Enchantment.FIRE_ASPECT) == 1) {
-//								ItemStack sword = new ItemStack(m, 1);
-//								sword.addUnsafeEnchantment(Enchantment.FIRE_ASPECT, 2);
-//								e.setCurrentItem(sword);
-//							}
-//						}
-//					}
-				}
 			}
 		}
 	}
+	
+//	@EventHandler
+//	public void onBookEnchant(InventoryClickEvent e) {
+//		if (e.getWhoClicked() instanceof Player) {
+//			if (e.getView().getType() == InventoryType.ANVIL ||
+//					((Player)e.getWhoClicked()).getOpenInventory().getType() == InventoryType.ANVIL) {
+//				AnvilInventory anvilInv;
+//				if(e.getView().getType() == InventoryType.ANVIL) {
+//					anvilInv = (AnvilInventory) e.getInventory();
+//				}
+//				else {
+//					anvilInv = (AnvilInventory) ((Player)e.getWhoClicked()).getOpenInventory();
+//				}
+//				int slot = e.getRawSlot();				
+//
+//				if (slot == 2 || slot == 1 || slot == 0 || e.getView().getType() != InventoryType.ANVIL) {
+//				
+//					
+//					Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(DecimateCore.getCore(), new Runnable(){
+//
+//						@Override
+//						public void run() {
+//							ItemStack a = anvilInv.getItem(0);
+//							ItemStack b = anvilInv.getItem(1);
+////							if(slot == 0){
+////								a = e.getCursor();
+////							}
+////							if(slot == 1){
+////								b = e.getCursor();
+////							}
+//							if(a == null || b == null){
+//								return;
+//							}
+//							
+//							if(!core.getEnchantManager().isEnchantedBook(b)){
+//								return;
+//							}
+//							
+//							CustomEnchant enchantment = core.getEnchantManager().getEnchantById(b.getEnchantmentLevel(Enchantment.ARROW_FIRE));
+//							
+//							if(!enchantment.isItemApplicable(a)){
+//								return;
+//							}
+//							
+//							ItemStack result = a.clone();
+//							core.getEnchantManager().addEnchantToItem(result, enchantment.getEnchantName(), b.getEnchantmentLevel(Enchantment.ARROW_DAMAGE));
+//
+//							anvilInv.setItem(2, result);
+//							((Player)e.getWhoClicked()).updateInventory();
+//							
+//							if(slot == 2){
+//								ItemStack air = new ItemStack(Material.AIR);
+//								e.setCurrentItem(air);
+//								anvilInv.setItem(0, air);
+//								anvilInv.setItem(1, air);
+//								((Player)e.getWhoClicked()).setItemOnCursor(result);
+//							}
+//						}
+//						
+//					}, 10);					
+////					for (Material m : swords) {
+////						if (itemsInAnvil[0].getType() == m && itemsInAnvil[1].getType() == m) {
+////							ItemStack slot1 = itemsInAnvil[0];
+////							ItemStack slot2 = itemsInAnvil[1];
+////
+////							if (slot1.getEnchantmentLevel(Enchantment.FIRE_ASPECT) == 1
+////									&& slot2.getEnchantmentLevel(Enchantment.FIRE_ASPECT) == 1) {
+////								ItemStack sword = new ItemStack(m, 1);
+////								sword.addUnsafeEnchantment(Enchantment.FIRE_ASPECT, 2);
+////								e.setCurrentItem(sword);
+////							}
+////						}
+////					}
+//				}
+//			}
+//		}
+//	}
 
 	/*
 	 * CustomDeathEnchant
