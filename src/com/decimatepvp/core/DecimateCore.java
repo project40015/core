@@ -95,7 +95,7 @@ public class DecimateCore extends JavaPlugin implements PluginMessageListener {
 	/*
 	 * Managers
 	 */
-	private Manager[] managers = new Manager[21];
+	private Manager[] managers = new Manager[22];
 	
 	private FreezeManager freezeManager;
 	private TntFillManager tntFillManager;
@@ -118,6 +118,7 @@ public class DecimateCore extends JavaPlugin implements PluginMessageListener {
 	private CommandBookManager commandBookManager;
 	private SellWandManager sellWandManager;
 	private AccountIPManager accountIpManager;
+	private EntityManager entityManager = new EntityManager();
 	
 	/*
 	 * Other
@@ -126,7 +127,6 @@ public class DecimateCore extends JavaPlugin implements PluginMessageListener {
 	private EnchantManager enchantManager;
 	private PotionAbilityManager potionManager;
 	private AnnouncementManager announcementManager;
-	private EntityManager entityManager;
 	private TrenchPick trenchPick;
 	private ExplodableManager explodableManager;
 	
@@ -168,11 +168,12 @@ public class DecimateCore extends JavaPlugin implements PluginMessageListener {
 		managers[n++] = blacklistManager = new BlacklistManager();
 		managers[n++] = accountIpManager = new AccountIPManager();
 		managers[n++] = explodableManager = new ExplodableManager();
+		managers[n++] = entityManager = new EntityManager();
 				
 		setupEco();
 		loadCommands();
 		loadListeners(harvesterManager, staffChatManager, freezeManager, new PlayerBreakBlockListener(),
-				new EntityItemListener(), new PlayerUseItemListener(),
+				new EntityItemListener(), new PlayerUseItemListener(), entityManager,
 				toggleChatManager, spectateManager, itemCooldownManager, new GlitchPatchManager(),
 				new BottleExpCommand(), new ExplosionListener(), new DeleteHome(),
 				new AnvilDamageListener(), new BottleExpCommand(), new MiniEvents(), new FactionCommandListener(),

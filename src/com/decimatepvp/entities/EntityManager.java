@@ -15,6 +15,7 @@ import org.bukkit.World;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.craftbukkit.v1_8_R3.entity.CraftEntity;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -22,12 +23,13 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
 
+import com.decimatepvp.core.Manager;
 import com.decimatepvp.utils.DecimateUtils;
 import com.google.common.collect.Maps;
 
 import net.minecraft.server.v1_8_R3.EntityTypes;
 
-public class EntityManager implements Listener, CommandExecutor {
+public class EntityManager implements Manager, Listener, CommandExecutor {
 
 	private static Random random = new Random();
 
@@ -36,21 +38,25 @@ public class EntityManager implements Listener, CommandExecutor {
 	public EntityManager() {
 		this.registerEntity(WitherBoss.class, "WitherBoss", 64);
 	}
-	
+
 	@EventHandler
 	public void entityDamageWither(EntityDamageByEntityEvent event) {
 		org.bukkit.entity.Entity damager = event.getDamager();
 		org.bukkit.entity.Entity damagee = event.getEntity();
-		
+
 		if(damager instanceof Player) {
-			if(damagee.toString().equals("DecimateWitherBoss")) {
-				double damage = event.getFinalDamage() * 10;
-				
+			if(((CraftEntity) damagee).getHandle() instanceof WitherBoss) {
+				double damage = event.getFinalDamage();
+
 				Player player = (Player) damager;
-				Map<String, Float> playerDamage = withers.get(damagee).playerDamage;
-				playerDamage.put(player.getName(),
-						(float) (playerDamage.containsKey(player.getName()) ?
-								playerDamage.get(player.getName()) + damage : damage));
+				WitherBoss boss = withers.get(damagee);
+				
+				if(0 > boss.getHealth() - damage) {
+					damage = boss.getHealth();
+				}
+				
+				boss.playerDamage.put(player.getName(), (float) (boss.playerDamage.containsKey(player.getName())
+						? boss.playerDamage.get(player.getName()) + damage : damage));
 			}
 		}
 	}
@@ -74,8 +80,7 @@ public class EntityManager implements Listener, CommandExecutor {
 	}
 
 	@Override
-	public boolean onCommand(CommandSender sender, Command paramCommand, String paramString,
-			String[] args) {
+	public boolean onCommand(CommandSender sender, Command paramCommand, String paramString, String[] args) {
 		if(sender.hasPermission("Decimate.staff.witherboss")) {
 			World world = Bukkit.getServer().getWorlds().get(0);
 			Location location = this.getLocationNearSpawn(world);
@@ -85,8 +90,7 @@ public class EntityManager implements Listener, CommandExecutor {
 					x = Double.parseDouble(args[0]);
 					y = Double.parseDouble(args[1]);
 					z = Double.parseDouble(args[2]);
-				}
-				catch (Exception e) {
+				} catch (Exception e) {
 					sender.sendMessage("Proper Usage: /boss [x] [y] [z]");
 				}
 				location = new Location(world, x, y, z);
@@ -99,8 +103,7 @@ public class EntityManager implements Listener, CommandExecutor {
 					x = Double.parseDouble(args[1]);
 					y = Double.parseDouble(args[2]);
 					z = Double.parseDouble(args[3]);
-				}
-				catch (Exception e) {
+				} catch (Exception e) {
 					sender.sendMessage("Proper Usage: /boss [world] [x] [y] [z]");
 				}
 				location = new Location(paramWorld, x, y, z);
@@ -110,8 +113,8 @@ public class EntityManager implements Listener, CommandExecutor {
 
 			Bukkit.broadcastMessage(ChatColor.GOLD + "=-=-=-=-=-=-=-=-=-=-=-=-=-=-");
 			Bukkit.broadcastMessage(DecimateUtils.color("&8&lThe Wither has been spotted nearing &7&l"
-					+ location.getBlockX() + " " + location.getBlockZ() + "&8&l. &7Come defeat it for"
-					+ "amazing rewards! Happy Hunting..."));
+					+ location.getBlockX() + " " + location.getBlockZ() + "&8&l."));
+			Bukkit.broadcastMessage(DecimateUtils.color("&7Come defeat it for " + "amazing rewards! Happy Hunting..."));
 			Bukkit.broadcastMessage(ChatColor.GOLD + "=-=-=-=-=-=-=-=-=-=-=-=-=-=-");
 		}
 		else {
@@ -135,14 +138,14 @@ public class EntityManager implements Listener, CommandExecutor {
 	public void registerEntity(Class<? extends WitherBoss> clazz, String name, int id) {
 		try {
 			List<Map<?, ?>> dataMap = new ArrayList<>();
-			for (Field f : EntityTypes.class.getDeclaredFields()){
-				if (f.getType().getSimpleName().equals(Map.class.getSimpleName())){
+			for(Field f : EntityTypes.class.getDeclaredFields()) {
+				if(f.getType().getSimpleName().equals(Map.class.getSimpleName())) {
 					f.setAccessible(true);
 					dataMap.add((Map<?, ?>) f.get(null));
 				}
 			}
 
-			if (dataMap.get(2).containsKey(id)){
+			if(dataMap.get(2).containsKey(id)) {
 				dataMap.get(0).remove(name);
 				dataMap.get(2).remove(id);
 			}
@@ -150,8 +153,7 @@ public class EntityManager implements Listener, CommandExecutor {
 			Method method = EntityTypes.class.getDeclaredMethod("a", Class.class, String.class, int.class);
 			method.setAccessible(true);
 			method.invoke(null, clazz, name, id);
-		}
-		catch (Exception e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
@@ -161,6 +163,13 @@ public class EntityManager implements Listener, CommandExecutor {
 		boss.spawn(location);
 
 		return boss;
+	}
+
+	@Override
+	public void disable() {
+		for(WitherBoss boss : getWithers()) {
+			boss.world.removeEntity(boss);
+		}
 	}
 
 }

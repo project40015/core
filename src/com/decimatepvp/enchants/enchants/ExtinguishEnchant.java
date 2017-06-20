@@ -1,27 +1,35 @@
 package com.decimatepvp.enchants.enchants;
 
-import org.bukkit.event.entity.EntityDamageEvent;
-import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
+import org.bukkit.entity.LivingEntity;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 
-import com.decimatepvp.enchants.types.CustomDamagedEnchant;
+import com.decimatepvp.enchants.types.CustomEquipEnchant;
 import com.decimatepvp.utils.DecimateUtils;
 
-public class ExtinguishEnchant extends CustomDamagedEnchant {
+public class ExtinguishEnchant extends CustomEquipEnchant {
 	
 	private static String[] lore = new String[] {
 			DecimateUtils.color("&2&lOH NO!! I'M ON FIRE!!"),
-			DecimateUtils.color("&2&lOh wait, as soon as I take damage it goes away. Neat.")
+			DecimateUtils.color("&2&lOh... It feels nice. Nvm.")
 	};
+	
+	private final PotionEffect fire;
 
 	public ExtinguishEnchant() {
 		super("Extinguish", 1, lore, ItemType.HELMET, ItemType.CHESTPLATE, ItemType.LEGGINGS, ItemType.BOOTS);
+		
+		fire = new PotionEffect(PotionEffectType.FIRE_RESISTANCE, Integer.MAX_VALUE, 1);
 	}
 
 	@Override
-	public void onDamageTaken(EntityDamageEvent event, int level) {
-		if((event.getCause() == DamageCause.FIRE) || (event.getCause() == DamageCause.FIRE_TICK)) {
-			event.getEntity().setFireTicks(0);
-		}
+	public void onDequip(LivingEntity entity, int level) {
+		entity.removePotionEffect(fire.getType());
+	}
+
+	@Override
+	public void onEquip(LivingEntity entity, int level) {
+		entity.addPotionEffect(fire);
 	}
 
 }
