@@ -22,6 +22,12 @@ public class ExplodableManager implements Manager {
 		return false;
 	}
 	
+	public void deleteExplodable(Explodable explodable){
+		if(this.explodables.contains(explodable)){
+			this.explodables.remove(explodable);
+		}
+	}
+	
 	public ExplodableType getExplodableType(int material){
 		for(ExplodableType type : explodableTypes){
 			if(type.getMaterial() == material){

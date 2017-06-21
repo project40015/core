@@ -22,6 +22,7 @@ import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.entity.EntitySpawnEvent;
+import org.bukkit.event.entity.ItemSpawnEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -185,12 +186,12 @@ public class CropHopperManager implements Listener, Manager {
 	}
 	
 	@EventHandler
-	public void onSpawn(EntitySpawnEvent event){
-		if(event.getEntity() instanceof Item){
-			Item i = (Item) event.getEntity();
-			Material type = i.getItemStack().getType();
+	public void onSpawn(ItemSpawnEvent event){
+//		if(event.getEntity() instanceof Item){
+//			Item i = (Item) event.getEntity();
+			Material type = event.getEntity().getItemStack().getType();
 			if(type == Material.CACTUS){
-				event.setCancelled(fill(i.getLocation(), i.getItemStack(), true));
+				event.setCancelled(fill(event.getEntity().getLocation(), event.getEntity().getItemStack(), true));
 			}
 			if(type == Material.ROTTEN_FLESH || type == Material.IRON_INGOT
 					 || type == Material.BONE || type == Material.ARROW ||
@@ -198,10 +199,11 @@ public class CropHopperManager implements Listener, Manager {
 					 type == Material.PORK || type == Material.SULPHUR ||
 					 type == Material.TNT || type == Material.STRING ||
 					 type == Material.SPIDER_EYE || type == Material.RAW_CHICKEN ||
-					 type == Material.EGG){
-				event.setCancelled(fill(i.getLocation(), i.getItemStack(), false));
+					 type == Material.EGG || type == Material.RED_ROSE ||
+					 type == Material.GOLD_NUGGET){
+				event.setCancelled(fill(event.getEntity().getLocation(), event.getEntity().getItemStack(), false));
 			}
-		}
+//		}
 	}
 	
 	private boolean fill(Location location, ItemStack item, boolean crop){

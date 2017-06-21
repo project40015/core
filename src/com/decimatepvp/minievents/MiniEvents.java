@@ -91,14 +91,14 @@ public class MiniEvents implements Listener {
 		event.setLeaveMessage("");
 	}
 	
-	@EventHandler
-	public void onTarget(EntityTargetLivingEntityEvent event){
-		if(event.getTarget() instanceof Player){
-			if(event.getEntity() instanceof Monster && !event.getEntity().equals(EntityType.WITHER)){
-				event.setCancelled(true);
-			}
-		}
-	}
+//	@EventHandler
+//	public void onTarget(EntityTargetLivingEntityEvent event){
+//		if(event.getTarget() instanceof Player){
+//			if(event.getEntity() instanceof Monster && !event.getEntity().equals(EntityType.WITHER)){
+//				event.setCancelled(true);
+//			}
+//		}
+//	}
 	
 	@SuppressWarnings("deprecation")
 	@EventHandler
