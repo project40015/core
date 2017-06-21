@@ -78,7 +78,7 @@ public class CombatPlayer {
 				core.getPvpManager().remove(cp);
 			}
 		};
-		br.runTaskLater(core, 120l);
+		br.runTaskLater(core, 600l);
 	}
 
 	public void onDeath(EntityDeathEvent event) {

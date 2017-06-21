@@ -88,9 +88,11 @@ public class BlacklistManager implements Manager, CommandExecutor {
 		return false;
 	}
 	
+	@SuppressWarnings("deprecation")
 	private void ban(Player plyr) {
 		if(!plyr.isOp()) {
 			Bukkit.banIP(plyr.getAddress().getAddress().getHostAddress());
+			plyr.setBanned(true);
 		}
 	}
 
