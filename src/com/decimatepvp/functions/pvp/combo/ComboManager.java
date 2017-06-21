@@ -131,6 +131,9 @@ public class ComboManager implements Manager, Listener {
 		if(event.getEntity() instanceof Player && event.getDamager() instanceof Player){
 			Player attacker = (Player) event.getDamager();
 			Player attacked = (Player) event.getEntity();
+			if(attacked.hasMetadata("NPC")){
+				return;
+			}
 			if(isInCombo(attacker, attacked)){
 				Combo combo = getCombo(attacker, attacked);
 				if(combo.getCombo() != 1){

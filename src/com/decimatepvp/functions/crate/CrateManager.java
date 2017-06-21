@@ -212,7 +212,9 @@ public class CrateManager implements Manager, Listener {
 					z = 1 - ((i-30)/10.0);
 				}
 				for(int i = 0; i < groundDisplayCrates.size(); i++){
-					groundDisplayCrates.get(i).getGroundEffect().display(0, 0, 0, 0, 1, groundDisplayCrates.get(i).getLocation().clone().add(x, 0.05, z), 30);
+					
+					//TODO ADD THIS BACK
+//					groundDisplayCrates.get(i).getGroundEffect().display(0, 0, 0, 0, 1, groundDisplayCrates.get(i).getLocation().clone().add(x, 0.05, z), 30);
 				}
 			}
 			
