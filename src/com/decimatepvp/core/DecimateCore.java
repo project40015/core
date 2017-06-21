@@ -118,7 +118,7 @@ public class DecimateCore extends JavaPlugin implements PluginMessageListener {
 	private CommandBookManager commandBookManager;
 	private SellWandManager sellWandManager;
 	private AccountIPManager accountIpManager;
-	private EntityManager entityManager = new EntityManager();
+	private EntityManager entityManager;
 	
 	/*
 	 * Other

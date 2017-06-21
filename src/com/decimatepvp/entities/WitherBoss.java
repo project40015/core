@@ -26,6 +26,7 @@ import org.bukkit.entity.Skeleton;
 import org.bukkit.entity.Skeleton.SkeletonType;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityRegainHealthEvent;
+import org.bukkit.event.entity.EntityRegainHealthEvent.RegainReason;
 import org.bukkit.event.entity.ExplosionPrimeEvent;
 import org.bukkit.inventory.EntityEquipment;
 import org.bukkit.inventory.ItemStack;
@@ -166,6 +167,8 @@ public class WitherBoss extends EntityMonster implements IRangedEntity {
 	public Map<String, Float> playerDamage = Maps.newHashMap();
 
 	private final DecimalFormat df = new DecimalFormat("00.00");
+	
+	private float totalHealth = 100;
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public WitherBoss(net.minecraft.server.v1_8_R3.World world) {
@@ -396,9 +399,9 @@ public class WitherBoss extends EntityMonster implements IRangedEntity {
 		for(Entry<String, Float> set : playerDamage.entrySet()) {
 			if(position <= 3) {
 				String damage = df.format(set.getValue());
-				damage = df.format((set.getValue() / 100) * 100.0) + "%";
+				damage = df.format((set.getValue() / totalHealth) * 100.0) + "%";
 				String message = this.getPlaceColor(position) + DecimateUtils.color(
-						position + ".) &b&l" + set.getKey() + "&2 with &b&l" + damage + "&2 of the total damage!");
+						position + ". &b&l" + set.getKey() + "&2 with &b&l" + damage + "&2 of the total damage!");
 
 				Bukkit.broadcastMessage(message);
 			}
@@ -414,6 +417,10 @@ public class WitherBoss extends EntityMonster implements IRangedEntity {
 	}
 
 	private void startDeathEffect() {
+		if(!world.entityList.contains(this)) {
+			return;
+		}
+		
 		Location center = this.getBukkitEntity().getLocation();
 		world.getWorld().playSound(center, Sound.AMBIENCE_THUNDER, 500f, 1.0f);
 		world.getWorld().playSound(center, Sound.EXPLODE, 500f, 1.0f);
@@ -890,6 +897,18 @@ public class WitherBoss extends EntityMonster implements IRangedEntity {
 	@Override
 	protected String z() {
 		return "mob.wither.idle";
+	}
+	
+	@Override
+	public void heal(float f, RegainReason regainReason) {
+		super.heal(f, regainReason);
+		totalHealth += f;
+	}
+	
+	@Override
+	public void heal(float f) {
+		super.heal(f);
+		totalHealth += f;
 	}
 
 }
