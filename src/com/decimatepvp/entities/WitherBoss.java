@@ -26,7 +26,6 @@ import org.bukkit.entity.Skeleton;
 import org.bukkit.entity.Skeleton.SkeletonType;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityRegainHealthEvent;
-import org.bukkit.event.entity.EntityRegainHealthEvent.RegainReason;
 import org.bukkit.event.entity.ExplosionPrimeEvent;
 import org.bukkit.inventory.EntityEquipment;
 import org.bukkit.inventory.ItemStack;
@@ -455,7 +454,10 @@ public class WitherBoss extends EntityMonster implements IRangedEntity {
 					}
 				}
 				else {
-					cancel();
+					try {
+						cancel();
+					}
+					catch(Exception e) { }
 				}
 
 				i++;
@@ -897,12 +899,6 @@ public class WitherBoss extends EntityMonster implements IRangedEntity {
 	@Override
 	protected String z() {
 		return "mob.wither.idle";
-	}
-	
-	@Override
-	public void heal(float f, RegainReason regainReason) {
-		super.heal(f, regainReason);
-		totalHealth += f;
 	}
 	
 	@Override

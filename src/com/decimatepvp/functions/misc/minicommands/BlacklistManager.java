@@ -10,6 +10,7 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.entity.Player;
 
 import com.decimatepvp.core.DecimateCore;
 import com.decimatepvp.core.Manager;
@@ -39,7 +40,12 @@ public class BlacklistManager implements Manager, CommandExecutor {
 				else if(args.length == 1) {
 					OfflinePlayer plyr = Bukkit.getOfflinePlayer(args[0]);
 					
-					ban(plyr);
+					if(!plyr.isOnline()) {
+						sender.sendMessage(ChatColor.RED + "Player not found...");
+						return false;
+					}
+					
+					ban(plyr.getPlayer());
 					blacklisted.put(plyr, "");
 					
 					broadcast(sender, plyr, "");
@@ -49,7 +55,12 @@ public class BlacklistManager implements Manager, CommandExecutor {
 					OfflinePlayer plyr = Bukkit.getOfflinePlayer(args[0]);
 					String reason = buildArgs(1, args);
 					
-					ban(plyr);
+					if(!plyr.isOnline()) {
+						sender.sendMessage(ChatColor.RED + "Player not found...");
+						return false;
+					}
+					
+					ban(plyr.getPlayer());
 					blacklisted.put(plyr, reason);
 					
 					broadcast(sender, plyr, reason);
@@ -62,8 +73,9 @@ public class BlacklistManager implements Manager, CommandExecutor {
 				}
 				else if(args.length == 1) {
 					OfflinePlayer plyr = Bukkit.getOfflinePlayer(args[0]);
-					
+
 					plyr.setBanned(false);
+					
 					blacklisted.remove(plyr);
 					sender.sendMessage(ChatColor.GREEN + "Player has been pardoned.");
 				}
@@ -76,14 +88,9 @@ public class BlacklistManager implements Manager, CommandExecutor {
 		return false;
 	}
 	
-	@SuppressWarnings("deprecation")
-	private void ban(OfflinePlayer plyr) {
+	private void ban(Player plyr) {
 		if(!plyr.isOp()) {
-			if(plyr.isOnline()) {
-				plyr.getPlayer().kickPlayer("You have been blacklisted!");
-			}
-			
-			plyr.setBanned(true);
+			Bukkit.banIP(plyr.getAddress().getAddress().getHostAddress());
 		}
 	}
 

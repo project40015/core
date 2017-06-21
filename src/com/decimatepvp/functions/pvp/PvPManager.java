@@ -3,7 +3,6 @@ package com.decimatepvp.functions.pvp;
 import java.util.List;
 import java.util.Map;
 
-import org.bukkit.EntityEffect;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
@@ -11,12 +10,9 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.entity.EntityDamageEvent;
-import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
@@ -105,18 +101,18 @@ public class PvPManager implements Manager, Listener, CommandExecutor {
 //		player.getPlayer().setMetadata("LogoutCommand", new FixedMetadataValue(DecimateCore.getCore(), true));
 //	}
 	
-	@EventHandler
-	public void onEntityDamage(EntityDamageEvent event){
-		if(this.entities.containsKey(event.getEntity().getEntityId())){
-			event.setCancelled(true);
-			if(event.getCause().equals(DamageCause.FIRE_TICK) || event.getCause().equals(DamageCause.FALL)){
-				return;
-			}
-			LivingEntity livingEntity = (LivingEntity) event.getEntity();
-			livingEntity.damage(event.getDamage());
-			livingEntity.playEffect(EntityEffect.HURT);
-		}
-	}
+//	@EventHandler
+//	public void onEntityDamage(EntityDamageEvent event){
+//		if(this.entities.containsKey(event.getEntity().getEntityId())){
+//			event.setCancelled(true);
+//			if(event.getCause().equals(DamageCause.FIRE_TICK) || event.getCause().equals(DamageCause.FALL)){
+//				return;
+//			}
+//			LivingEntity livingEntity = (LivingEntity) event.getEntity();
+//			livingEntity.damage(event.getDamage());
+//			livingEntity.playEffect(EntityEffect.HURT);
+//		}
+//	}
 	
 	@EventHandler
 	public void onEntityDeath(EntityDeathEvent event) {

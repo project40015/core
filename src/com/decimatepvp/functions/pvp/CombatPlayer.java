@@ -9,6 +9,7 @@ import org.bukkit.entity.Zombie;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.inventory.EntityEquipment;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -35,6 +36,13 @@ public class CombatPlayer {
 		uuid = player.getUniqueId().toString();
 		EntityEquipment equip = zombie.getEquipment();
 		equip.setArmorContents(player.getEquipment().getArmorContents());
+		
+		ItemStack head = new ItemStack(Material.SKULL_ITEM, 1, (byte) 3);
+			SkullMeta meta = (SkullMeta) head.getItemMeta();
+			meta.setOwner(player.getName());
+			head.setItemMeta(meta);
+		equip.setHelmet(head);
+		
 		equip.setItemInHand(player.getItemInHand());
 		equip.setBootsDropChance(0);
 		equip.setLeggingsDropChance(0);
@@ -42,9 +50,15 @@ public class CombatPlayer {
 		equip.setHelmetDropChance(0);
 		equip.setItemInHandDropChance(0);
 		zombie.setBaby(false);
+		zombie.setVillager(false);
 		zombie.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, Integer.MAX_VALUE, 255));
+		zombie.addPotionEffect(new PotionEffect(PotionEffectType.FIRE_RESISTANCE, Integer.MAX_VALUE, 255));
 		zombie.setCustomName(ChatColor.RED + "(Logged Player) " + ChatColor.YELLOW + player.getName());
 		zombie.setCustomNameVisible(true);
+		
+		if(zombie.getVehicle() != null) {
+			zombie.getVehicle().remove();
+		}
 		
 		armor = player.getEquipment().getArmorContents();
 
@@ -64,7 +78,7 @@ public class CombatPlayer {
 				core.getPvpManager().remove(cp);
 			}
 		};
-		br.runTaskLaterAsynchronously(core, 1200l);
+		br.runTaskLater(core, 120l);
 	}
 
 	public void onDeath(EntityDeathEvent event) {
