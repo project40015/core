@@ -18,119 +18,140 @@ import com.huskehhh.mysql.mysql.MySQL;
 
 public class BanManager implements Manager {
 	
-	private final String host = "198.100.26.68", username = "mc_11737", password = "950094c839",
-			database = "mc_11737", table = "PlayerBanTableTest";
-	
+	private final String host = "198.100.26.68", username = "mc_11737",
+			password = "950094c839", database = "mc_11737",
+			table = "PlayerBanTable";
+
 	private List<String> allPlayers = Lists.newArrayList();
 	private Map<String, PlayerBan> playerBans = Maps.newHashMap();
-	
+
 	private MySQL db;
-	
+
 	public BanManager() {
-//		loadDatabase();
-//		loadBans();
+		// loadDatabase();
+		// loadBans();
 	}
-	
+
+	public static void main(String[] args) {
+		BanManager bm = new BanManager();
+		bm.loadDatabase();
+		bm.loadBans();
+
+//		bm.addToDatabase("3ea0aa33-e7d6-4f28-b2d9-6075bd5c60dc",
+//				System.currentTimeMillis(),
+//				System.currentTimeMillis() + 1000);
+		
+//		bm.removePlayer("3ea0aa33-e7d6-4f28-b2d9-6075bd5c60dc");
+		System.out.println(bm.playerBans.get("3ea0aa33-e7d6-4f28-b2d9-6075bd5c60dc").getTimeBanned());
+		
+		bm.closeDatebase();
+	}
+
 	public void unbanPlayer(OfflinePlayer player) {
 		playerBans.remove(player.getUniqueId().toString());
 	}
-	
+
 	public void banPlayer(OfflinePlayer player, long time) {
 		String uuid = player.getUniqueId().toString();
-		PlayerBan ban = new PlayerBan(uuid, System.currentTimeMillis(), System.currentTimeMillis()+time);
+		PlayerBan ban = new PlayerBan(uuid, System.currentTimeMillis(), System.currentTimeMillis() + time);
 		playerBans.put(uuid, ban);
 	}
 
 	public void saveBans() {
 		try {
-			
+
 			for(String uuid : allPlayers) {
-				if(!playerBans.containsKey(uuid)) { //If player isn't in list then remove them from database
+				if(!playerBans.containsKey(uuid)) { // If player isn't in list
+													// then remove them from
+													// database
 					removePlayer(uuid);
 				}
 				else {
-					playerBans.remove(uuid); //Removes them from the list leaving only new entries
+					playerBans.remove(uuid); // Removes them from the list
+												// leaving only new entries
 				}
 			}
-			
-			//Adds new entries to database
+
+			// Adds new entries to database
 			for(Entry<String, PlayerBan> set : playerBans.entrySet()) {
 				String uuid = set.getKey();
 				long timeBanned = set.getValue().getTimeBanned();
 				long timeUnbanned = set.getValue().getTimeUnbanned();
-				
+
 				addToDatabase(uuid, timeBanned, timeUnbanned);
 			}
-			
-		}
-		catch(Exception e) {
-			e.printStackTrace();
-		}
-	}
-	
-	public void loadBans() {
-		try {
-		    Connection connection = this.db.getConnection();
-		    Statement statement;
-		    statement = connection.createStatement();
-		    String sql = "Select * From " + table;
-		    ResultSet set;
-		    set = statement.executeQuery(sql);
-		    
-		    while (set.next()) {
-		    	String uuid = set.getString("UUID");
-		    	PlayerBan ban = new PlayerBan(uuid, set.getLong("TimeBanned"), set.getLong("TimeUnbanned"));
-		        
-		    	playerBans.put(uuid, ban);
-		    	allPlayers.add(uuid);
-		    }
-		    
-		    statement.close();
-		}
-		catch(Exception e) {
-			e.printStackTrace();
-		}
-	}
-	
-	///////////////////////////////////////////////////////////////////////////
 
-	public void loadDatabase() {
-		this.db = new MySQL(host, "3306", database, username, password);
-		
-		try {
-			Connection connection = db.getConnection();
-			Statement statement = connection.createStatement();
-			statement.executeUpdate("CREATE TABLE IF NOT EXISTS "
-					+ "PlayerBanTableTest (UUID varchar(36), TimeBanned long, TimeUnbanned long)");
-			
-			statement.close();
-			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
-	
+
+	public void loadBans() {
+		try {
+			Connection connection = this.db.getConnection();
+			Statement statement;
+			statement = connection.createStatement();
+			String sql = "Select * From " + table;
+			ResultSet set;
+			set = statement.executeQuery(sql);
+
+			while (set.next()) {
+				String uuid = set.getString("UUID");
+				PlayerBan ban = new PlayerBan(uuid, set.getLong("TimeBanned"), set.getLong("TimeUnbanned"));
+
+				playerBans.put(uuid, ban);
+				allPlayers.add(uuid);
+			}
+
+			statement.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	///////////////////////////////////////////////////////////////////////////
+
+	public void loadDatabase() {
+		this.db = new MySQL(host, "3306", database, username, password);
+
+		try {
+			if(!this.db.checkConnection()) {
+				this.db.openConnection();
+			}
+			
+			Connection connection = db.getConnection();
+			Statement statement = connection.createStatement();
+			statement.executeUpdate("CREATE TABLE IF NOT EXISTS " +
+					table + " (UUID varchar(36), TimeBanned long, TimeUnbanned long)");
+
+			statement.close();
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
 	public void addToDatabase(String uuid, long currentTime, long timeUnbanned) {
-		String query = " INSERT INTO "+table+" (UUID, TimeBanned, TimeUnbanned)"
-				+ " values (?, ?, ?, ?)";
+		String query = " INSERT INTO " + table + " (UUID, TimeBanned, TimeUnbanned)" + " values (?, ?, ?)";
 		try {
 			if(!this.db.checkConnection()) {
 				this.db.openConnection();
 			}
 
 			Connection connection = this.db.getConnection();
+			
 			PreparedStatement statement = connection.prepareStatement(query);
 			statement.setString(1, uuid);
 			statement.setInt(2, (int) currentTime);
 			statement.setInt(3, (int) timeUnbanned);
-			
+
 			statement.execute();
-			
+
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
-	
+
 	public void closeDatebase() {
 		try {
 			this.db.closeConnection();
@@ -141,24 +162,22 @@ public class BanManager implements Manager {
 
 	@Override
 	public void disable() {
-//		saveBans();
-//		closeDatebase();
+		// saveBans();
+		// closeDatebase();
 	}
 
 	public void removePlayer(String uuid) {
 		try {
-		    Connection connection = this.db.getConnection();
-		    String query = "DELETE FROM " + table + " WHERE UUID = '" + uuid + "'";
-		    PreparedStatement statement = connection.prepareStatement(query);
-		    statement.setInt(1, 3);
-		    
-		    statement.close();
-		}
-		catch(Exception e) {
+			Connection connection = this.db.getConnection();
+			String query = "DELETE FROM " + table + " WHERE 'UUID' = " + uuid;
+			PreparedStatement statement = connection.prepareStatement(query);
+//			statement.setInt(1, 0);
+
+			statement.close();
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
-	
-		
+
 	}
 
 }

@@ -25,6 +25,7 @@ import org.bukkit.event.entity.EntityDeathEvent;
 
 import com.decimatepvp.core.Manager;
 import com.decimatepvp.utils.DecimateUtils;
+import com.decimatepvp.utils.PlayerUtils;
 import com.google.common.collect.Maps;
 
 import net.minecraft.server.v1_8_R3.EntityTypes;
@@ -110,11 +111,16 @@ public class EntityManager implements Manager, Listener, CommandExecutor {
 			}
 			WitherBoss boss = this.spawnWitherBoss(location);
 			withers.put(boss.getBukkitEntity(), boss);
+			
+			for(Player player : Bukkit.getOnlinePlayers()) {
+				PlayerUtils.sendTitle(player, "The Wither has spawned!",
+						20, 40, 40, ChatColor.DARK_GRAY);
+			}
 
 			Bukkit.broadcastMessage(ChatColor.GOLD + "=-=-=-=-=-=-=-=-=-=-=-=-=-=-");
-			Bukkit.broadcastMessage(DecimateUtils.color("&8&lThe Wither has been spotted nearing &7&l"
+			Bukkit.broadcastMessage(DecimateUtils.color("&7&lThe Wither &8&lhas been spotted nearing &7&l"
 					+ location.getBlockX() + " " + location.getBlockZ() + "&8&l."));
-			Bukkit.broadcastMessage(DecimateUtils.color("&7Come defeat it for " + "amazing rewards! Happy Hunting..."));
+			Bukkit.broadcastMessage(DecimateUtils.color("&7Come defeat it for amazing rewards! Happy Hunting..."));
 			Bukkit.broadcastMessage(ChatColor.GOLD + "=-=-=-=-=-=-=-=-=-=-=-=-=-=-");
 		}
 		else {

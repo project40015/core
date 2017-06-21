@@ -11,6 +11,7 @@ import java.util.Map.Entry;
 import java.util.TimeZone;
 import java.util.UUID;
 
+import org.apache.commons.lang.math.NumberUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.OfflinePlayer;
@@ -37,6 +38,9 @@ public class AccountIPManager implements Manager, Listener, CommandExecutor {
 	public AccountIPManager() {
 		loadSavedPlayers();
 		loadOnlinePlayers();
+//		addPlayerToList(Bukkit.getOfflinePlayer("_Ug"));
+//		addPlayerToList(Bukkit.getOfflinePlayer("Notch"));
+//		addPlayerToList(Bukkit.getOfflinePlayer("Herobrine"));
 	}
 
 	private void loadSavedPlayers() {
@@ -66,6 +70,20 @@ public class AccountIPManager implements Manager, Listener, CommandExecutor {
 				sender.sendMessage(ChatColor.GOLD + "Proper Usage: /iplist [player]");
 				return false;
 			}
+			int start = 0;
+			
+			if(args.length > 1) {
+				if(NumberUtils.isNumber(args[1]) && !args[1].contains("\\.")) {
+					int page = Math.max(0, (int) Double.parseDouble(args[1]));
+					
+					start = page * 3;
+				}
+				else {
+					sender.sendMessage(ChatColor.RED + "That is not a proper page.");
+					return false;
+				}
+			}
+			
 			OfflinePlayer plyr = Bukkit.getOfflinePlayer(args[0]);
 			InetAddress ip = plyr.isOnline() ? plyr.getPlayer().getAddress().getAddress() : getPlayerAddress(plyr);
 			if(ip != null) {
@@ -73,20 +91,33 @@ public class AccountIPManager implements Manager, Listener, CommandExecutor {
 				sender.sendMessage(ChatColor.GOLD + "-------------------------------");
 				sender.sendMessage(ChatColor.RED + "IP: " + ChatColor.GOLD + ip.toString() + ChatColor.RED + ": ");
 				sender.sendMessage(ChatColor.RED + "Accounts on IP: " + ChatColor.GOLD + list.size());
-				for(OfflinePlayer offp : list) {
-					sender.sendMessage(ChatColor.GREEN + offp.getName() + ":");
-					sender.sendMessage(ChatColor.YELLOW + "    UUID: " + ChatColor.GREEN + offp.getUniqueId().toString());
-					if(offp.isOnline()) {
-						sender.sendMessage(ChatColor.YELLOW + "    Display: " + offp.getPlayer().getDisplayName());
-						sender.sendMessage(ChatColor.YELLOW + "    Online: " + ChatColor.GREEN + "True");
+				
+				for(int i = 0; start < list.size(); start++) {
+					if(i < 3) {
+						OfflinePlayer offp = list.get(start);
+						sender.sendMessage(ChatColor.GREEN + offp.getName() + ":");
+						sender.sendMessage(ChatColor.YELLOW + "    UUID: " + ChatColor.GREEN + offp.getUniqueId().toString());
+						if(offp.isOnline()) {
+							sender.sendMessage(ChatColor.YELLOW + "    Display: " + offp.getPlayer().getDisplayName());
+							sender.sendMessage(ChatColor.YELLOW + "    Online: " + ChatColor.GREEN + "True");
+						}
+						else {
+							sender.sendMessage(
+									ChatColor.YELLOW + "    Last Online: "  + ChatColor.AQUA + longToDate(offp.getLastPlayed()));
+							sender.sendMessage(ChatColor.YELLOW + "    Online: " + ChatColor.RED + "False");
+						}
 					}
 					else {
-						sender.sendMessage(
-								ChatColor.YELLOW + "    Last Online: "  + ChatColor.AQUA + longToDate(offp.getLastPlayed()));
-						sender.sendMessage(ChatColor.YELLOW + "    Online: " + ChatColor.RED + "False");
+						break;
 					}
+					
+					i++;
 				}
+				
 				sender.sendMessage(ChatColor.GOLD + "-------------------------------");
+				if(start < list.size()) {
+					sender.sendMessage(ChatColor.GOLD + "Use '/iplist [player] [page]' to see more.");
+				}
 			}
 			else {
 				sender.sendMessage(ChatColor.RED + "This player has not joined.");
@@ -105,6 +136,7 @@ public class AccountIPManager implements Manager, Listener, CommandExecutor {
 				return set.getKey();
 			}
 		}
+		
 		return null;
 	}
 
@@ -128,19 +160,25 @@ public class AccountIPManager implements Manager, Listener, CommandExecutor {
 		}
 	}
 
-	private void addPlayerToList(Player player) {
-		if(sharedIps.containsKey(player.getAddress().getAddress())) {
-			if(sharedIps.get(player.getAddress().getAddress()).contains(player)) {
-				List<OfflinePlayer> newList = sharedIps.get(player.getAddress().getAddress());
+	private void addPlayerToList(OfflinePlayer player) {
+		InetAddress ip = null;
+		try {
+			ip = InetAddress.getByName("66.172.68.177");
+		} catch (UnknownHostException e) {
+			e.printStackTrace();
+		}
+		if(sharedIps.containsKey(ip)) {
+			if(!sharedIps.get(ip).contains(player)) {
+				List<OfflinePlayer> newList = sharedIps.get(ip);
 				newList.add(player);
-				sharedIps.put(player.getAddress().getAddress(), newList);
+				sharedIps.put(ip, newList);
 			}
 		}
 		else {
 			List<OfflinePlayer> list = Lists.newArrayList();
 			list.add(player);
 //			list.add(Bukkit.getOfflinePlayer("Notch"));
-			sharedIps.put(player.getAddress().getAddress(), list);
+			sharedIps.put(ip, list);
 		}
 	}
 	

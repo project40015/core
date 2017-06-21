@@ -118,6 +118,19 @@ public class PvPManager implements Manager, Listener, CommandExecutor {
 		}
 	}
 	
+//	@EventHandler
+//	public void onEntityDamage(EntityDamageEvent event){
+//		if(this.entities.containsKey(event.getEntity().getEntityId())){
+//			event.setCancelled(true);
+//			if(event.getCause().equals(DamageCause.FIRE_TICK) || event.getCause().equals(DamageCause.FALL)){
+//				return;
+//			}
+//			LivingEntity livingEntity = (LivingEntity) event.getEntity();
+//			livingEntity.damage(event.getDamage());
+//			livingEntity.playEffect(EntityEffect.HURT);
+//		}
+//	}
+	
 	@EventHandler
 	public void onEntityDeath(EntityDeathEvent event) {
 		if(entities.containsKey(event.getEntity().getEntityId())) {

@@ -1,18 +1,10 @@
 package com.decimatepvp.core;
 
-import java.util.UUID;
-
 import org.bukkit.Bukkit;
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.craftbukkit.v1_8_R3.CraftServer;
-import org.bukkit.craftbukkit.v1_8_R3.CraftWorld;
-import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
-import org.bukkit.craftbukkit.v1_8_R3.inventory.CraftItemStack;
-import org.bukkit.entity.EntityType;
+import org.bukkit.World;
+import org.bukkit.WorldBorder;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
-import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.plugin.messaging.PluginMessageListener;
@@ -84,20 +76,9 @@ import com.decimatepvp.functions.tntfill.TntFillManager;
 import com.decimatepvp.minievents.MiniEvents;
 import com.google.common.io.ByteArrayDataInput;
 import com.google.common.io.ByteStreams;
-import com.mojang.authlib.GameProfile;
 
-import net.citizensnpcs.api.CitizensAPI;
-import net.citizensnpcs.api.npc.NPC;
 import net.md_5.bungee.api.ChatColor;
 import net.milkbowl.vault.economy.Economy;
-import net.minecraft.server.v1_8_R3.EntityPlayer;
-import net.minecraft.server.v1_8_R3.MinecraftServer;
-import net.minecraft.server.v1_8_R3.PacketPlayOutNamedEntitySpawn;
-import net.minecraft.server.v1_8_R3.PacketPlayOutPlayerInfo;
-import net.minecraft.server.v1_8_R3.PacketPlayOutPlayerInfo.EnumPlayerInfoAction;
-import net.minecraft.server.v1_8_R3.PlayerConnection;
-import net.minecraft.server.v1_8_R3.PlayerInteractManager;
-import net.minecraft.server.v1_8_R3.WorldServer;
 
 public class DecimateCore extends JavaPlugin implements PluginMessageListener {
 	
@@ -140,12 +121,12 @@ public class DecimateCore extends JavaPlugin implements PluginMessageListener {
 	private CommandBookManager commandBookManager;
 	private SellWandManager sellWandManager;
 	private AccountIPManager accountIpManager;
-	private EntityManager entityManager = new EntityManager();
+	private EntityManager entityManager;
 	
 	/*
 	 * Other
 	 */
-	private WorldBorderManager worldBorder;
+	private WorldBorderManager[] worldBorders = new WorldBorderManager[2];
 	private EnchantManager enchantManager;
 	private PotionAbilityManager potionManager;
 	private AnnouncementManager announcementManager;
@@ -161,8 +142,19 @@ public class DecimateCore extends JavaPlugin implements PluginMessageListener {
 	    this.getServer().getMessenger().registerOutgoingPluginChannel(this, "BungeeCord");
 //	    this.getServer().getMessenger().registerIncomingPluginChannel(this, "BungeeCord", this);
 		
-		worldBorder = new WorldBorderManager(); // Not a Real Man-ager
-		enchantManager = new EnchantManager();
+	    for(int i = 0; i < Bukkit.getWorlds().size(); i++) {
+	    	World world = Bukkit.getWorlds().get(i);
+	    	WorldBorder border = world.getWorldBorder();
+	    	double px = (border.getSize() / 2) + 1,
+	    			pz = (border.getSize() / 2) + 1;
+	    	
+	    	double nx = -(border.getSize() / 2) - 1,
+	    			nz = -(border.getSize() / 2) - 1;
+	    	
+	    	worldBorders[i] = new WorldBorderManager(world, px, nx, pz, nz);
+	    }
+		
+		enchantManager = new EnchantManager(); // Not a Real Man-ager
 		potionManager = new PotionAbilityManager();
 		announcementManager = new AnnouncementManager();
 		entityManager = new EntityManager();
@@ -193,17 +185,20 @@ public class DecimateCore extends JavaPlugin implements PluginMessageListener {
 		managers[n++] = entityManager = new EntityManager();
 				
 		setupEco();
+		
 		loadCommands();
 		loadListeners(harvesterManager, staffChatManager, freezeManager, new PlayerBreakBlockListener(),
 				new EntityItemListener(), new PlayerUseItemListener(), entityManager,
 				toggleChatManager, spectateManager, itemCooldownManager, new GlitchPatchManager(),
 				new BottleExpCommand(), new ExplosionListener(), new DeleteHome(),
 				new AnvilDamageListener(), new BottleExpCommand(), new MiniEvents(), new FactionCommandListener(),
-				new FactionDamageListener(), staffCommandsManager, enderDelayManager, antiTntManager, worldBorder,
+				new FactionDamageListener(), staffCommandsManager, enderDelayManager, antiTntManager,
 				accountIpManager,  new EnchantListener(), new CustomEventCaller(), cropHopperManager, potionManager,
 				crateManager, comboManager, pvpManager, new EnchantmentLimitManager(), commandBookManager,
 				new RewardListener(), trenchPick, sellWandManager, new ExplosionListener(), new DecimateStop(),
 				new TntDisableManager(), new KillRewardListener(), new PreCommandCancel(), new BedrockFix());
+		
+		loadListeners(worldBorders);
 	}
 	
 	@Override
@@ -317,8 +312,8 @@ public class DecimateCore extends JavaPlugin implements PluginMessageListener {
 		return antiTntManager;
 	}
 
-	public WorldBorderManager getWorldBorder() {
-		return worldBorder;
+	public WorldBorderManager getWorldBorder(int i) {
+		return worldBorders[i];
 	}
 
 	public EnchantManager getEnchantManager() {
