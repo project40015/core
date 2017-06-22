@@ -1,5 +1,6 @@
 package com.decimatepvp.enchants.enchants;
 
+import org.bukkit.ChatColor;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
@@ -17,7 +18,7 @@ public class WarriorEnchant extends CustomEquipEnchant {
 	};
 
 	public WarriorEnchant() {
-		super("Warrior", 1, lore, ItemType.CHESTPLATE);
+		super(ChatColor.RED + "Warrior", 1, lore, ItemType.CHESTPLATE);
 		
 		this.strength = new PotionEffect(PotionEffectType.INCREASE_DAMAGE, Integer.MAX_VALUE, 1);
 	}

@@ -1,5 +1,6 @@
 package com.decimatepvp.enchants.enchants;
 
+import org.bukkit.ChatColor;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
@@ -17,7 +18,7 @@ public class SwiftnessEnchant extends CustomEquipEnchant {
 	};
 
 	public SwiftnessEnchant() {
-		super("Swiftness", 1, lore, ItemType.BOOTS);
+		super(ChatColor.AQUA + "Swiftness", 1, lore, ItemType.BOOTS);
 		
 		this.speed = new PotionEffect(PotionEffectType.SPEED, Integer.MAX_VALUE, 1);
 	}

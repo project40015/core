@@ -4,6 +4,8 @@ import java.util.Random;
 
 import org.bukkit.inventory.ItemStack;
 
+import com.decimatepvp.core.DecimateCore;
+
 public class CustomEnchant {
 	
 	protected final Random random;
@@ -38,6 +40,9 @@ public class CustomEnchant {
 	}
 	
 	public boolean isItemApplicable(ItemStack item) {
+		if(item.getEnchantments() != null && DecimateCore.getCore().getEnchantManager().getEnchantsOnItem(item).contains(this)){
+			return false;
+		}
 		for(ItemType type : types) {
 			if(type.isItemOfType(item)) {
 				return true;
@@ -51,6 +56,9 @@ public class CustomEnchant {
 		SWORD, AXE, HOE, SPADE, PICKAXE, HELMET, CHESTPLATE, LEGGINGS, BOOTS, BOW;
 		
 		public boolean isItemOfType(ItemStack item) {
+			if(item == null){
+				return false;
+			}
 			return item.getType().toString().contains("_" + this.toString());
 		}
 	}

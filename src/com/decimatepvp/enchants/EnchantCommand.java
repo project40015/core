@@ -28,6 +28,7 @@ public class EnchantCommand implements CommandExecutor, TabCompleter {
 		if(args.length == 2) {
 			String arg = args[1].toLowerCase();
 			for(String enchant : enchants) {
+				enchant = ChatColor.stripColor(enchant);
 				if(enchant.toLowerCase().startsWith(arg)) {
 					completer.add(enchant);
 				}

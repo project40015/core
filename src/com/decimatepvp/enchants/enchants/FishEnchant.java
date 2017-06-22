@@ -1,5 +1,6 @@
 package com.decimatepvp.enchants.enchants;
 
+import org.bukkit.ChatColor;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
@@ -17,7 +18,7 @@ public class FishEnchant extends CustomEquipEnchant {
 	};
 
 	public FishEnchant() {
-		super("Fish", 1, lore, ItemType.HELMET);
+		super(ChatColor.BLUE + "Fish", 1, lore, ItemType.HELMET);
 		
 		this.waterBreathing = new PotionEffect(PotionEffectType.WATER_BREATHING, Integer.MAX_VALUE, 0);
 	}

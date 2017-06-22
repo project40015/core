@@ -1,5 +1,6 @@
 package com.decimatepvp.enchants.enchants;
 
+import org.bukkit.ChatColor;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
@@ -17,7 +18,7 @@ public class ExtinguishEnchant extends CustomEquipEnchant {
 	private final PotionEffect fire;
 
 	public ExtinguishEnchant() {
-		super("Extinguish", 1, lore, ItemType.HELMET, ItemType.CHESTPLATE, ItemType.LEGGINGS, ItemType.BOOTS);
+		super(ChatColor.GOLD + "Extinguish", 1, lore, ItemType.HELMET, ItemType.CHESTPLATE, ItemType.LEGGINGS, ItemType.BOOTS);
 		
 		fire = new PotionEffect(PotionEffectType.FIRE_RESISTANCE, Integer.MAX_VALUE, 1);
 	}

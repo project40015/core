@@ -16,6 +16,7 @@ import com.decimatepvp.enchants.enchants.FishEnchant;
 import com.decimatepvp.enchants.enchants.SwiftnessEnchant;
 import com.decimatepvp.enchants.enchants.WarriorEnchant;
 import com.decimatepvp.utils.DecimateUtils;
+import com.decimatepvp.utils.EnchantGlow;
 import com.decimatepvp.utils.ItemUtils;
 import com.decimatepvp.utils.RomanNumeralUtils;
 import com.google.common.collect.Lists;
@@ -38,14 +39,14 @@ public class EnchantManager {
 	}
 	
 	public boolean addEnchantToItem(ItemStack item, String enchant, int level) {
-		CustomEnchant enchantment = this.getEnchant(enchant);
+		CustomEnchant enchantment = this.getEnchant(ChatColor.stripColor(enchant));
 		if(item != null && enchantment != null && enchantment.isItemApplicable(item)) {
 			level = Math.min(enchantment.getEnchantMaxLevel(), Math.max(level, 0));
 			
 			if(!this.doesWeaponHaveEnchant(enchant, item)) {
 				ItemMeta meta = item.getItemMeta();
 				List<String> lore = Lists.newArrayList();
-				lore.add(DecimateUtils.color("&7" + enchantment.getEnchantName() + " " + this.toRoman(level)));
+				lore.add(DecimateUtils.color("&7" + ChatColor.stripColor(enchantment.getEnchantName()) + " " + this.toRoman(level)));
 				if(meta.hasLore()) {
 					lore.addAll(meta.getLore());
 				}
@@ -54,6 +55,7 @@ public class EnchantManager {
 //				}
 				meta.setLore(lore);
 				item.setItemMeta(meta);
+				EnchantGlow.addGlow(item);
 				return true;
 			}
 		}
@@ -85,7 +87,12 @@ public class EnchantManager {
 	}
 
 	public CustomEnchant getEnchant(String enchant) {
-		return customEnchants.containsKey(enchant) ? customEnchants.get(enchant) : null;
+		for(String ec : this.customEnchants.keySet()){
+			if(ChatColor.stripColor(ec).equalsIgnoreCase(enchant)){
+				return customEnchants.get(ec);
+			}
+		}
+		return null;
 	}
 	
 	public CustomEnchant getEnchantById(int enchantmentLevel) {
@@ -93,11 +100,11 @@ public class EnchantManager {
 	}
 
 	public ItemStack getEnchantedBook(String enchant, int level) {
-		ItemStack book = new ItemStack(Material.BOOK);
+		ItemStack book = new ItemStack(Material.ENCHANTED_BOOK);
 		CustomEnchant enchantment = this.getEnchant(enchant);
 		if(enchantment != null) {
 			ItemUtils.setDisplayName(book, enchantment.getEnchantName() + " " + this.toRoman(level));
-			ItemUtils.setLore(book, enchantment.getLore());
+//			ItemUtils.setLore(book, enchantment.getLore());
 			book.addUnsafeEnchantment(Enchantment.ARROW_INFINITE, 69);
 			book.addUnsafeEnchantment(Enchantment.ARROW_DAMAGE, level);
 			book.addUnsafeEnchantment(Enchantment.ARROW_FIRE, customEnchantIds.get(enchantment));
@@ -115,7 +122,7 @@ public class EnchantManager {
 			for(String lore : item.getItemMeta().getLore()) {
 				lore = ChatColor.stripColor(lore);
 				String enchant = lore.split(" ")[0];
-				if(this.isEnchant(enchant)) {
+				if(this.isEnchant(enchant) && !enchantments.contains(enchant)) {
 					enchantments.add(this.getEnchant(enchant));
 				}
 			}
@@ -137,12 +144,17 @@ public class EnchantManager {
 	}
 
 	public boolean isEnchant(String enchant) {
-		return customEnchants.containsKey(enchant);
+		for(String ec : this.customEnchants.keySet()){
+			if(ChatColor.stripColor(ec).equalsIgnoreCase(enchant)){
+				return true;
+			}
+		}
+		return false;
 	}
 
 	public boolean isEnchantedBook(ItemStack item) {
 		return item.getEnchantmentLevel(Enchantment.ARROW_INFINITE) == 69 && 
-				item.getType() == Material.BOOK &&
+				item.getType() == Material.ENCHANTED_BOOK &&
 				customEnchantIds.containsValue(item.getEnchantmentLevel(Enchantment.ARROW_FIRE));
 	}
 

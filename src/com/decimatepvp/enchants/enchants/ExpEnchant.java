@@ -1,5 +1,6 @@
 package com.decimatepvp.enchants.enchants;
 
+import org.bukkit.ChatColor;
 import org.bukkit.event.entity.EntityDeathEvent;
 
 import com.decimatepvp.enchants.types.CustomKillerEnchant;
@@ -13,7 +14,7 @@ public class ExpEnchant extends CustomKillerEnchant {
 	};
 
 	public ExpEnchant() {
-		super("ExpBoost", 1, lore, ItemType.SWORD, ItemType.AXE, ItemType.BOW);
+		super(ChatColor.GREEN + "ExpBoost", 1, lore, ItemType.SWORD, ItemType.AXE, ItemType.BOW);
 	}
 
 	@Override

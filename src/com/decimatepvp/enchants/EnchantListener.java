@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.Sound;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
@@ -207,10 +208,11 @@ public class EnchantListener implements Listener {
 								anvilInv.setItem(0, air);
 								anvilInv.setItem(1, air);
 								((Player)e.getWhoClicked()).setItemOnCursor(result);
+								((Player)e.getWhoClicked()).getWorld().playSound(((Player)e.getWhoClicked()).getLocation(), Sound.ANVIL_USE, 1, 1);
 							}
 						}
 						
-					}, 10);					
+					}, 6);					
 //					for (Material m : swords) {
 //						if (itemsInAnvil[0].getType() == m && itemsInAnvil[1].getType() == m) {
 //							ItemStack slot1 = itemsInAnvil[0];
