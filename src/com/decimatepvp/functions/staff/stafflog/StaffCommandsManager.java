@@ -56,17 +56,19 @@ public class StaffCommandsManager implements Manager, Listener {
 	@Override
 	public void disable() {
 		String name = createFileNameFromDate();
-		Configuration cfg = new Configuration(DecimateCore.getCore(), "/stafflogs", name + ".yml");
-		FileConfiguration config = cfg.getData();
 		
 		for(Entry<OfflinePlayer, List<String>> set : commands.entrySet()) {
 			String username = set.getKey().getName();
 			String uid = set.getKey().getUniqueId().toString();
 			
+			Configuration cfg = new Configuration(DecimateCore.getCore(), "/stafflogs/" + username,
+					name + ".yml");
+			FileConfiguration config = cfg.getData();
+			
 			config.set(username + "_" + uid, set.getValue());
+			cfg.saveData();
 		}
 		
-		cfg.saveData();
 	}
 
 	private String createFileNameFromDate() {

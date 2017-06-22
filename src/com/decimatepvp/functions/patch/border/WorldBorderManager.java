@@ -47,8 +47,9 @@ public class WorldBorderManager implements Listener {
 					if((isOutsideBorder(entity.getLocation()))) {
 						if(entity instanceof Player) {
 							if(entity.hasPermission("Decimate.staff.leaveborder")) {
-								entity.teleport(world.getHighestBlockAt(9999, 9990).getLocation());
+								entity.teleport(world.getHighestBlockAt(9999, 9999).getLocation());
 							}
+							
 //							else {
 //								entity.sendMessage("Outside the border!");
 //							}
@@ -58,7 +59,6 @@ public class WorldBorderManager implements Listener {
 						}
 					}
 					else if((entity instanceof FallingBlock)) {
-						
 						if(isNearBorder(entity.getLocation())) {
 							entity.remove();
 						}
@@ -77,10 +77,11 @@ public class WorldBorderManager implements Listener {
 		if(z < 0) {
 			z--;
 		}
-		if((z >= 11999) || (z <= -11999)) {
+		
+		if((z >= pz - 2) || (z <= nz + 2)) {
 			return true;
 		}
-		if((x >= 11999) || (x <= -11999)) {
+		if((x >= px - 2) || (x <= nx + 2)) {
 			return true;
 		}
 		
