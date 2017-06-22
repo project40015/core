@@ -24,6 +24,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerPreLoginEvent;
 
 import com.decimatepvp.core.DecimateCore;
 import com.decimatepvp.core.Manager;
@@ -31,6 +32,7 @@ import com.decimatepvp.core.utils.Configuration;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
+@SuppressWarnings("deprecation")
 public class AccountIPManager implements Manager, Listener, CommandExecutor {
 	
 	private Map<InetAddress, List<OfflinePlayer>> sharedIps = Maps.newHashMap();
@@ -62,7 +64,6 @@ public class AccountIPManager implements Manager, Listener, CommandExecutor {
 		}
 	}
 
-	@SuppressWarnings("deprecation")
 	@Override
 	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
 		if(sender.hasPermission("Decimate.staff.iplist")) {
@@ -152,21 +153,32 @@ public class AccountIPManager implements Manager, Listener, CommandExecutor {
 		return sharedIps.get(ip);
 	}
 	
+	@EventHandler
+	public void onPrejoin(PlayerPreLoginEvent event) {
+		InetAddress ip = event.getAddress();
+		
+		if((sharedIps.containsKey(ip)) && (sharedIps.get(ip).size() >= 10)) {
+			event.disallow(PlayerPreLoginEvent.Result.KICK_FULL,
+					"There are too many accounts on this ip.");
+		}
+	}
+	
 	@EventHandler(priority = EventPriority.LOWEST)
 	public void onJoin(PlayerJoinEvent event) {
 		Player player = event.getPlayer();
+		
 		if(!isInList(player)) {
 			addPlayerToList(player);
 		}
 	}
 
-	private void addPlayerToList(OfflinePlayer player) {
-		InetAddress ip = null;
-		try {
-			ip = InetAddress.getByName("66.172.68.177");
-		} catch (UnknownHostException e) {
-			e.printStackTrace();
-		}
+	private void addPlayerToList(Player player) {
+		InetAddress ip = player.getAddress().getAddress();
+//		try {
+//			ip = InetAddress.getByName("66.172.68.177");
+//		} catch (UnknownHostException e) {
+//			e.printStackTrace();
+//		}
 		if(sharedIps.containsKey(ip)) {
 			if(!sharedIps.get(ip).contains(player)) {
 				List<OfflinePlayer> newList = sharedIps.get(ip);

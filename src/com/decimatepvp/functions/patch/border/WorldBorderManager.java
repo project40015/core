@@ -1,5 +1,6 @@
 package com.decimatepvp.functions.patch.border;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.Entity;
@@ -14,8 +15,8 @@ import com.decimatepvp.core.DecimateCore;
 
 public class WorldBorderManager implements Listener {
 	
-	private double px = 10001D, nx = -10001D;
-	private double pz = 10001D, nz = -10001D;
+	private double px, nx;
+	private double pz, nz;
 	
 	private final World world;
 
@@ -27,6 +28,10 @@ public class WorldBorderManager implements Listener {
 		this.pz = pz;
 		this.nz = nz;
 		this.world = world;
+
+		Bukkit.broadcastMessage("-");
+		Bukkit.broadcastMessage(px + " " + pz);
+		Bukkit.broadcastMessage(nx + " " + nz);
 		
 		getEntityManager().runTaskTimer(DecimateCore.getCore(), 0, 10l);
 	}
@@ -46,9 +51,9 @@ public class WorldBorderManager implements Listener {
 				for(Entity entity : world.getEntities()) {
 					if((isOutsideBorder(entity.getLocation()))) {
 						if(entity instanceof Player) {
-							if(entity.hasPermission("Decimate.staff.leaveborder")) {
-								entity.teleport(world.getHighestBlockAt(9999, 9999).getLocation());
-							}
+//							if(entity.hasPermission("Decimate.staff.leaveborder")) {
+//							}
+							entity.teleport(world.getHighestBlockAt(9999, 9999).getLocation());
 							
 //							else {
 //								entity.sendMessage("Outside the border!");

@@ -15,8 +15,11 @@ import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.AnvilInventory;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.potion.PotionEffect;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import com.decimatepvp.core.DecimateCore;
@@ -31,6 +34,35 @@ import com.decimatepvp.events.PlayerEquipEvent;
 public class EnchantListener implements Listener {
 
 	private static final DecimateCore core = DecimateCore.getCore();
+	
+	@EventHandler
+	public void onPlayerQuit(PlayerQuitEvent event) {
+		Player player = event.getPlayer();
+		
+		for(PotionEffect effect : player.getActivePotionEffects()) {
+			int time = effect.getDuration();
+			
+			if(time > 100000) {
+				player.removePotionEffect(effect.getType());
+			}
+		}
+	}
+	
+	@EventHandler
+	public void onPlayerJoin(PlayerJoinEvent event) {
+		Player player = event.getPlayer();
+		
+		for(ItemStack equipment : player.getEquipment().getArmorContents()) {
+			List<CustomEnchant> enchantments = core.getEnchantManager().getEnchantsOnItem(equipment);
+			for (CustomEnchant enchantment : enchantments) {
+				if (enchantment instanceof CustomEquipEnchant) {
+					CustomEquipEnchant equipEnchantment = (CustomEquipEnchant) enchantment;
+					int level = core.getEnchantManager().getLevelFromItem(enchantment, equipment);
+					equipEnchantment.onEquip(event.getPlayer(), level);
+				}
+			}
+		}
+	}
 
 //	@SuppressWarnings("deprecation")
 //	@EventHandler
