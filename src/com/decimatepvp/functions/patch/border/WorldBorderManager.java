@@ -1,6 +1,5 @@
 package com.decimatepvp.functions.patch.border;
 
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.Entity;
@@ -13,12 +12,16 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 import com.decimatepvp.core.DecimateCore;
 
+import net.md_5.bungee.api.ChatColor;
+
 public class WorldBorderManager implements Listener {
 	
 	private double px, nx;
 	private double pz, nz;
 	
 	private final World world;
+	
+	private final Location spawn;
 
 	public WorldBorderManager(World world,
 			double px, double nx,
@@ -28,17 +31,20 @@ public class WorldBorderManager implements Listener {
 		this.pz = pz;
 		this.nz = nz;
 		this.world = world;
+		this.spawn = world.getHighestBlockAt(0, 0).getLocation().add(0, 4, 0);
 
-		Bukkit.broadcastMessage("-");
-		Bukkit.broadcastMessage(px + " " + pz);
-		Bukkit.broadcastMessage(nx + " " + nz);
+//		Bukkit.broadcastMessage("-");
+//		Bukkit.broadcastMessage(px + " " + pz);
+//		Bukkit.broadcastMessage(nx + " " + nz);
 		
 		getEntityManager().runTaskTimer(DecimateCore.getCore(), 0, 10l);
 	}
 
 	@EventHandler
 	public void onPlayerTeleport(PlayerTeleportEvent event) {
-		if(isOutsideBorder(event.getTo())) {
+		if((event.getTo().getWorld().getUID().equals(world.getUID())) &&
+				(isOutsideBorder(event.getTo()))) {
+			event.getPlayer().sendMessage(ChatColor.RED + "You can't teleport there!");
 			event.setCancelled(true);
 		}
 	}
@@ -51,10 +57,9 @@ public class WorldBorderManager implements Listener {
 				for(Entity entity : world.getEntities()) {
 					if((isOutsideBorder(entity.getLocation()))) {
 						if(entity instanceof Player) {
-//							if(entity.hasPermission("Decimate.staff.leaveborder")) {
+							entity.teleport(spawn);
+//							if(!entity.hasPermission("Decimate.staff.leaveborder")) {
 //							}
-							entity.teleport(world.getHighestBlockAt(0, 0).getLocation().add(0, 4, 0));
-							
 //							else {
 //								entity.sendMessage("Outside the border!");
 //							}
