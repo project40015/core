@@ -133,6 +133,7 @@ public class PvPManager implements Manager, Listener, CommandExecutor {
 	
 	@EventHandler
 	public void onEntityDeath(EntityDeathEvent event) {
+
 		if(entities.containsKey(event.getEntity().getEntityId())) {
 			CombatPlayer cp = entities.get(event.getEntity().getEntityId());
 			killList.add(cp.getUUID());

@@ -142,17 +142,17 @@ public class DecimateCore extends JavaPlugin implements PluginMessageListener {
 	    this.getServer().getMessenger().registerOutgoingPluginChannel(this, "BungeeCord");
 //	    this.getServer().getMessenger().registerIncomingPluginChannel(this, "BungeeCord", this);
 		
-	    for(int i = 0; i < Bukkit.getWorlds().size(); i++) {
-	    	World world = Bukkit.getWorlds().get(i);
-	    	WorldBorder border = world.getWorldBorder();
-	    	double px = (border.getSize() / 2) + 1,
-	    			pz = (border.getSize() / 2) + 1;
-	    	
-	    	double nx = -(border.getSize() / 2) - 1,
-	    			nz = -(border.getSize() / 2) - 1;
-	    	
-	    	worldBorders[i] = new WorldBorderManager(world, px, nx, pz, nz);
-	    }
+//	    for(int i = 0; i < Bukkit.getWorlds().size(); i++) {
+//	    	World world = Bukkit.getWorlds().get(i);
+//	    	WorldBorder border = world.getWorldBorder();
+//	    	double px = (border.getSize() / 2) + 1,
+//	    			pz = (border.getSize() / 2) + 1;
+//	    	
+//	    	double nx = -(border.getSize() / 2) - 1,
+//	    			nz = -(border.getSize() / 2) - 1;
+//	    	
+//	    	worldBorders[i] = new WorldBorderManager(world, px, nx, pz, nz);
+//	    }
 		
 		enchantManager = new EnchantManager(); // Not a Real Man-ager
 		potionManager = new PotionAbilityManager();
@@ -198,7 +198,7 @@ public class DecimateCore extends JavaPlugin implements PluginMessageListener {
 				new RewardListener(), trenchPick, sellWandManager, new ExplosionListener(), new DecimateStop(),
 				new TntDisableManager(), new KillRewardListener(), new PreCommandCancel(), new BedrockFix());
 		
-		loadListeners(worldBorders);
+//		loadListeners(worldBorders);
 	}
 	
 	@Override

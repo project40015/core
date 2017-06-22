@@ -82,6 +82,7 @@ public class CombatPlayer {
 	public void remove() {
 //		if(!zombie.isDead()) {
 			npc.despawn();
+			npc.destroy();
 //		}
 	}
 	
