@@ -53,7 +53,7 @@ public class WorldBorderManager implements Listener {
 						if(entity instanceof Player) {
 //							if(entity.hasPermission("Decimate.staff.leaveborder")) {
 //							}
-							entity.teleport(world.getHighestBlockAt(9999, 9999).getLocation());
+							entity.teleport(world.getHighestBlockAt(0, 0).getLocation().add(0, 4, 0));
 							
 //							else {
 //								entity.sendMessage("Outside the border!");

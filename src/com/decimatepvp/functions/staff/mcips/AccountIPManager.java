@@ -157,12 +157,24 @@ public class AccountIPManager implements Manager, Listener, CommandExecutor {
 	public void onPrejoin(PlayerPreLoginEvent event) {
 		InetAddress ip = event.getAddress();
 		
-		if((sharedIps.containsKey(ip)) && (sharedIps.get(ip).size() >= 10)) {
+		if(online(ip) >= 10) {
 			event.disallow(PlayerPreLoginEvent.Result.KICK_FULL,
 					"There are too many accounts on this ip.");
 		}
 	}
 	
+	private int online(InetAddress ip) {
+		int online = 0;
+		
+		for(Player player : Bukkit.getOnlinePlayers()) {
+			if(player.getAddress().getAddress().equals(ip)) {
+				online++;
+			}
+		}
+		
+		return online;
+	}
+
 	@EventHandler(priority = EventPriority.LOWEST)
 	public void onJoin(PlayerJoinEvent event) {
 		Player player = event.getPlayer();
