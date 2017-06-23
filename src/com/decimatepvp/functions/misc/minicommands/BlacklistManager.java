@@ -78,7 +78,7 @@ public class BlacklistManager implements Manager, CommandExecutor {
 				else if(args.length == 1) {
 					OfflinePlayer plyr = null;
 					String ip = null;
-					
+
 					try {
 						if(InetAddress.getByName(args[0]) != null) {
 							ip = InetAddress.getByName(args[0]).getHostAddress();
@@ -86,7 +86,10 @@ public class BlacklistManager implements Manager, CommandExecutor {
 						else {
 							plyr = Bukkit.getOfflinePlayer(args[0]);
 						}
-					} catch (UnknownHostException e) { }
+					}
+					catch(UnknownHostException e) {
+						plyr = Bukkit.getOfflinePlayer(args[0]);
+					}
 
 					if(ip == null) {
 						if(ipaddresses.containsKey(plyr)) {
@@ -102,19 +105,17 @@ public class BlacklistManager implements Manager, CommandExecutor {
 					}
 
 					if(ip != null) {
+						sender.sendMessage(ChatColor.GREEN + "Player's ip has been pardoned.");
 						Bukkit.unbanIP(ip);
 					}
 
 					if(plyr != null) {
-						plyr.setBanned(false);
-					}
+						if(plyr.isBanned()) {
+							plyr.setBanned(false);
+						}
 
-					if((plyr != null) || (ip != null)) {
 						blacklisted.remove(plyr);
 						sender.sendMessage(ChatColor.GREEN + "Player has been pardoned.");
-					}
-					else {
-						sender.sendMessage(ChatColor.RED + "I'll be honest - I have no idea what happened.");
 					}
 				}
 			}
@@ -176,7 +177,7 @@ public class BlacklistManager implements Manager, CommandExecutor {
 			String uid = line.split(" - ")[1];
 			String reason = config.getString(line + ".reason");
 			String ip = null;
-			
+
 			try {
 				ip = InetAddress.getByName(config.getString(line + ".ip")).getHostAddress();
 			} catch (UnknownHostException e) {

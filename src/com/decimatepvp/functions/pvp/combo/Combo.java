@@ -14,10 +14,11 @@ public class Combo {
 		this.combo = 1;
 	}
 	
-	public double hit(double damage){
+	public double hit(double damage, boolean strength){
 		this.combo++;
 		this.time = 20*3;
-		return damage*(1.2 + combo*0.05);
+		
+		return damage*(1.2 + combo*(strength ? 0.025 : 0.05));
 	}
 	
 	public boolean time(int n){

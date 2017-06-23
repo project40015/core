@@ -10,6 +10,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.potion.PotionEffectType;
 
 import com.decimatepvp.core.DecimateCore;
 import com.decimatepvp.core.Manager;
@@ -150,7 +151,8 @@ public class ComboManager implements Manager, Listener {
 					attacker.playSound(attacked.getLocation(), Sound.NOTE_PLING, 1, 1);
 					PlayerUtils.sendActionbar(attacker, ChatColor.GRAY + "Combo: " + format(combo.getCombo() - 1));
 				}
-				event.setDamage(combo.hit(event.getDamage()));
+				event.setDamage(combo.hit(event.getDamage(),
+						 attacker.hasPotionEffect(PotionEffectType.INCREASE_DAMAGE)));
 			}else{
 				this.combos.add(new Combo(attacker.getName(), attacked.getName()));
 			}
