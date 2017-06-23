@@ -16,6 +16,7 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
@@ -23,6 +24,7 @@ import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.event.player.PlayerToggleFlightEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 
@@ -54,13 +56,18 @@ public class PvPManager implements Manager, Listener, CommandExecutor {
 
 			@Override
 			public void run() {
-				for(Entry<Player, Long> set : pvp.entrySet()) {
+				for(Entry<Player, Long> set : Maps.newHashMap(pvp).entrySet()) {
 					Player player = set.getKey();
 					long time = set.getValue();
 					time -= 10;
 
 					if(time > 0) {
 						pvp.put(player, time);
+						
+						if(player.getAllowFlight()) {
+							player.setFlying(false);
+							player.setAllowFlight(false);
+						}
 					}
 					else {
 						player.sendMessage(ChatColor.GREEN + "You have been taken out of combat!");
@@ -78,6 +85,13 @@ public class PvPManager implements Manager, Listener, CommandExecutor {
 	}
 
 	@EventHandler
+	public void onPlayerFly(PlayerToggleFlightEvent event) {
+		if(isPlayerInCombat(event.getPlayer())) {
+			event.setCancelled(true);
+		}
+	}
+	
+	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
 	public void onDamage(EntityDamageByEntityEvent event) {
 		if((event.getDamager() instanceof Player) && (event.getEntity() instanceof Player)) {
 			Player damagee = (Player) event.getEntity();

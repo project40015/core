@@ -193,32 +193,32 @@ public class CrateManager implements Manager, Listener {
 				groundDisplayCrates.add(crate);
 			}
 		}
-		final int t = 3;
-		run = Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(DecimateCore.getCore(), new Runnable(){
-
-			@Override
-			public void run() {
-				double x = 0, z = 0;
-				i = i >= 40 ? 1 : i + 1;
-				if(i <= 10){
-					x = i/10.0;
-				}else if(i <= 20){
-					x = 1;
-					z = (i-10)/10.0;
-				}else if(i <= 30){
-					x = 1 - ((i-20)/10.0);
-					z = 1;
-				}else{
-					z = 1 - ((i-30)/10.0);
-				}
-				for(int i = 0; i < groundDisplayCrates.size(); i++){
-					
-					//TODO ADD THIS BACK
-					groundDisplayCrates.get(i).getGroundEffect().display(0, 0, 0, 0, 1, groundDisplayCrates.get(i).getLocation().clone().add(x, 0.05, z), 30);
-				}
-			}
-			
-		}, t, t);
+//		final int t = 3;
+//		run = Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(DecimateCore.getCore(), new Runnable(){
+//
+//			@Override
+//			public void run() {
+//				double x = 0, z = 0;
+//				i = i >= 40 ? 1 : i + 1;
+//				if(i <= 10){
+//					x = i/10.0;
+//				}else if(i <= 20){
+//					x = 1;
+//					z = (i-10)/10.0;
+//				}else if(i <= 30){
+//					x = 1 - ((i-20)/10.0);
+//					z = 1;
+//				}else{
+//					z = 1 - ((i-30)/10.0);
+//				}
+//				for(int i = 0; i < groundDisplayCrates.size(); i++){
+//					
+//					//TODO ADD THIS BACK
+//					groundDisplayCrates.get(i).getGroundEffect().display(0, 0, 0, 0, 1, groundDisplayCrates.get(i).getLocation().clone().add(x, 0.05, z), 30);
+//				}
+//			}
+//			
+//		}, t, t);
 	}
 	
 	private void startSeasonalTimer(){
