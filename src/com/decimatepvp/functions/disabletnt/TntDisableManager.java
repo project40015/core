@@ -13,7 +13,7 @@ public class TntDisableManager implements Listener {
 	
 	@SuppressWarnings("deprecation")
 	public TntDisableManager(){
-		then = (new Date(2017-1900, 6-1, 16+7, 18-2+7, 0)).getTime();
+		then = (new Date(2017-1900, 6-1, 16+7, 15, 0)).getTime();
 	}
 	
 	@EventHandler
