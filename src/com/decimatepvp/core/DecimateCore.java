@@ -29,6 +29,7 @@ import com.decimatepvp.entities.EntityManager;
 import com.decimatepvp.events.CustomEventCaller;
 import com.decimatepvp.functions.animation.AnimationManager;
 import com.decimatepvp.functions.announcement.AnnouncementManager;
+import com.decimatepvp.functions.antihack.PhaseManager;
 import com.decimatepvp.functions.antitnt.AntiTntManager;
 import com.decimatepvp.functions.bookCommand.CommandBookManager;
 import com.decimatepvp.functions.crate.CrateKeyCommand;
