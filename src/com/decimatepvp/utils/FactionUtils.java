@@ -15,19 +15,19 @@ import com.massivecraft.factions.struct.Relation;
 import com.massivecraft.factions.struct.Role;
 
 public class FactionUtils {
-	
+
 	private static Factions factions = Factions.getInstance();
 	private static FPlayers players = FPlayers.getInstance();
 	private static Board board = Board.getInstance();
-	
+
 	public static Faction getWilderness() {
 		return factions.getWilderness();
 	}
-	
+
 	public static Faction getSafezone() {
 		return factions.getSafeZone();
 	}
-	
+
 	public static Faction getWarzone() {
 		return factions.getWarZone();
 	}
@@ -35,40 +35,41 @@ public class FactionUtils {
 	public static boolean isInAllyTerritory(Player player) {
 		Faction fplyr = getFaction(player);
 		Faction area = getFactionByLoc(player.getLocation());
-		
+
 		Relation rel = area.getRelationTo(fplyr);
 		if((rel == Relation.MEMBER) || (rel == Relation.ALLY)) {
 			return true;
 		}
-		
+
 		return false;
 	}
-	
+
 	public static boolean isAreaSafe(Player player) {
 		Faction fplyr = getFaction(player);
 		Faction area = getFactionByLoc(player.getLocation());
-		
+
 		Relation rel = area.getRelationTo(fplyr);
 		if((rel == Relation.MEMBER) || (area == factions.getWilderness()) || (area == factions.getWarZone())) {
 			return true;
 		}
-		
+
 		return false;
 	}
-	
-	public static boolean isOwner(Player player, Location location){
+
+	public static boolean isOwner(Player player, Location location) {
 		Faction faction = board.getFactionAt(new FLocation(location));
-		if(getFaction(player).equals(faction)){
-			if(getFPlayer(player).getRole().equals(Role.MODERATOR) || getFPlayer(player).getRole().equals(Role.ADMIN)){
+		if(getFaction(player).equals(faction)) {
+			if(getFPlayer(player).getRole() == Role.MODERATOR || getFPlayer(player).getRole() == Role.ADMIN) {
 				return true;
 			}
-		}else{
+		}
+		else {
 			return false;
 		}
-		for(FLocation loc : faction.getClaimOwnership().keySet()){
-			if(loc.isInChunk(location)){
-				for(String str : faction.getClaimOwnership().get(loc)){
-					if(str.equalsIgnoreCase(player.getUniqueId().toString())){
+		for(FLocation loc : faction.getClaimOwnership().keySet()) {
+			if(loc.isInChunk(location)) {
+				for(String str : faction.getClaimOwnership().get(loc)) {
+					if(str.equalsIgnoreCase(player.getUniqueId().toString())) {
 						return true;
 					}
 				}
@@ -77,19 +78,19 @@ public class FactionUtils {
 		}
 		return true;
 	}
-	
+
 	public static Faction getFactionByLoc(Location location) {
 		return board.getFactionAt(new FLocation(location));
 	}
-	
+
 	public static FPlayer getFPlayer(OfflinePlayer player) {
 		return players.getByOfflinePlayer(player);
 	}
-	
+
 	public static Faction getFaction(OfflinePlayer player) {
 		return getFPlayer(player).getFaction();
 	}
-	
+
 	public static Factions getFactions() {
 		return factions;
 	}
