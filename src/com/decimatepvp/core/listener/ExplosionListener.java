@@ -8,6 +8,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
+import org.bukkit.block.CreatureSpawner;
 import org.bukkit.craftbukkit.v1_8_R3.entity.CraftEntity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.event.EventHandler;
@@ -15,6 +16,8 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.entity.ExplosionPrimeEvent;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.util.BlockIterator;
 import org.bukkit.util.Vector;
@@ -57,7 +60,7 @@ public class ExplosionListener implements Listener {
 	}
 	
 	private boolean instantBlowDrop(Material m){
-		return m == Material.ENCHANTMENT_TABLE || m == Material.ENDER_CHEST;
+		return m == Material.ENCHANTMENT_TABLE || m == Material.ENDER_CHEST || m == Material.MOB_SPAWNER;
 	}
 	
 	 
@@ -95,6 +98,16 @@ public class ExplosionListener implements Listener {
 	            	  continue;
 	              }
 	              if(!block.getLocation().getBlock().isLiquid() && instantBlowDrop(block.getType())){
+	            	  if(block.getType() == Material.MOB_SPAWNER){
+	                      EntityType type = ((CreatureSpawner) block.getState()).getSpawnedType();
+	                      ItemStack localItemStack = new ItemStack(Material.MOB_SPAWNER, 1);
+	                      ItemMeta localItemMeta = Bukkit.getItemFactory().getItemMeta(Material.MOB_SPAWNER);
+	                      String str = type.name();
+	                      str = "&e{entity} &fSpawner".replace("{entity}", (str.substring(0, 1).toUpperCase() + str.toLowerCase().substring(1)).replace("_", " "));
+	                      localItemMeta.setDisplayName(ChatColor.translateAlternateColorCodes('&', str));
+	                      localItemStack.setItemMeta(localItemMeta);
+	                      block.getWorld().dropItem(block.getLocation(), localItemStack);
+	            	  }
 	            	  block.breakNaturally();
 	            	  continue;
 	              }

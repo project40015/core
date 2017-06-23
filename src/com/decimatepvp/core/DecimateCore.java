@@ -20,6 +20,7 @@ import com.decimatepvp.core.listener.KillRewardListener;
 import com.decimatepvp.core.listener.PlayerBreakBlockListener;
 import com.decimatepvp.core.listener.PlayerUseItemListener;
 import com.decimatepvp.core.listener.PreCommandCancel;
+import com.decimatepvp.core.listener.VehiclePlaceBugListener;
 import com.decimatepvp.core.utils.DecimateConfig;
 import com.decimatepvp.enchants.EnchantCommand;
 import com.decimatepvp.enchants.EnchantListener;
@@ -187,7 +188,8 @@ public class DecimateCore extends JavaPlugin implements PluginMessageListener {
 				accountIpManager,  new EnchantListener(), new CustomEventCaller(), cropHopperManager, potionManager,
 				crateManager, comboManager, pvpManager, new EnchantmentLimitManager(), commandBookManager,
 				new RewardListener(), trenchPick, sellWandManager, new ExplosionListener(), new DecimateStop(),
-				new TntDisableManager(), new KillRewardListener(), new PreCommandCancel(), new BedrockFix());
+				new TntDisableManager(), new KillRewardListener(), new PreCommandCancel(), new BedrockFix(),
+				new VehiclePlaceBugListener());
 		
 		loadListeners(worldBorders);
 	}

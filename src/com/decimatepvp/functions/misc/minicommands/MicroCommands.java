@@ -1,5 +1,7 @@
 package com.decimatepvp.functions.misc.minicommands;
 
+import java.util.Date;
+
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
@@ -12,6 +14,28 @@ import com.decimatepvp.core.DecimateCore;
 
 public class MicroCommands implements CommandExecutor {
 
+	long then;
+	
+	@SuppressWarnings("deprecation")
+	public MicroCommands(){
+		then = (new Date(2017-1900, 6-1, 16+7, 18-2+7, 0)).getTime();
+	}
+	
+	private String tntEnable(){
+		//PST
+		if(System.currentTimeMillis() >= then){
+			return "enabled!";
+		}
+		long time = then - System.currentTimeMillis();
+	
+		int seconds = (int) ((time / 1000) % 60);
+		int minutes = (int) ((time / (1000*60)) % 60);
+		int hours   = (int) ((time / (1000*60*60)) % 24);
+		int days = (int) ((time / (1000*60*60*24)));
+	
+		return days + "d " + hours + "h " + minutes + "m " + seconds + "s";
+	}
+	
 	@Override
 	public boolean onCommand(CommandSender arg0, Command arg1, String arg2, String[] arg3) {
 		
@@ -21,6 +45,7 @@ public class MicroCommands implements CommandExecutor {
 		}else if(arg1.getName().equalsIgnoreCase("map")){
 			arg0.sendMessage(DecimateCore.getCore().getColoredDecimate() + ChatColor.WHITE + "PVP " + ChatColor.GRAY + "(season II):");
 			arg0.sendMessage("");
+			arg0.sendMessage(ChatColor.GRAY + "TNT Enable: " + ChatColor.RED + tntEnable());
 			arg0.sendMessage(ChatColor.GRAY + "Worldborder:");
 			arg0.sendMessage(ChatColor.GREEN + "  Overworld" + ChatColor.GRAY + ": " + ChatColor.RED + "10k " + ChatColor.GRAY + "by" + ChatColor.RED + " 10k");
 			arg0.sendMessage(ChatColor.YELLOW + "  End" + ChatColor.GRAY + ": " + ChatColor.RED + "5k " + ChatColor.GRAY + "by" + ChatColor.RED + " 5k");
