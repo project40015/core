@@ -12,6 +12,7 @@ import com.massivecraft.factions.FPlayers;
 import com.massivecraft.factions.Faction;
 import com.massivecraft.factions.Factions;
 import com.massivecraft.factions.struct.Relation;
+import com.massivecraft.factions.struct.Role;
 
 public class FactionUtils {
 	
@@ -57,6 +58,13 @@ public class FactionUtils {
 	
 	public static boolean isOwner(Player player, Location location){
 		Faction faction = board.getFactionAt(new FLocation(location));
+		if(getFaction(player).equals(faction)){
+			if(getFPlayer(player).getRole().equals(Role.MODERATOR) || getFPlayer(player).getRole().equals(Role.ADMIN)){
+				return true;
+			}
+		}else{
+			return false;
+		}
 		for(FLocation loc : faction.getClaimOwnership().keySet()){
 			if(loc.isInChunk(location)){
 				for(String str : faction.getClaimOwnership().get(loc)){
