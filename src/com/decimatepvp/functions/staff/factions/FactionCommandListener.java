@@ -32,7 +32,7 @@ public class FactionCommandListener implements Listener {
 		Player player = event.getPlayer();
 		String command = event.getMessage().substring(1, event.getMessage().length()).toLowerCase();
 
-//		if(!player.hasPermission("Decimate.factions.commandbypass")) {
+		if(!player.hasPermission("Decimate.factions.commandbypass")) {
 			if(core.getPvpManager().isPlayerInCombat(player)) {
 				if(!isCommandAllowed(allowedPvPCommands, command)) {
 					player.sendMessage(ChatColor.RED + "You cannot use this command in combat!");
@@ -51,7 +51,7 @@ public class FactionCommandListener implements Listener {
 					event.setCancelled(true);
 				}
 			}
-//		}
+		}
 	}
 	
 	private boolean isCommandAllyOnly(String command) {
