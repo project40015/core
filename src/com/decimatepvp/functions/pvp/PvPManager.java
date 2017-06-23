@@ -2,7 +2,9 @@ package com.decimatepvp.functions.pvp;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
+import org.bukkit.ChatColor;
 import org.bukkit.EntityEffect;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
@@ -15,12 +17,14 @@ import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.scheduler.BukkitRunnable;
 
 import com.decimatepvp.core.DecimateCore;
 import com.decimatepvp.core.Manager;
@@ -30,19 +34,59 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
 public class PvPManager implements Manager, Listener, CommandExecutor {
-	
+
+	private final long DAMAGE_TIME = 200;
+
+	private Map<Player, Long> pvp = Maps.newHashMap();
+
 	private List<String> killList = Lists.newArrayList();
 	private Map<String, CombatPlayer> players = Maps.newHashMap();
 	private Map<Integer, CombatPlayer> entities = Maps.newHashMap();
-	
+
 	public PvPManager() {
 		loadKillList();
+
+		loadCombatRunnable();
 	}
-	
-//	@EventHandler
-//	public void onClick(InventoryClickEvent event) {
-//		Bukkit.broadcastMessage(""+event.getSlot());
-//	}
+
+	private void loadCombatRunnable() {
+		BukkitRunnable br = new BukkitRunnable() {
+
+			@Override
+			public void run() {
+				for(Entry<Player, Long> set : pvp.entrySet()) {
+					Player player = set.getKey();
+					long time = set.getValue();
+					time -= 10;
+
+					if(time > 0) {
+						pvp.put(player, time);
+					}
+					else {
+						player.sendMessage(ChatColor.GREEN + "You have been taken out of combat!");
+						pvp.remove(player);
+					}
+				}
+			}
+		};
+
+		br.runTaskTimer(DecimateCore.getCore(), 0l, 10l);
+	}
+
+	public boolean isPlayerInCombat(Player player) {
+		return pvp.containsKey(player);
+	}
+
+	@EventHandler
+	public void onDamage(EntityDamageByEntityEvent event) {
+		if((event.getDamager() instanceof Player) && (event.getEntity() instanceof Player)) {
+			Player damagee = (Player) event.getEntity();
+			if(!isPlayerInCombat(damagee)) {
+				damagee.sendMessage(ChatColor.RED + "You have been put into combat!");
+			}
+			pvp.put(damagee, DAMAGE_TIME);
+		}
+	}
 
 	@Override
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
@@ -59,7 +103,7 @@ public class PvPManager implements Manager, Listener, CommandExecutor {
 			entities.put(combat.getId(), combat);
 			return true;
 		}
-		
+
 		return false;
 	}
 
@@ -70,46 +114,39 @@ public class PvPManager implements Manager, Listener, CommandExecutor {
 			players.remove(player.getUniqueId().toString());
 			return true;
 		}
-		
+
 		return false;
 	}
-	
-	public boolean addToList(OfflinePlayer player) {
+
+	public boolean addToKillList(OfflinePlayer player) {
 		if(!killList.contains(player.getUniqueId().toString())) {
 			killList.add(player.getUniqueId().toString());
 			return true;
 		}
-		
+
 		return false;
 	}
-	
-	public boolean removeFromList(OfflinePlayer player) {
+
+	public boolean removeFromKillList(OfflinePlayer player) {
 		if(killList.contains(player.getUniqueId().toString())) {
 			killList.remove(player.getUniqueId().toString());
 			return true;
 		}
-		
+
 		return false;
 	}
-	
+
 	public void remove(CombatPlayer cp) {
 		entities.remove(cp.getId());
 		players.remove(cp.getUUID(), cp);
 		cp.remove();
 	}
-	
-//	@EventHandler
-//	public void onKick(PlayerKickEvent event) {
-//		Player player = event.getPlayer();
-//
-//		player.getPlayer().setMetadata("LogoutCommand", new FixedMetadataValue(DecimateCore.getCore(), true));
-//	}
-	
+
 	@EventHandler
-	public void onEntityDamage(EntityDamageEvent event){
-		if(this.entities.containsKey(event.getEntity().getEntityId())){
+	public void onEntityDamage(EntityDamageEvent event) {
+		if(this.entities.containsKey(event.getEntity().getEntityId())) {
 			event.setCancelled(true);
-			if(!event.getCause().equals(DamageCause.ENTITY_ATTACK)){
+			if(!event.getCause().equals(DamageCause.ENTITY_ATTACK)) {
 				return;
 			}
 			LivingEntity livingEntity = (LivingEntity) event.getEntity();
@@ -117,20 +154,7 @@ public class PvPManager implements Manager, Listener, CommandExecutor {
 			livingEntity.playEffect(EntityEffect.HURT);
 		}
 	}
-	
-//	@EventHandler
-//	public void onEntityDamage(EntityDamageEvent event){
-//		if(this.entities.containsKey(event.getEntity().getEntityId())){
-//			event.setCancelled(true);
-//			if(event.getCause().equals(DamageCause.FIRE_TICK) || event.getCause().equals(DamageCause.FALL)){
-//				return;
-//			}
-//			LivingEntity livingEntity = (LivingEntity) event.getEntity();
-//			livingEntity.damage(event.getDamage());
-//			livingEntity.playEffect(EntityEffect.HURT);
-//		}
-//	}
-	
+
 	@EventHandler
 	public void onEntityDeath(EntityDeathEvent event) {
 
@@ -141,7 +165,7 @@ public class PvPManager implements Manager, Listener, CommandExecutor {
 			remove(cp);
 		}
 	}
-	
+
 	@EventHandler
 	public void onKillListJoin(PlayerJoinEvent event) {
 		Player player = event.getPlayer();
@@ -152,29 +176,28 @@ public class PvPManager implements Manager, Listener, CommandExecutor {
 			player.getInventory().setLeggings(new ItemStack(Material.AIR));
 			player.getInventory().setBoots(new ItemStack(Material.AIR));
 			player.setHealth(0);
-			removeFromList(player);
+			removeFromKillList(player);
 		}
 		if(players.containsKey(player.getUniqueId().toString())) {
 			remove(players.get(player.getUniqueId().toString()));
 		}
 	}
-	
+
 	@EventHandler
 	public void onPlayerQuit(PlayerQuitEvent event) {
 		Player player = event.getPlayer();
 		if(!player.hasMetadata("LogoutCommand")) {
-			if(!shouldCancelLogger(player)){
+			if(!shouldCancelLogger(player)) {
 				addHumanEntity(player);
 			}
 		}
 	}
-	
-	private boolean shouldCancelLogger(Player player){
-		if(player.getGameMode().equals(GameMode.CREATIVE) ||
-				player.getGameMode().equals(GameMode.SPECTATOR)){
+
+	private boolean shouldCancelLogger(Player player) {
+		if(player.getGameMode().equals(GameMode.CREATIVE) || player.getGameMode().equals(GameMode.SPECTATOR)) {
 			return true;
 		}
-		if(PlayerUtils.isInSpawn(player)){
+		if(PlayerUtils.isInSpawn(player)) {
 			return true;
 		}
 		return false;
@@ -183,7 +206,7 @@ public class PvPManager implements Manager, Listener, CommandExecutor {
 	private void loadKillList() {
 		Configuration cfg = new Configuration(DecimateCore.getCore(), "KillList.yml");
 		FileConfiguration config = cfg.getData();
-		
+
 		this.killList = Lists.newArrayList();
 		this.killList.addAll(config.getStringList("KillList"));
 	}
@@ -193,14 +216,14 @@ public class PvPManager implements Manager, Listener, CommandExecutor {
 		Configuration cfg = new Configuration(DecimateCore.getCore(), "KillList.yml");
 		cfg.reset();
 		FileConfiguration config = cfg.getData();
-		
+
 		config.set("KillList", killList);
 		cfg.saveData();
-		
+
 		for(CombatPlayer cp : players.values()) {
 			cp.remove();
 		}
-		
+
 	}
 
 }

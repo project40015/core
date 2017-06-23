@@ -72,7 +72,7 @@ public class LogoutCommand implements CommandExecutor {
 //				((CraftPlayer) player.getPlayer()).getHandle().playerConnection.disconnect("You have logged out!");
 				player.getPlayer().sendMessage(ChatColor.YELLOW + "Sent you to the hub!");
 				BungeeUtils.send(player.getPlayer(), "lobby");
-				DecimateCore.getCore().getPvpManager().removeFromList(player);
+				DecimateCore.getCore().getPvpManager().removeFromKillList(player);
 			}
 			catch(Exception e) {
 				player.getPlayer().sendMessage(ChatColor.RED + "Something went wrong. Please try again.");
