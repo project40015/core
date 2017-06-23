@@ -10,6 +10,15 @@ import org.bukkit.entity.Entity;
 public class DecimateUtils {
 	
 	private static final Random random = new Random();
+	
+	public static String longToTime(long time){
+		int seconds = (int) ((time / 1000) % 60);
+		int minutes = (int) ((time / (1000*60)) % 60);
+		int hours   = (int) ((time / (1000*60*60)) % 24);
+		int days = (int) ((time / (1000*60*60*24)));
+	
+		return days + "d " + hours + "h " + minutes + "m " + seconds + "s";
+	}
 
 	public static Location generateRandomLocation(int i, int j, int k) {
 		int x = random.nextInt(i*2) - i;
