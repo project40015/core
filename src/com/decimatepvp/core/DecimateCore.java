@@ -41,6 +41,7 @@ import com.decimatepvp.functions.misc.crophopper.CropHopperCommand;
 import com.decimatepvp.functions.misc.crophopper.CropHopperManager;
 import com.decimatepvp.functions.misc.decimatestop.DecimateStop;
 import com.decimatepvp.functions.misc.delhome.DeleteHome;
+import com.decimatepvp.functions.misc.enemylogout.EnemyTerritoryLogoutManager;
 import com.decimatepvp.functions.misc.harvester.HarvesterCommand;
 import com.decimatepvp.functions.misc.harvester.HarvesterManager;
 import com.decimatepvp.functions.misc.itemcooldown.ItemCooldownManager;
@@ -192,7 +193,7 @@ public class DecimateCore extends JavaPlugin implements PluginMessageListener {
 				crateManager, comboManager, pvpManager, new EnchantmentLimitManager(), commandBookManager,
 				new RewardListener(), trenchPick, sellWandManager, new ExplosionListener(), new DecimateStop(),
 				new TntDisableManager(), new KillRewardListener(), new PreCommandCancel(), new BedrockFix(),
-				new VehiclePlaceBugListener(), playtimeManager);
+				new VehiclePlaceBugListener(), playtimeManager, new EnemyTerritoryLogoutManager());
 		
 		loadListeners(worldBorders);
 	}
