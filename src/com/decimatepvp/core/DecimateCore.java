@@ -76,6 +76,7 @@ import com.decimatepvp.functions.staff.togglechat.ToggleChatCommand;
 import com.decimatepvp.functions.staff.togglechat.ToggleChatManager;
 import com.decimatepvp.functions.tntfill.TntFillCommand;
 import com.decimatepvp.functions.tntfill.TntFillManager;
+import com.decimatepvp.functions.trade.TradeManager;
 import com.decimatepvp.minievents.MiniEvents;
 import com.google.common.io.ByteArrayDataInput;
 import com.google.common.io.ByteStreams;
@@ -101,7 +102,7 @@ public class DecimateCore extends JavaPlugin implements PluginMessageListener {
 	/*
 	 * Managers
 	 */
-	private Manager[] managers = new Manager[23];
+	private Manager[] managers = new Manager[24];
 	
 	private FreezeManager freezeManager;
 	private TntFillManager tntFillManager;
@@ -126,6 +127,7 @@ public class DecimateCore extends JavaPlugin implements PluginMessageListener {
 	private AccountIPManager accountIpManager;
 	private EntityManager entityManager;
 	private PlaytimeManager playtimeManager;
+	private TradeManager tradeManager;
 	
 	/*
 	 * Other
@@ -179,14 +181,15 @@ public class DecimateCore extends JavaPlugin implements PluginMessageListener {
 		managers[n++] = explodableManager = new ExplodableManager();
 		managers[n++] = entityManager = new EntityManager();
 		managers[n++] = playtimeManager = new PlaytimeManager();
+		managers[n++] = tradeManager = new TradeManager();
 				
 		setupEco();
 		
 		loadCommands();
 		loadListeners(harvesterManager, staffChatManager, freezeManager, new PlayerBreakBlockListener(),
-				new EntityItemListener(), new PlayerUseItemListener(), entityManager,
+				new EntityItemListener(), new PlayerUseItemListener(), entityManager, tradeManager,
 				toggleChatManager, spectateManager, itemCooldownManager, new GlitchPatchManager(),
-				new BottleExpCommand(), new ExplosionListener(), new DeleteHome(),
+				new BottleExpCommand(), new ExplosionListener(), new DeleteHome(), 
 				new AnvilDamageListener(), new BottleExpCommand(), new MiniEvents(), new FactionCommandListener(),
 				new FactionDamageListener(), staffCommandsManager, enderDelayManager, antiTntManager,
 				accountIpManager,  new EnchantListener(), new CustomEventCaller(), cropHopperManager, potionManager,
@@ -265,6 +268,7 @@ public class DecimateCore extends JavaPlugin implements PluginMessageListener {
 		getCommand("announcements").setExecutor(this.announcementManager);
 		
 		getCommand("playtime").setExecutor(playtimeManager);
+		getCommand("trade").setExecutor(tradeManager);
 
 	}
 

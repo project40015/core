@@ -84,3 +84,5 @@ commands:
     aliases: [ta]
   playtime:
     description: Shows the total playtime of a player.
+  trade:
+    description: Allows the trade of both item and money between two players.

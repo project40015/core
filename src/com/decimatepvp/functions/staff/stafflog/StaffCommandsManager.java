@@ -21,10 +21,9 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
 public class StaffCommandsManager implements Manager, Listener {
-	
-	private List<String> ALLOWED = Arrays.asList(
-			"home", "spawn", "echest", "warp");
-	
+
+	private List<String> ALLOWED = Arrays.asList("home", "spawn", "echest", "warp");
+
 	Map<OfflinePlayer, List<String>> commands = Maps.newHashMap();
 
 	@EventHandler
@@ -32,7 +31,7 @@ public class StaffCommandsManager implements Manager, Listener {
 		Player player = event.getPlayer();
 		if(player.hasPermission("Decimate.staff.log")) {
 			if(!isAllowed(event.getMessage().toLowerCase())) {
-				
+
 				if(commands.containsKey(player)) {
 					commands.get(player).add(event.getMessage());
 				}
@@ -55,31 +54,18 @@ public class StaffCommandsManager implements Manager, Listener {
 
 	@Override
 	public void disable() {
-		String name = createFileNameFromDate();
-		
+		String month = new SimpleDateFormat("MMMM").format(Calendar.getInstance().getTime());
+		String day = new SimpleDateFormat("dd").format(Calendar.getInstance().getTime());
+
 		for(Entry<OfflinePlayer, List<String>> set : commands.entrySet()) {
 			String username = set.getKey().getName();
-			String uid = set.getKey().getUniqueId().toString();
-			
-			Configuration cfg = new Configuration(DecimateCore.getCore(), "/stafflogs/" + username,
-					name + ".yml");
+
+			Configuration cfg = new Configuration(DecimateCore.getCore(), "/stafflogs/" + username, month + ".yml");
 			FileConfiguration config = cfg.getData();
-			
-			config.set(username + "_" + uid, set.getValue());
+
+			config.set(day, config.getStringList(day).addAll(set.getValue()));
 			cfg.saveData();
 		}
-		
-	}
 
-	private String createFileNameFromDate() {
-		   String dateString = null;
-		   SimpleDateFormat sdfr = new SimpleDateFormat("yyyy-MM-dd_HH:mm");
-		   try{
-			dateString = sdfr.format(Calendar.getInstance().getTime());
-		   }catch (Exception ex ){
-			System.out.println(ex);
-		   }
-		   return dateString;
 	}
-	
 }
