@@ -13,8 +13,11 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.Projectile;
+import org.bukkit.entity.Zombie;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -72,6 +75,10 @@ public class PvPManager implements Manager, Listener, CommandExecutor {
 					else {
 						player.sendMessage(ChatColor.GREEN + "You have been taken out of combat!");
 						pvp.remove(player);
+						
+						if(player.getGameMode() == GameMode.CREATIVE) {
+							player.setAllowFlight(true);
+						}
 					}
 				}
 			}
@@ -93,8 +100,15 @@ public class PvPManager implements Manager, Listener, CommandExecutor {
 	
 	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
 	public void onDamage(EntityDamageByEntityEvent event) {
-		if((event.getDamager() instanceof Player) && (event.getEntity() instanceof Player)) {
-			Player damagee = (Player) event.getEntity();
+		Entity damager = event.getDamager();
+		Entity entity = event.getEntity();
+		
+		if(damager instanceof Projectile) {
+			damager = (Entity) ((Projectile) damager).getShooter();
+		}
+		
+		if((damager instanceof Player) && (entity instanceof Player)) {
+			Player damagee = (Player) entity;
 			if(!isPlayerInCombat(damagee)) {
 				damagee.sendMessage(ChatColor.RED + "You have been put into combat!");
 			}
