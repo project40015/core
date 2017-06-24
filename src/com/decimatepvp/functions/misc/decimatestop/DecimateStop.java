@@ -33,15 +33,18 @@ public class DecimateStop implements Listener, CommandExecutor {
 			BungeeUtils.send(player, "lobby");
 		}
 		
+		Bukkit.getServer().setWhitelist(true);
+		
 		Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(DecimateCore.getCore(), new Runnable(){
 
 			@Override
 			public void run() {
 //				Bukkit.getServer().shutdown();
+				Bukkit.getServer().setWhitelist(false);
 				Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), "stop");
 			}
 			
-		}, 20*1);
+		}, 20*5);
 		
 		
 		return false;
