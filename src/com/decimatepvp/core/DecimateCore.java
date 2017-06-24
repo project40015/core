@@ -144,6 +144,7 @@ public class DecimateCore extends JavaPlugin implements PluginMessageListener {
 		core = this;
 		config = new DecimateConfig();
 		
+		setupEco();
 		
 	    this.getServer().getMessenger().registerOutgoingPluginChannel(this, "BungeeCord");
 //	    this.getServer().getMessenger().registerIncomingPluginChannel(this, "BungeeCord", this);
@@ -182,8 +183,6 @@ public class DecimateCore extends JavaPlugin implements PluginMessageListener {
 		managers[n++] = entityManager = new EntityManager();
 		managers[n++] = playtimeManager = new PlaytimeManager();
 		managers[n++] = tradeManager = new TradeManager();
-				
-		setupEco();
 		
 		loadCommands();
 		loadListeners(harvesterManager, staffChatManager, freezeManager, new PlayerBreakBlockListener(),
@@ -395,5 +394,9 @@ public class DecimateCore extends JavaPlugin implements PluginMessageListener {
 	    	
 	    }
 	  }
+	  
+	public Economy getEconomy() {
+		return eco;
+	}
 
 }
