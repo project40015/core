@@ -88,26 +88,35 @@ public class TradeInventory  {
 			ItemStack item1 = trade1.getItem(slot);
 			ItemStack item2 = trade2.getItem(slot);
 
-			trade1.setItem(manager.itemSlots.get(slot), item2);
-			trade2.setItem(manager.itemSlots.get(slot), item1);
+			if(item1 != null) {
+				trade1.setItem(manager.itemSlots.get(slot), item2);
+			}
+			
+			if(item2 != null) {
+				trade2.setItem(manager.itemSlots.get(slot), item1);
+			}
 		}
 	}
 
 	private void syncReady() {
 		if(ready1) {
+			Bukkit.broadcastMessage("1");
 			trade1.setItem(30, ItemUtils.createItem(Material.INK_SACK, 1, (byte) 10, "&aReady!"));
 			trade2.setItem(32, ItemUtils.createItem(Material.INK_SACK, 1, (byte) 10, "&aReady!"));
 		}
 		else {
+			Bukkit.broadcastMessage("2");
 			trade1.setItem(30, ItemUtils.createItem(Material.INK_SACK, 1, (byte) 8, "&7Not ready"));
 			trade2.setItem(32, ItemUtils.createItem(Material.INK_SACK, 1, (byte) 8, "&7Not ready"));
 		}
 		
 		if(ready2) {
+			Bukkit.broadcastMessage("3");
 			trade2.setItem(30, ItemUtils.createItem(Material.INK_SACK, 1, (byte) 10, "&aReady!"));
 			trade1.setItem(32, ItemUtils.createItem(Material.INK_SACK, 1, (byte) 10, "&aReady!"));
 		}
 		else {
+			Bukkit.broadcastMessage("4");
 			trade2.setItem(30, ItemUtils.createItem(Material.INK_SACK, 1, (byte) 8, "&7Not ready"));
 			trade1.setItem(32, ItemUtils.createItem(Material.INK_SACK, 1, (byte) 8, "&7Not ready"));
 		}
@@ -179,18 +188,21 @@ public class TradeInventory  {
 			ItemStack i1 = trade1.getItem(slot);
 			ItemStack i2 = trade2.getItem(slot);
 
-			if(player1.getInventory().firstEmpty() != -1) {
-				player1.getInventory().addItem(i1);
+			if(player1 != null && i1 != null) {
+				if(player1.getInventory().firstEmpty() != -1) {
+					player1.getInventory().addItem(i1);
+				}
+				else {
+					player1.getWorld().dropItem(player1.getLocation(), i1);
+				}
 			}
-			else {
-				player1.getWorld().dropItem(player1.getLocation(), i1);
-			}
-
-			if(player2.getInventory().firstEmpty() != -1) {
-				player2.getInventory().addItem(i2);
-			}
-			else {
-				player2.getWorld().dropItem(player2.getLocation(), i2);
+			else if(player2 != null && i2 != null) {
+				if(player2.getInventory().firstEmpty() != -1) {
+					player2.getInventory().addItem(i2);
+				}
+				else {
+					player2.getWorld().dropItem(player2.getLocation(), i2);
+				}
 			}
 		}
 	}

@@ -12,8 +12,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.event.inventory.InventoryCloseEvent;
-import org.bukkit.event.player.PlayerQuitEvent;
 
 import com.decimatepvp.core.Manager;
 import com.google.common.collect.Maps;
@@ -32,42 +30,6 @@ public class TradeManager implements Manager, Listener, CommandExecutor {
 	
 	public TradeManager() {
 		createSlots();
-	}
-
-	@EventHandler
-	public void onTraderQuit(InventoryCloseEvent event) {
-		Player player = (Player) event.getPlayer();
-		if(trades1.containsKey(player) ||
-				trades2.containsKey(player)) {
-
-			TradeInventory trade = trades1.containsKey(player) ?
-					trades1.get(player) :
-						trades2.get(player);
-			
-			Player p2 = trade.getPlayer1() == player ? player : trade.getPlayer2();
-			
-			p2.closeInventory();
-			p2.sendMessage("Other traders has left.");
-			trade.endTrade();
-		}
-	}
-
-	@EventHandler
-	public void onTraderQuit(PlayerQuitEvent event) {
-		Player player = event.getPlayer();
-		if(trades1.containsKey(player) ||
-				trades2.containsKey(player)) {
-
-			TradeInventory trade = trades1.containsKey(player) ?
-					trades1.get(player) :
-						trades2.get(player);
-			
-			Player p2 = trade.getPlayer1() == player ? player : trade.getPlayer2();
-			
-			p2.closeInventory();
-			p2.sendMessage("Other traders has left.");
-			trade.endTrade();
-		}
 	}
 	
 	@EventHandler
@@ -89,6 +51,7 @@ public class TradeManager implements Manager, Listener, CommandExecutor {
 						trades2.get(player);
 			
 			int i = (player == trade.getPlayer1() ? 1 : 2);
+			Bukkit.broadcastMessage("i="+i);
 			
 			if(slot == 47) { //Add $100
 				trade.addMoney(i, 100);
