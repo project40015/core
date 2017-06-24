@@ -11,6 +11,7 @@ import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 
 import com.decimatepvp.core.DecimateCore;
+import com.decimatepvp.utils.DecimateUtils;
 
 public class MicroCommands implements CommandExecutor {
 
@@ -28,12 +29,7 @@ public class MicroCommands implements CommandExecutor {
 		}
 		long time = then - System.currentTimeMillis();
 	
-		int seconds = (int) ((time / 1000) % 60);
-		int minutes = (int) ((time / (1000*60)) % 60);
-		int hours   = (int) ((time / (1000*60*60)) % 24);
-		int days = (int) ((time / (1000*60*60*24)));
-	
-		return days + "d " + hours + "h " + minutes + "m " + seconds + "s";
+		return DecimateUtils.longToTime(time);
 	}
 	
 	@Override

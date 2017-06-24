@@ -17,7 +17,7 @@ import com.decimatepvp.core.Manager;
 public class TntFillManager implements Manager {
 
 	private HashMap<String, Integer> onCooldown = new HashMap<String, Integer>();
-	private int cooldown = 15;
+	private int cooldown = 2;
 	private int runnable;
 	
 	public TntFillManager(){

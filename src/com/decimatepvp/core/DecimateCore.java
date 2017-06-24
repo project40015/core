@@ -29,7 +29,6 @@ import com.decimatepvp.entities.EntityManager;
 import com.decimatepvp.events.CustomEventCaller;
 import com.decimatepvp.functions.animation.AnimationManager;
 import com.decimatepvp.functions.announcement.AnnouncementManager;
-import com.decimatepvp.functions.antihack.PhaseManager;
 import com.decimatepvp.functions.antitnt.AntiTntManager;
 import com.decimatepvp.functions.bookCommand.CommandBookManager;
 import com.decimatepvp.functions.crate.CrateKeyCommand;
@@ -37,6 +36,7 @@ import com.decimatepvp.functions.crate.CrateManager;
 import com.decimatepvp.functions.crate.rewards.RewardListener;
 import com.decimatepvp.functions.disabletnt.TntDisableManager;
 import com.decimatepvp.functions.extraexplodables.ExplodableManager;
+import com.decimatepvp.functions.misc.PlaytimeManager;
 import com.decimatepvp.functions.misc.crophopper.CropHopperCommand;
 import com.decimatepvp.functions.misc.crophopper.CropHopperManager;
 import com.decimatepvp.functions.misc.decimatestop.DecimateStop;
@@ -100,7 +100,7 @@ public class DecimateCore extends JavaPlugin implements PluginMessageListener {
 	/*
 	 * Managers
 	 */
-	private Manager[] managers = new Manager[22];
+	private Manager[] managers = new Manager[23];
 	
 	private FreezeManager freezeManager;
 	private TntFillManager tntFillManager;
@@ -124,6 +124,7 @@ public class DecimateCore extends JavaPlugin implements PluginMessageListener {
 	private SellWandManager sellWandManager;
 	private AccountIPManager accountIpManager;
 	private EntityManager entityManager;
+	private PlaytimeManager playtimeManager;
 	
 	/*
 	 * Other
@@ -176,6 +177,7 @@ public class DecimateCore extends JavaPlugin implements PluginMessageListener {
 		managers[n++] = accountIpManager = new AccountIPManager();
 		managers[n++] = explodableManager = new ExplodableManager();
 		managers[n++] = entityManager = new EntityManager();
+		managers[n++] = playtimeManager = new PlaytimeManager();
 				
 		setupEco();
 		
@@ -190,7 +192,7 @@ public class DecimateCore extends JavaPlugin implements PluginMessageListener {
 				crateManager, comboManager, pvpManager, new EnchantmentLimitManager(), commandBookManager,
 				new RewardListener(), trenchPick, sellWandManager, new ExplosionListener(), new DecimateStop(),
 				new TntDisableManager(), new KillRewardListener(), new PreCommandCancel(), new BedrockFix(),
-				new VehiclePlaceBugListener());
+				new VehiclePlaceBugListener(), playtimeManager);
 		
 		loadListeners(worldBorders);
 	}
@@ -260,6 +262,8 @@ public class DecimateCore extends JavaPlugin implements PluginMessageListener {
 		getCommand("trenchpickaxe").setExecutor(trenchPick);
 		getCommand("hub").setExecutor(new HubCommand());
 		getCommand("announcements").setExecutor(this.announcementManager);
+		
+		getCommand("playtime").setExecutor(playtimeManager);
 
 	}
 
