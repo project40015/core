@@ -101,16 +101,10 @@ public class PvPManager implements Manager, Listener, CommandExecutor {
 	
 	@EventHandler(priority = EventPriority.LOWEST)
 	public void onDamage(EntityDamageByEntityEvent event) {
-<<<<<<< HEAD
 		if(event.isCancelled() || event.getDamage() == 0){
 			return;
 		}
-		if((event.getDamager() instanceof Player) && (event.getEntity() instanceof Player)) {
-			Player damagee = (Player) event.getEntity();
-			if(FactionUtils.getFaction(damagee).equals(FactionUtils.getFaction((Player)event.getDamager()))){
-				return;
-			}
-=======
+
 		Entity damager = event.getDamager();
 		Entity entity = event.getEntity();
 		
@@ -120,7 +114,9 @@ public class PvPManager implements Manager, Listener, CommandExecutor {
 		
 		if((damager instanceof Player) && (entity instanceof Player)) {
 			Player damagee = (Player) entity;
->>>>>>> origin/master
+			if(FactionUtils.getFaction(damagee).equals(FactionUtils.getFaction((Player)event.getDamager()))){
+				return;
+			}
 			if(!isPlayerInCombat(damagee)) {
 				damagee.sendMessage(ChatColor.RED + "You have been put into combat!");
 			}
