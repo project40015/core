@@ -1,6 +1,8 @@
 package com.decimatepvp.core.listener;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Random;
 
 import org.bukkit.Bukkit;
@@ -25,6 +27,7 @@ import org.bukkit.util.Vector;
 import com.decimatepvp.core.DecimateCore;
 import com.decimatepvp.functions.extraexplodables.ExplodableManager;
 import com.google.common.collect.Maps;
+import com.songoda.epicspawners.EpicSpawners;
 
 import net.minecraft.server.v1_8_R3.MathHelper;
 
@@ -69,6 +72,7 @@ public class ExplosionListener implements Listener {
 	  {
 	    if ((!e.isCancelled()) && (e.getEntity() != null))
 	    {
+	    	List<Location> hit = new ArrayList<>();
 //	      if ((e.getEntityType() != EntityType.PRIMED_TNT)) {
 //	        return;
 //	      }
@@ -87,10 +91,13 @@ public class ExplosionListener implements Listener {
 	            if (source.distance(loc) <= dmgRadius)
 	            {
 	              Block block = loc.getBlock();
+	              if(hit.contains(block.getLocation())){
+	            	  return;
+	              }
 //	              if(block.getType() != Material.AIR){
 //	            	  Bukkit.broadcastMessage(block.getType().toString());
 //	              }
-	              if(!block.getLocation().getBlock().isLiquid() && instantBlow(block.getType())){
+	              if(instantBlow(block.getType())){
 	            	  if(block.getType() == Material.BEDROCK && block.getLocation().getY() < 5){
 	            		  continue;
 	            	  }
@@ -98,17 +105,25 @@ public class ExplosionListener implements Listener {
 	            	  continue;
 	              }
 	              if(!block.getLocation().getBlock().isLiquid() && instantBlowDrop(block.getType())){
-	            	  if(block.getType() == Material.MOB_SPAWNER){
+	            	  if(!e.blockList().contains(block) && block.getType() == Material.MOB_SPAWNER){
+	            		  hit.add(loc.getBlock().getLocation());
 	                      EntityType type = ((CreatureSpawner) block.getState()).getSpawnedType();
-	                      ItemStack localItemStack = new ItemStack(Material.MOB_SPAWNER, 1);
-	                      ItemMeta localItemMeta = Bukkit.getItemFactory().getItemMeta(Material.MOB_SPAWNER);
-	                      String str = type.name();
-	                      str = "&e{entity} &fSpawner".replace("{entity}", (str.substring(0, 1).toUpperCase() + str.toLowerCase().substring(1)).replace("_", " "));
-	                      localItemMeta.setDisplayName(ChatColor.translateAlternateColorCodes('&', str));
-	                      localItemStack.setItemMeta(localItemMeta);
-	                      block.getWorld().dropItem(block.getLocation(), localItemStack);
+//	                      ItemStack localItemStack = new ItemStack(Material.MOB_SPAWNER, 1);
+//	                      ItemMeta localItemMeta = Bukkit.getItemFactory().getItemMeta(Material.MOB_SPAWNER);
+//	                      String str = type.name();
+//	                      str = "&e{entity} &fSpawner".replace("{entity}", (str.substring(0, 1).toUpperCase() + str.toLowerCase().substring(1)).replace("_", " "));
+//	                      if(type == EntityType.BLAZE){
+//	                    	  str += "    ";
+////	                      }
+//	                      localItemMeta.setDisplayName(ChatColor.translateAlternateColorCodes('&', str));
+//	                      localItemStack.setItemMeta(localItemMeta);
+	                      block.getWorld().dropItem(block.getLocation(), EpicSpawners.pl().getApi().newSpawnerItem(type, 1));
+	                      block.breakNaturally();
+	                      continue;
 	            	  }
-	            	  block.breakNaturally();
+	            	  if(source.getBlock().isLiquid()){
+	            		  block.breakNaturally();
+	            	  }
 	            	  continue;
 	              }
 	              if (makeBlowable(block.getType()))
