@@ -100,23 +100,19 @@ public class TradeInventory  {
 
 	private void syncReady() {
 		if(ready1) {
-			Bukkit.broadcastMessage("1");
 			trade1.setItem(30, ItemUtils.createItem(Material.INK_SACK, 1, (byte) 10, "&aReady!"));
 			trade2.setItem(32, ItemUtils.createItem(Material.INK_SACK, 1, (byte) 10, "&aReady!"));
 		}
 		else {
-			Bukkit.broadcastMessage("2");
 			trade1.setItem(30, ItemUtils.createItem(Material.INK_SACK, 1, (byte) 8, "&7Not ready"));
 			trade2.setItem(32, ItemUtils.createItem(Material.INK_SACK, 1, (byte) 8, "&7Not ready"));
 		}
 		
 		if(ready2) {
-			Bukkit.broadcastMessage("3");
 			trade2.setItem(30, ItemUtils.createItem(Material.INK_SACK, 1, (byte) 10, "&aReady!"));
 			trade1.setItem(32, ItemUtils.createItem(Material.INK_SACK, 1, (byte) 10, "&aReady!"));
 		}
 		else {
-			Bukkit.broadcastMessage("4");
 			trade2.setItem(30, ItemUtils.createItem(Material.INK_SACK, 1, (byte) 8, "&7Not ready"));
 			trade1.setItem(32, ItemUtils.createItem(Material.INK_SACK, 1, (byte) 8, "&7Not ready"));
 		}

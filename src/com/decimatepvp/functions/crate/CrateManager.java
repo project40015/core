@@ -312,7 +312,7 @@ public class CrateManager implements Manager, Listener {
 	public void onInteract(PlayerInteractEvent event){
 		if(event.getAction().equals(Action.RIGHT_CLICK_BLOCK) || event.getAction().equals(Action.LEFT_CLICK_BLOCK)){
 			for(Crate crate : crates){
-				if(crate.getLocation().getBlock().getLocation().equals(event.getClickedBlock().getLocation())){
+				if(crate.getLocation() != null && crate.getLocation().getBlock().getLocation().equals(event.getClickedBlock().getLocation())){
 					if(crate.isComingSoon()){
 						event.getPlayer().sendMessage("");
 						event.getPlayer().sendMessage(crate.getName() + ChatColor.GRAY + " is coming soon to " + ChatColor.DARK_AQUA.toString() + ChatColor.UNDERLINE + "shop.decimatepvp.com" + ChatColor.GRAY + "!");

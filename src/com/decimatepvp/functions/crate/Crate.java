@@ -206,7 +206,9 @@ public abstract class Crate {
 	
 	public void setTimeString(String st){
 		this.time = st;
-		this.timeStand.setCustomName(time);
+		if(this.timeStand != null){
+			this.timeStand.setCustomName(time);
+		}
 	}
 	
 	public boolean isOver(){
