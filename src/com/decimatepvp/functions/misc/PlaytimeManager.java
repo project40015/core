@@ -38,17 +38,16 @@ public class PlaytimeManager implements CommandExecutor, Listener, Manager {
 		if(sender.hasPermission("Decimate.command.playtime")) {
 			OfflinePlayer player = null;
 			
-			if((sender.hasPermission("Decimate.command.playtime.others")) && !(sender instanceof Player)) {
-				if(args.length > 0) {
-					player = Bukkit.getOfflinePlayer(args[0]);
-				}
-				else {
-					sender.sendMessage("You must add a player!");
-					return false;
-				}
+			if(args.length > 0 && sender.hasPermission("Decimate.command.playtime.others")) {
+				player = Bukkit.getOfflinePlayer(args[0]);
 			}
 			else {
-				player = (Player) sender;
+				if(sender instanceof Player) {
+					player = (Player) sender;
+				}
+				else {
+					sender.sendMessage("Usage: /playtime [player]");
+				}
 			}
 			
 			if(playtime.containsKey(player.getUniqueId().toString())) {

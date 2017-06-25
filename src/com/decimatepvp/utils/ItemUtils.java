@@ -11,6 +11,10 @@ import com.google.common.collect.Lists;
 
 public class ItemUtils {
 	
+	public static ItemStack createItem(Material material, int amount, String displayName) {
+		return createItem(material, amount, (byte) 0, displayName);
+	}
+	
 	public static ItemStack createItem(Material material, int amount, byte data, String displayName, String... lore) {
 		ItemStack item = new ItemStack(material, amount, data);
 		setDisplayName(item, displayName);
