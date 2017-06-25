@@ -11,6 +11,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 
 import com.decimatepvp.core.DecimateCore;
+import com.decimatepvp.utils.ParticleEffect;
 import com.decimatepvp.utils.ParticleEffect.OrdinaryColor;
 
 public class ParticleUtils {

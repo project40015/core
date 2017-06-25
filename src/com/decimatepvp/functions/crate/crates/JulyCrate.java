@@ -14,30 +14,30 @@ import com.decimatepvp.functions.crate.CrateReward;
 import com.decimatepvp.utils.EnchantGlow;
 import com.decimatepvp.utils.ParticleEffect;
 
-public class SummerCrate extends TypicalCrate {
+public class JulyCrate extends TypicalCrate {
 
-	private ItemStack summerKey;
+	private ItemStack julyKey;
 	
 	@SuppressWarnings("deprecation")
-	public SummerCrate(List<CrateReward> rewards) {
-		super(ChatColor.GOLD + "Summer Crate", rewards);
+	public JulyCrate(List<CrateReward> rewards) {
+		super(ChatColor.RED + "July Crate", rewards);
 		setupKey();
 		
-		super.setGroundEffect(ParticleEffect.FLAME);
-		super.addTimeStand(new Date(2017-1900, 6-1, 30, 12, 0));
+		super.setGroundEffect(ParticleEffect.PORTAL);
+		super.addTimeStand(new Date(2017-1900, 7-1, 30, 12, 0));
 	}
 	
 	private void setupKey(){
-		summerKey = new ItemStack(Material.TRIPWIRE_HOOK);
-		ItemMeta meta = summerKey.getItemMeta();
-		meta.setDisplayName(ChatColor.GOLD + "Summer Crate Key");
-		summerKey.setItemMeta(meta);
-		EnchantGlow.addGlow(summerKey);
+		julyKey = new ItemStack(Material.TRIPWIRE_HOOK);
+		ItemMeta meta = julyKey.getItemMeta();
+		meta.setDisplayName(ChatColor.RED + "July" + ChatColor.WHITE + " Crate " + ChatColor.BLUE + "Key");
+		julyKey.setItemMeta(meta);
+		EnchantGlow.addGlow(julyKey);
 	}
 
 	@Override
 	public ItemStack getItemStack() {
-		return summerKey;
+		return julyKey;
 	}
 
 	@Override

@@ -18,7 +18,7 @@ public class GodCrate extends TypicalCrate {
 	private ItemStack godKey;
 	
 	public GodCrate(List<CrateReward> rewards) {
-		super(ChatColor.YELLOW + "God Crate", rewards, new Location(Bukkit.getWorlds().get(0), 19, 76, 22));
+		super(ChatColor.YELLOW + "God Crate", rewards);
 		setupKey();
 		
 		super.setGroundEffect(ParticleEffect.CRIT_MAGIC);

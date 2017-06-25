@@ -25,7 +25,7 @@ public class KillRewardListener implements Listener {
 			DecimateCore.getCore().eco.withdrawPlayer(event.getEntity(), cash);
 			
 			killer.sendMessage(ChatColor.GRAY + "You stole " + ChatColor.RED + "$" + cash + ChatColor.GRAY + " from " + ChatColor.RED + event.getEntity().getName() + ChatColor.GRAY + "!");
-			event.getEntity().sendMessage(ChatColor.GRAY + "You lost " + ChatColor.RED + "$" + cash + ChatColor.GRAY + " to " + ChatColor.RED + event.getEntity().getName() + ChatColor.GRAY + "!");
+			event.getEntity().sendMessage(ChatColor.GRAY + "You lost " + ChatColor.RED + "$" + cash + ChatColor.GRAY + " to " + ChatColor.RED + killer.getName() + ChatColor.GRAY + "!");
 		}
 	}
 	

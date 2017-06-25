@@ -84,3 +84,5 @@ commands:
     aliases: [ta]
   playtime:
     description: Shows the total playtime of a player.
+  trails:
+    description: Open the trail selection menu

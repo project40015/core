@@ -23,7 +23,7 @@ import com.decimatepvp.core.Manager;
 public class SpectateManager implements Listener, Manager {
 	
 	private final List<String> allowed =
-			Arrays.asList("warp", "spawn", "spectate", "tp", "ban", "tempban", "mute", "pardon", "r", "msg", "whois", "iplist", "f", "kick", "freeze");
+			Arrays.asList("warp", "spawn", "spectate", "tp", "ban", "tempban", "mute", "pardon", "r", "msg", "whois", "iplist", "f", "kick", "freeze", "staffchat", "togglechat");
 
 	private List<Spectator> spectators = new ArrayList<>();
 	

@@ -18,7 +18,7 @@ public class DecimateCrate extends TypicalCrate {
 	private ItemStack decimateKey;
 	
 	public DecimateCrate(List<CrateReward> rewards) {
-		super(ChatColor.LIGHT_PURPLE + "Decimate Crate", rewards, new Location(Bukkit.getWorlds().get(0), 21, 76, 20));
+		super(ChatColor.LIGHT_PURPLE + "Decimate Crate", rewards);
 		setupKey();
 		
 		super.setGroundEffect(ParticleEffect.SPELL_WITCH);

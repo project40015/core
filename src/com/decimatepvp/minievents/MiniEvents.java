@@ -1,6 +1,7 @@
 package com.decimatepvp.minievents;
 
 import org.bukkit.ChatColor;
+import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.entity.Chicken;
 import org.bukkit.entity.Creeper;
@@ -10,6 +11,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.event.entity.CreatureSpawnEvent.SpawnReason;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
@@ -137,6 +139,15 @@ public class MiniEvents implements Listener {
 	@EventHandler
 	public void onChange(WeatherChangeEvent event){
 		event.setCancelled(true);
+	}
+	
+	@EventHandler
+	public void onPlace(BlockPlaceEvent event){
+		if(event.getBlock().getY() == event.getPlayer().getLocation().getBlockY() - 1){
+			if(event.getPlayer().getGameMode() == GameMode.CREATIVE){
+				event.getPlayer().setVelocity(event.getPlayer().getVelocity().setY(-1));
+			}
+		}
 	}
 	
 	@EventHandler

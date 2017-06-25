@@ -28,32 +28,27 @@ public abstract class Crate {
 	private boolean seasonal = false;
 	private String time = "N/A";
 	
+	private Crate next;
+	
 	private Date over;
 	
-	public Crate(String name, List<CrateReward> rewards, Location location){
+	public Crate(String name, List<CrateReward> rewards){
 		this.name = name;
 		this.rewards = rewards;
 		for(CrateReward reward : rewards){
 			this.totalChance += reward.getChance();
 		}
 		setupRewards();
-		spawn(location);
 	}
 	
-	public Crate(String name, boolean comingSoon, Location location){
+	public Crate(String name, boolean comingSoon){
 		this.name = name;
 		this.comingSoon = comingSoon;
-		spawn(location);
 	}
 	
 	protected void addTimeStand(Date over){
 		this.seasonal = true;
 		this.over = over;
-		this.timeStand = nameStand.getWorld().spawn(nameStand.getLocation().clone().add(0,-.3,0), ArmorStand.class);
-		timeStand.setVisible(false);
-		timeStand.setCustomNameVisible(true);
-		timeStand.setCustomName(time);
-		timeStand.setGravity(false);
 	}
 	
 	protected void setGroundEffect(ParticleEffect effect){
@@ -68,13 +63,33 @@ public abstract class Crate {
 		return this.groundEffect;
 	}
 	
-	private void spawn(Location location){
+	public void setNext(Crate crate){
+		this.next = crate;
+	}
+	
+	public boolean hasNext(){
+		return next != null;
+	}
+	
+	public Crate getNext(){
+		return next;
+	}
+	
+	public void spawn(Location location){
 		this.location = location;
 		nameStand = location.getWorld().spawn(location.clone().add(.5,-.9,.5), ArmorStand.class);
 		nameStand.setVisible(false);
 		nameStand.setCustomNameVisible(true);
 		nameStand.setCustomName(name);
 		nameStand.setGravity(false);
+		
+		if(this.seasonal){
+			this.timeStand = nameStand.getWorld().spawn(nameStand.getLocation().clone().add(0,-.3,0), ArmorStand.class);
+			timeStand.setVisible(false);
+			timeStand.setCustomNameVisible(true);
+			timeStand.setCustomName(time);
+			timeStand.setGravity(false);
+		}
 	}
 	
 	private void orderRewards(){

@@ -104,7 +104,7 @@ public class ExplosionListener implements Listener {
 	            	  block.setType(Material.AIR);
 	            	  continue;
 	              }
-	              if(!block.getLocation().getBlock().isLiquid() && instantBlowDrop(block.getType())){
+	              if(instantBlowDrop(block.getType())){
 	            	  if(!e.blockList().contains(block) && block.getType() == Material.MOB_SPAWNER){
 	            		  hit.add(loc.getBlock().getLocation());
 	                      EntityType type = ((CreatureSpawner) block.getState()).getSpawnedType();
@@ -121,9 +121,9 @@ public class ExplosionListener implements Listener {
 	                      block.breakNaturally();
 	                      continue;
 	            	  }
-	            	  if(source.getBlock().isLiquid()){
+//	            	  if(source.getBlock().isLiquid()){
 	            		  block.breakNaturally();
-	            	  }
+//	            	  }
 	            	  continue;
 	              }
 	              if (makeBlowable(block.getType()))
@@ -198,7 +198,9 @@ public class ExplosionListener implements Listener {
 	                    @SuppressWarnings("deprecation")
 						int id = block.getType().getId();
 //	                    if(
-	                    plugin.getExplodableManager().getExplodable(block.getWorld().getName(), block.getX(), block.getY(), block.getZ(), id).hit();
+	                    if(!e.getEntity().getType().equals(EntityType.CREEPER)){
+	                    	plugin.getExplodableManager().getExplodable(block.getWorld().getName(), block.getX(), block.getY(), block.getZ(), id).hit();
+	                    }
 //	                    		){
 //	                    	block.setType(Material.AIR);
 //	                    }

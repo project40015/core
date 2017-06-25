@@ -18,7 +18,7 @@ public class VoteCrate extends TypicalCrate {
 	private ItemStack voteKey;
 	
 	public VoteCrate(List<CrateReward> rewards) {
-		super(ChatColor.GRAY + "Vote Crate", rewards, new Location(Bukkit.getWorlds().get(0), 16, 76, 22));
+		super(ChatColor.GRAY + "Vote Crate", rewards);
 		setupKey();
 		
 		super.setGroundEffect(ParticleEffect.CRIT);

@@ -29,12 +29,12 @@ public abstract class TypicalCrate extends Crate {
 	private HashMap<String, CrateReward> openers = new HashMap<String, CrateReward>();
 	private List<String> closed = new ArrayList<String>();
 	
-	public TypicalCrate(String name, List<CrateReward> rewards, Location location) {
-		super(name, rewards, location);
+	public TypicalCrate(String name, List<CrateReward> rewards) {
+		super(name, rewards);
 	}
 	
-	public TypicalCrate(String name, boolean comingSoon, Location location){
-		super(name, comingSoon, location);
+	public TypicalCrate(String name, boolean comingSoon){
+		super(name, comingSoon);
 	}
 	
 	public HashMap<String, CrateReward> getOpeners(){

@@ -9,6 +9,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.Sound;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -27,6 +28,7 @@ import com.decimatepvp.core.DecimateCore;
 import com.decimatepvp.core.Manager;
 import com.decimatepvp.functions.crate.crates.DecimateCrate;
 import com.decimatepvp.functions.crate.crates.GodCrate;
+import com.decimatepvp.functions.crate.crates.JulyCrate;
 import com.decimatepvp.functions.crate.crates.SummerCrate;
 import com.decimatepvp.functions.crate.crates.TypicalCrate;
 import com.decimatepvp.functions.crate.crates.VoteCrate;
@@ -53,11 +55,19 @@ public class CrateManager implements Manager, Listener {
 		VoteCrate voteCrate = setupVoteCrate();
 		DecimateCrate decimateCrate = setupDecimateCrate();
 		SummerCrate summerCrate = setupSummerCrate();
+		JulyCrate julyCrate = setupJulyCrate();
 		
 		this.crates.add(godCrate);
+		godCrate.spawn(new Location(Bukkit.getWorlds().get(0), 19, 76, 22));
 		this.crates.add(voteCrate);
+		voteCrate.spawn(new Location(Bukkit.getWorlds().get(0), 16, 76, 22));
 		this.crates.add(decimateCrate);
+		decimateCrate.spawn(new Location(Bukkit.getWorlds().get(0), 21, 76, 20));
 		this.crates.add(summerCrate);
+		summerCrate.spawn(new Location(Bukkit.getWorlds().get(0), 21, 76, 17));
+		this.crates.add(julyCrate);
+		
+		summerCrate.setNext(julyCrate);
 	}
 	
 	@EventHandler
@@ -135,6 +145,17 @@ public class CrateManager implements Manager, Listener {
 				));
 	}
 	
+	private JulyCrate setupJulyCrate(){
+		return new JulyCrate(Arrays.asList(
+				new CommandReward("Blaze Spawner (3)", new ItemStack(Material.MOB_SPAWNER), Rarity.RARE, 25, "es give %player% BLAZE 0 3", false),
+				new CommandReward("Iron Golem Spawner (3)",new ItemStack(Material.MOB_SPAWNER), Rarity.EPIC, 15, "es give %player% IRON_GOLEM 0 3", false),
+				new CommandReward("Creeper Spawner (2)", new ItemStack(Material.MOB_SPAWNER), Rarity.RARE, 22, "es give %player% CREEPER 0 2", false),
+				new CommandReward("Freedom Trail", new ItemStack(Material.FIREWORK), Rarity.EPIC, 8, "manuaddp %player% decimatepvp.trail.fourthofjuly", true, ChatColor.GRAY +
+						"Receive the " + ChatColor.RED + "Freedom Trail"  + ChatColor.GRAY + "!",
+						ChatColor.GRAY + "You have unlocked the " + ChatColor.RED + "Freedom Trail"  + ChatColor.GRAY + "!", "decimatepvp.trail.fourthofjuly"),
+				new CommandReward("Protection V Kit (1)", new ItemStack(Material.BOOK), Rarity.COMMON, 30, "kit p5 %player%", true)
+				));
+	}	
 	private VoteCrate setupVoteCrate(){
 		return new VoteCrate(Arrays.asList(
 				new CommandReward("Creeper Spawner (1)", new ItemStack(Material.MOB_SPAWNER), Rarity.MYTHICAL, 1, "es give %player% CREEPER 0 1", false),
@@ -223,10 +244,23 @@ public class CrateManager implements Manager, Listener {
 	
 	private void startSeasonalTimer(){
 		List<Crate> seasonal = new ArrayList<Crate>();
+		List<Crate> remove = new ArrayList<Crate>();
 		for(Crate crate : this.crates){
 			if(crate.isSeasonal()){
-				seasonal.add(crate);
+				if(crate.isOver()){
+					crate.clearStands();
+					crate.disable();
+					remove.add(crate);
+					if(crate.hasNext()){
+						crate.getNext().spawn(crate.getLocation());
+					}
+				}else{
+					seasonal.add(crate);
+				}
 			}
+		}
+		for(Crate crate : remove){
+			crates.remove(crate);
 		}
 		if(seasonal.size() == 0){
 			return;
@@ -239,8 +273,21 @@ public class CrateManager implements Manager, Listener {
 					if(seasonal.get(i).isOver()){
 						seasonal.get(i).clearStands();
 						seasonal.get(i).disable();
-						crates.remove(seasonal);
-						seasonal.remove(i--);
+						crates.remove(seasonal.get(i));
+						if(seasonal.get(i).hasNext()){
+							seasonal.get(i).getNext().spawn(seasonal.get(i).getLocation());
+							Bukkit.broadcastMessage("");
+							Bukkit.broadcastMessage("");
+							Bukkit.broadcastMessage("     " + ChatColor.YELLOW.toString() + ChatColor.MAGIC + ":" + ChatColor.RESET + "   " + 
+								ChatColor.GOLD.toString() + ChatColor.BOLD + seasonal.get(i).getNext().getName() + " has spawned!   " + ChatColor.YELLOW.toString() + ChatColor.MAGIC + ":");
+							Bukkit.broadcastMessage("");
+							Bukkit.broadcastMessage("");
+							for(Player player : Bukkit.getServer().getOnlinePlayers()){
+								player.playSound(player.getLocation(), Sound.ENDERDRAGON_DEATH, 1, 1);
+							}
+						}
+						seasonal.remove(i);
+						i--;
 					}else{
 						seasonal.get(i).setTimeString(ChatColor.GRAY + formatTimeString(seasonal.get(i).getOver()));
 					}

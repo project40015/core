@@ -4,11 +4,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.EntityEffect;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
+import org.bukkit.World;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -25,6 +27,7 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.event.entity.EntityDeathEvent;
+import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerToggleFlightEvent;
@@ -38,6 +41,10 @@ import com.decimatepvp.utils.FactionUtils;
 import com.decimatepvp.utils.PlayerUtils;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+
+import net.citizensnpcs.api.CitizensAPI;
+import net.citizensnpcs.api.event.NPCDamageByEntityEvent;
+import net.citizensnpcs.api.event.NPCDeathEvent;
 
 public class PvPManager implements Manager, Listener, CommandExecutor {
 
@@ -142,6 +149,17 @@ public class PvPManager implements Manager, Listener, CommandExecutor {
 
 		return false;
 	}
+	
+	@EventHandler
+	public void onNPCDeath(EntityDeathEvent event){
+		if(event.getEntity().hasMetadata("NPC") && !entities.containsKey(event.getEntity().getEntityId())){
+			CitizensAPI.getNPCRegistry().getNPC(event.getEntity()).despawn();
+			CitizensAPI.getNPCRegistry().getNPC(event.getEntity()).destroy();
+		}
+		if(event.getEntity().hasMetadata("NPC")){
+			event.getDrops().clear();
+		}
+	}
 
 	public boolean removeHumanEntity(OfflinePlayer player) {
 		if(players.containsKey(player.getUniqueId().toString())) {
@@ -179,21 +197,22 @@ public class PvPManager implements Manager, Listener, CommandExecutor {
 	}
 
 	@EventHandler
-	public void onEntityDamage(EntityDamageEvent event) {
-		if(this.entities.containsKey(event.getEntity().getEntityId())) {
-			event.setCancelled(true);
-			if(!event.getCause().equals(DamageCause.ENTITY_ATTACK)) {
-				return;
-			}
-			LivingEntity livingEntity = (LivingEntity) event.getEntity();
-			livingEntity.damage(event.getDamage());
-			livingEntity.playEffect(EntityEffect.HURT);
+	public void onEntityDamage(NPCDamageByEntityEvent event) {
+		if(!this.entities.containsKey(event.getNPC().getEntity().getEntityId())) {
+			event.getNPC().despawn();
+			event.getNPC().destroy();
+		}
+	}
+	
+	@EventHandler
+	public void onPlayerDeath(PlayerDeathEvent event){
+		if(event.getEntity().hasMetadata("NPC")){
+			event.setDeathMessage("");
 		}
 	}
 
 	@EventHandler
 	public void onEntityDeath(EntityDeathEvent event) {
-
 		if(entities.containsKey(event.getEntity().getEntityId())) {
 			CombatPlayer cp = entities.get(event.getEntity().getEntityId());
 			killList.add(cp.getUUID());
@@ -249,6 +268,19 @@ public class PvPManager implements Manager, Listener, CommandExecutor {
 
 	@Override
 	public void disable() {
+		for(CombatPlayer cp : players.values()) {
+			cp.remove();
+		}
+		
+		for(World world : Bukkit.getServer().getWorlds()){
+			for(Entity entity : world.getEntities()){
+				if(entity.hasMetadata("NPC")){
+					CitizensAPI.getNPCRegistry().getNPC(entity).despawn();
+					CitizensAPI.getNPCRegistry().getNPC(entity).destroy();
+				}
+			}
+		}
+		
 		Configuration cfg = new Configuration(DecimateCore.getCore(), "KillList.yml");
 		cfg.reset();
 		FileConfiguration config = cfg.getData();
@@ -256,9 +288,6 @@ public class PvPManager implements Manager, Listener, CommandExecutor {
 		config.set("KillList", killList);
 		cfg.saveData();
 
-		for(CombatPlayer cp : players.values()) {
-			cp.remove();
-		}
 
 	}
 
