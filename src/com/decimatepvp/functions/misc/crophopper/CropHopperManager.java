@@ -91,9 +91,9 @@ public class CropHopperManager implements Listener, Manager {
 		return null;
 	}
 	
-	public boolean isCropHopper(Chunk chunk){
+	public boolean isCropHopper(Chunk chunk, boolean crop){
 		for(CropHopper hopper : hoppers){
-			if(hopper.getLocation().getChunk().equals(chunk)){
+			if(hopper.isCrop() == crop && hopper.getLocation().getChunk().equals(chunk)){
 				return true;
 			}
 		}
@@ -223,7 +223,7 @@ public class CropHopperManager implements Listener, Manager {
 				this.removeHopper(ch);
 			}
 		}
-		return this.isCropHopper(location.getChunk());
+		return this.isCropHopper(location.getChunk(), crop);
 	}
 	
 //	@EventHandler
