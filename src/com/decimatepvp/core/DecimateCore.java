@@ -3,7 +3,6 @@ package com.decimatepvp.core;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.WorldBorder;
-import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.RegisteredServiceProvider;
@@ -77,8 +76,8 @@ import com.decimatepvp.functions.staff.togglechat.ToggleChatCommand;
 import com.decimatepvp.functions.staff.togglechat.ToggleChatManager;
 import com.decimatepvp.functions.tntfill.TntFillCommand;
 import com.decimatepvp.functions.tntfill.TntFillManager;
-import com.decimatepvp.functions.trails.TrailManager;
 import com.decimatepvp.functions.trade.TradeManager;
+import com.decimatepvp.functions.trails.TrailManager;
 import com.decimatepvp.minievents.MiniEvents;
 import com.google.common.io.ByteArrayDataInput;
 import com.google.common.io.ByteStreams;
@@ -272,7 +271,6 @@ public class DecimateCore extends JavaPlugin implements PluginMessageListener {
 		getCommand("playtime").setExecutor(playtimeManager);
 		getCommand("trails").setExecutor(this.trailManager);
 		getCommand("trade").setExecutor(tradeManager);
-
 	}
 
 	public static DecimateCore getCore() {

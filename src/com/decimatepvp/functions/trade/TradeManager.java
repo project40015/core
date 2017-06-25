@@ -10,6 +10,7 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 
@@ -32,13 +33,14 @@ public class TradeManager implements Manager, Listener, CommandExecutor {
 		createSlots();
 	}
 	
-	@EventHandler
+	@EventHandler(priority = EventPriority.LOW)
 	public void onTradeClick(InventoryClickEvent event) {
 		Player player = (Player) event.getWhoClicked();
 		if(trades1.containsKey(player) ||
 				trades2.containsKey(player)) {
 			int slot = event.getRawSlot();
 			
+//			Bukkit.broadcastMessage(""+(!itemSlots.containsKey(slot) && slot < 54));
 			if(!itemSlots.containsKey(slot) && slot < 54) {
 				event.setCancelled(true);
 			}
@@ -164,13 +166,20 @@ public class TradeManager implements Manager, Listener, CommandExecutor {
 	}
 	
 	private void createSlots() {
-		int flip = 9;
-		for(int i = 0; i < 4; i++) {
-			itemSlots.put(i, flip);
-			itemSlots.put(i+9, 9+flip);
-			itemSlots.put(i+18, 18+flip);
-			flip--;
-		}
+		itemSlots.put(0, 8);
+		itemSlots.put(1, 7);
+		itemSlots.put(2, 6);
+		itemSlots.put(3, 5);
+
+		itemSlots.put(9, 17);
+		itemSlots.put(10, 16);
+		itemSlots.put(11, 15);
+		itemSlots.put(12, 14);
+
+		itemSlots.put(18, 26);
+		itemSlots.put(19, 25);
+		itemSlots.put(20, 24);
+		itemSlots.put(21, 23);
 	}
 
 }

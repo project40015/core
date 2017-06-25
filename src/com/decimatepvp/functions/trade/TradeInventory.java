@@ -52,6 +52,7 @@ public class TradeInventory  {
 		trade2 = Bukkit.createInventory(null, 54, ChatColor.YELLOW + "Trade with " + player1.getName());
 		
 		trade2.setContents(trade1.getContents().clone());
+		trade2.setItem(9, bar.clone());
 		
 		for(int slot = 4; slot < 54; slot += 9) {
 			trade1.setItem(slot, bar);
@@ -88,42 +89,42 @@ public class TradeInventory  {
 			ItemStack item1 = trade1.getItem(slot);
 			ItemStack item2 = trade2.getItem(slot);
 
-			if(item1 != null) {
+			if(item2 != null) {
 				trade1.setItem(manager.itemSlots.get(slot), item2);
 			}
 			
-			if(item2 != null) {
+			if(item1 != null) {
 				trade2.setItem(manager.itemSlots.get(slot), item1);
 			}
 		}
 	}
 
 	private void syncReady() {
-		if(ready1) {
-			trade1.setItem(30, ItemUtils.createItem(Material.INK_SACK, 1, (byte) 10, "&aReady!"));
-			trade2.setItem(32, ItemUtils.createItem(Material.INK_SACK, 1, (byte) 10, "&aReady!"));
+		if(ready2) {
+			trade1.setItem(32, ItemUtils.createItem(Material.INK_SACK, 1, (byte) 10, "&aReady!"));
+			trade2.setItem(30, ItemUtils.createItem(Material.INK_SACK, 1, (byte) 10, "&aReady!"));
 		}
 		else {
-			trade1.setItem(30, ItemUtils.createItem(Material.INK_SACK, 1, (byte) 8, "&7Not ready"));
-			trade2.setItem(32, ItemUtils.createItem(Material.INK_SACK, 1, (byte) 8, "&7Not ready"));
+			trade1.setItem(32, ItemUtils.createItem(Material.INK_SACK, 1, (byte) 8, "&7Not ready"));
+			trade2.setItem(30, ItemUtils.createItem(Material.INK_SACK, 1, (byte) 8, "&7Not ready"));
 		}
 		
-		if(ready2) {
-			trade2.setItem(30, ItemUtils.createItem(Material.INK_SACK, 1, (byte) 10, "&aReady!"));
-			trade1.setItem(32, ItemUtils.createItem(Material.INK_SACK, 1, (byte) 10, "&aReady!"));
+		if(ready1) {
+			trade2.setItem(32, ItemUtils.createItem(Material.INK_SACK, 1, (byte) 10, "&aReady!"));
+			trade1.setItem(30, ItemUtils.createItem(Material.INK_SACK, 1, (byte) 10, "&aReady!"));
 		}
 		else {
-			trade2.setItem(30, ItemUtils.createItem(Material.INK_SACK, 1, (byte) 8, "&7Not ready"));
-			trade1.setItem(32, ItemUtils.createItem(Material.INK_SACK, 1, (byte) 8, "&7Not ready"));
+			trade2.setItem(32, ItemUtils.createItem(Material.INK_SACK, 1, (byte) 8, "&7Not ready"));
+			trade1.setItem(30, ItemUtils.createItem(Material.INK_SACK, 1, (byte) 8, "&7Not ready"));
 		}
 	}
 	
 	public void addMoney(int i, int money) {
 		if(i == 1) {
-			money1 += 100;
+			money1 += money;
 		}
 		else {
-			money2 += 100;
+			money2 += money;
 		}
 	}
 	
