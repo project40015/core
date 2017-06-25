@@ -336,7 +336,7 @@ public class CrateManager implements Manager, Listener {
 		if(event.getRightClicked() instanceof ArmorStand){
 			ArmorStand stand = (ArmorStand) event.getRightClicked();
 			for(Crate crate : this.crates){
-				if(crate.getNameStand().equals(stand)){
+				if(crate.getNameStand() != null && crate.getNameStand().equals(stand)){
 					event.setCancelled(true);
 				}
 			}
