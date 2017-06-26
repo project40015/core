@@ -6,7 +6,6 @@ import org.bukkit.Material;
 import org.bukkit.entity.Chicken;
 import org.bukkit.entity.Creeper;
 import org.bukkit.entity.EntityType;
-import org.bukkit.entity.Monster;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -16,7 +15,7 @@ import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.event.entity.CreatureSpawnEvent.SpawnReason;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
-import org.bukkit.event.entity.EntityTargetLivingEntityEvent;
+import org.bukkit.event.entity.SpawnerSpawnEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.InventoryOpenEvent;
@@ -32,6 +31,15 @@ import org.bukkit.inventory.ItemStack;
 import com.decimatepvp.utils.PlayerUtils;
 
 public class MiniEvents implements Listener {
+	
+	@EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
+	public void onZombieSpawn(SpawnerSpawnEvent event) {
+		if(event.getEntityType() == EntityType.ZOMBIE) {
+			if(event.getEntity().getVehicle() != null) {
+				event.getEntity().getVehicle().remove();
+			}
+		}
+	}
 	
 //	@SuppressWarnings("deprecation")
 //	@EventHandler(priority = EventPriority.HIGHEST)
