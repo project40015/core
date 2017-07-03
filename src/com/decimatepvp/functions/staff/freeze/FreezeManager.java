@@ -3,6 +3,8 @@ package com.decimatepvp.functions.staff.freeze;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
@@ -29,6 +31,11 @@ public class FreezeManager implements Manager, Listener {
 		if(!this.frozen.contains(player.getUniqueId().toString())){
 			this.frozen.add(player.getUniqueId().toString());
 		}
+		player.sendMessage("");
+		player.sendMessage("");
+		player.sendMessage(ChatColor.GRAY + "YOU HAVE BEEN FROZEN. IF YOU " + ChatColor.RED.toString() + ChatColor.BOLD + "LOGOUT" + ChatColor.GRAY + " YOU WILL BE PUNISHED.");
+		player.sendMessage("");
+		player.sendMessage("");
 	}
 	
 	public void thaw(Player player){
@@ -70,6 +77,11 @@ public class FreezeManager implements Manager, Listener {
 	@EventHandler
 	public void onPlayerQuit(PlayerQuitEvent event) {
 		if(core.getFreezeManager().isFrozen(event.getPlayer())) {
+			for(Player player : Bukkit.getServer().getOnlinePlayers()){
+				if(player.hasPermission("Decimate.command.freeze")){
+					player.sendMessage(ChatColor.AQUA.toString() + ChatColor.BOLD + "FREEZE " + ChatColor.RED + event.getPlayer().getName() + " has disconnected while frozen.");
+				}
+			}
 			core.getFreezeManager().thaw(event.getPlayer());
 		}
 	}

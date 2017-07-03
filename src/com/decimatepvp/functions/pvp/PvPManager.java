@@ -111,6 +111,10 @@ public class PvPManager implements Manager, Listener, CommandExecutor {
 		if(event.isCancelled() || event.getDamage() == 0){
 			return;
 		}
+		
+		if(PlayerUtils.isInSpawn(event.getDamager().getLocation()) || PlayerUtils.isInSpawn(event.getEntity().getLocation())){
+			return;
+		}
 
 		Entity damager = event.getDamager();
 		Entity entity = event.getEntity();
@@ -121,7 +125,7 @@ public class PvPManager implements Manager, Listener, CommandExecutor {
 		
 		if((damager instanceof Player) && (entity instanceof Player)) {
 			Player damagee = (Player) entity;
-			if(FactionUtils.getFaction(damagee).equals(FactionUtils.getFaction((Player)event.getDamager()))){
+			if(FactionUtils.getFaction(damagee).equals(FactionUtils.getFaction((Player)damager))){
 				return;
 			}
 			if(!isPlayerInCombat(damagee)) {

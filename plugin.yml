@@ -86,5 +86,6 @@ commands:
     description: Shows the total playtime of a player.
   trails:
     description: Open the trail selection menu
+    aliases: [trail]
   trade:
     description: Allows the trade of both item and money between two players.

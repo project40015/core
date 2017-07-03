@@ -22,9 +22,10 @@ public class JulyCrate extends TypicalCrate {
 	public JulyCrate(List<CrateReward> rewards) {
 		super(ChatColor.RED + "July Crate", rewards);
 		setupKey();
+		super.setFourth();
 		
 		super.setGroundEffect(ParticleEffect.PORTAL);
-		super.addTimeStand(new Date(2017-1900, 7-1, 30, 12, 0));
+		super.addTimeStand(new Date(2017-1900, 7-1, 30, 20, 0));
 	}
 	
 	private void setupKey(){

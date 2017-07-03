@@ -24,7 +24,7 @@ public class SummerCrate extends TypicalCrate {
 		setupKey();
 		
 		super.setGroundEffect(ParticleEffect.FLAME);
-		super.addTimeStand(new Date(2017-1900, 6-1, 30, 12, 0));
+		super.addTimeStand(new Date(2017-1900, 7-1, 1, 12, 0));
 	}
 	
 	private void setupKey(){

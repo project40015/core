@@ -44,7 +44,10 @@ public class PlayerUtils {
 //	}
 	
 	public static boolean isInSpawn(Player player){
-		Location loc = player.getLocation();
+		return isInSpawn(player.getLocation());
+	}
+	
+	public static boolean isInSpawn(Location loc){
 		if(loc.getWorld().getName().equals("world")){
 			if(loc.getX() > -75 && loc.getX() < 77){
 				if(loc.getY() > 64){

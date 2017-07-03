@@ -17,15 +17,19 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.FireworkMeta;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.scheduler.BukkitRunnable;
 
 import com.decimatepvp.core.DecimateCore;
 import com.decimatepvp.functions.crate.Crate;
 import com.decimatepvp.functions.crate.CrateReward;
 import com.decimatepvp.functions.crate.Rarity;
 import com.decimatepvp.utils.ParticleEffect;
+import com.decimatepvp.utils.ParticleUtils;
+import com.decimatepvp.utils.ParticleEffect.OrdinaryColor;
 
 public abstract class TypicalCrate extends Crate {
 
+	private boolean fourth = false;
 	private HashMap<String, CrateReward> openers = new HashMap<String, CrateReward>();
 	private List<String> closed = new ArrayList<String>();
 	
@@ -41,6 +45,9 @@ public abstract class TypicalCrate extends Crate {
 		return this.openers;
 	}
 	
+	protected void setFourth(){
+		fourth = true;
+	}
 
 	@Override
 	protected void giveReward(Player player, CrateReward reward, Location location) {	
@@ -52,6 +59,17 @@ public abstract class TypicalCrate extends Crate {
 			Bukkit.broadcastMessage(ChatColor.GRAY + player.getName() + " found: " + reward.getRarity().getDisplay() + ChatColor.GRAY + " reward!");
 		}
 		reward.reward(player);
+	}
+	
+	private Color randomColor(){
+		double random = Math.random() * 3;
+		if(random < 1){
+			return Color.RED;
+		}else if(random < 2){
+			return Color.BLUE;
+		}else{
+			return Color.WHITE;
+		}
 	}
 
 	private void postEffect(Player player, Rarity rarity, Location location){
@@ -66,18 +84,36 @@ public abstract class TypicalCrate extends Crate {
 
 					@Override
 					public void run() {
-						location.getWorld().playSound(location, Sound.WATER, 1, 1);
+						if(!fourth){
+							location.getWorld().playSound(location, Sound.WATER, 1, 1);
+						}else{
+							location.getWorld().playSound(location, Sound.CHICKEN_IDLE, 1, 1);
+						}
 						double multiplier = q/100.0;
-						ParticleEffect.DRIP_WATER.display(0, 0, 0, 0, 1, location.clone().add(multiplier*Math.cos((2*Math.PI)*(q/50.0)), 0.5 + q/40.0, multiplier*Math.sin((2*Math.PI)*(q/50.0))), 20);
-						ParticleEffect.DRIP_WATER.display(0, 0, 0, 0, 1, location.clone().add(-1*multiplier*Math.cos((2*Math.PI)*(q/50.0)), 0.5 + q/40.0, -1*multiplier*Math.sin((2*Math.PI)*(q/50.0))), 20);
+						if(!fourth){
+							ParticleEffect.DRIP_WATER.display(0, 0, 0, 0, 1, location.clone().add(multiplier*Math.cos((2*Math.PI)*(q/50.0)), 0.5 + q/40.0, multiplier*Math.sin((2*Math.PI)*(q/50.0))), 20);
+							ParticleEffect.DRIP_WATER.display(0, 0, 0, 0, 1, location.clone().add(-1*multiplier*Math.cos((2*Math.PI)*(q/50.0)), 0.5 + q/40.0, -1*multiplier*Math.sin((2*Math.PI)*(q/50.0))), 20);
+						}else{
+							ParticleUtils.summonRedstoneParticle(new OrdinaryColor(randomColor()), location.clone().add(multiplier*Math.cos((2*Math.PI)*(q/50.0)), 0.5 + q/40.0, multiplier*Math.sin((2*Math.PI)*(q/50.0))), 20);
+							ParticleUtils.summonRedstoneParticle(new OrdinaryColor(randomColor()), location.clone().add(-1*multiplier*Math.cos((2*Math.PI)*(q/50.0)), 0.5 + q/40.0, -1*multiplier*Math.sin((2*Math.PI)*(q/50.0))), 30);
+						}
 						if(q == 49){
 							FireworkEffect effect = FireworkEffect.builder().trail(false).flicker(false).withColor(Color.BLUE).with(FireworkEffect.Type.BALL).build();
-							Firework fw = location.getWorld().spawn(location, Firework.class);
+							if(fourth){
+								effect = FireworkEffect.builder().trail(false).flicker(false).withColor(Color.BLUE).withColor(Color.RED).withColor(Color.WHITE).with(FireworkEffect.Type.BALL).build();; 
+							}
+							Firework fw = location.getWorld().spawn(location.clone().add(0,1.5,0), Firework.class);
 							FireworkMeta meta = fw.getFireworkMeta();
 							meta.clearEffects();
 							meta.addEffect(effect);
 							meta.setPower(0);
 							fw.setFireworkMeta(meta);
+							new BukkitRunnable() {
+							    @Override
+							    public void run() {
+							      fw.detonate();
+							    }
+							}.runTaskLater(DecimateCore.getCore(), 2L);
 						}
 					}
 					

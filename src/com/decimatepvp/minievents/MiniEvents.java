@@ -93,14 +93,14 @@ public class MiniEvents implements Listener {
 		event.setLeaveMessage("");
 	}
 	
-//	@EventHandler
-//	public void onTarget(EntityTargetLivingEntityEvent event){
-//		if(event.getTarget() instanceof Player){
-//			if(event.getEntity() instanceof Monster && !event.getEntity().equals(EntityType.WITHER)){
-//				event.setCancelled(true);
-//			}
-//		}
-//	}
+	@EventHandler
+	public void onTarget(EntityTargetLivingEntityEvent event){
+		if(event.getTarget() instanceof Player){
+			if(event.getEntity() instanceof Monster && !event.getEntity().equals(EntityType.WITHER)){
+				event.setCancelled(true);
+			}
+		}
+	}
 	
 	@SuppressWarnings("deprecation")
 	@EventHandler
@@ -121,6 +121,9 @@ public class MiniEvents implements Listener {
 	@EventHandler
 	public void onClick(InventoryClickEvent event){
 		if(event.getInventory().getType().equals(InventoryType.ENCHANTING)){
+			if(event.getCurrentItem() == null || event.getCurrentItem().getType() == null){
+				return;
+			}
 			if(event.getCurrentItem().getType().equals(Material.getMaterial(351))){
 				event.setCancelled(true);
 			}

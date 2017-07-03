@@ -147,12 +147,15 @@ public class CrateManager implements Manager, Listener {
 	
 	private JulyCrate setupJulyCrate(){
 		return new JulyCrate(Arrays.asList(
-				new CommandReward("Blaze Spawner (3)", new ItemStack(Material.MOB_SPAWNER), Rarity.RARE, 25, "es give %player% BLAZE 0 3", false),
-				new CommandReward("Iron Golem Spawner (3)",new ItemStack(Material.MOB_SPAWNER), Rarity.EPIC, 15, "es give %player% IRON_GOLEM 0 3", false),
+				new CommandReward("Blaze Spawner (3)", new ItemStack(Material.MOB_SPAWNER), Rarity.RARE, 17, "es give %player% BLAZE 0 3", false),
+				new CommandReward("Iron Golem Spawner (3)",new ItemStack(Material.MOB_SPAWNER), Rarity.RARE, 17, "es give %player% IRON_GOLEM 0 3", false),
 				new CommandReward("Creeper Spawner (2)", new ItemStack(Material.MOB_SPAWNER), Rarity.RARE, 22, "es give %player% CREEPER 0 2", false),
-				new CommandReward("Freedom Trail", new ItemStack(Material.FIREWORK), Rarity.EPIC, 8, "manuaddp %player% decimatepvp.trail.fourthofjuly", true, ChatColor.GRAY +
+				new CommandReward("Freedom Trail", new ItemStack(Material.FIREWORK), Rarity.EPIC, 9, "manuaddp %player% decimatepvp.trail.fourthofjuly", true, ChatColor.GRAY +
 						"Receive the " + ChatColor.RED + "Freedom Trail"  + ChatColor.GRAY + "!",
 						ChatColor.GRAY + "You have unlocked the " + ChatColor.RED + "Freedom Trail"  + ChatColor.GRAY + "!", "decimatepvp.trail.fourthofjuly"),
+				new CommandReward("July Kit", Skull.getPlayerSkull("MHF_Present2"), Rarity.EPIC, 9, "manuaddp %player% essentials.kits.july", true, ChatColor.GRAY +
+						"Receive the " + ChatColor.RED + "July Kit"  + ChatColor.GRAY + "!",
+						ChatColor.GRAY + "You have unlocked the " + ChatColor.RED + "July Kit"  + ChatColor.GRAY + "!", "essentials.kits.july"),
 				new CommandReward("Protection V Kit (1)", new ItemStack(Material.BOOK), Rarity.COMMON, 30, "kit p5 %player%", true)
 				));
 	}	

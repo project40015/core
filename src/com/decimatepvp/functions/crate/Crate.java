@@ -142,7 +142,7 @@ public abstract class Crate {
 	}
 	
 	public boolean isCrateKey(ItemStack item){
-		if(item == null || item.getItemMeta() == null){
+		if(item == null || item.getItemMeta() == null || item.getItemMeta().getDisplayName() == null){
 			return false;
 		}
 		return item.getItemMeta().getDisplayName().equals(getItemStack().getItemMeta().getDisplayName())
