@@ -203,7 +203,8 @@ public class CrateManager implements Manager, Listener {
 	
 	public Crate getCrate(String name){
 		for(Crate crate : this.crates){
-			if(ChatColor.stripColor(crate.getName()).replaceAll(" ", "_").equalsIgnoreCase(name)){
+			String n = ChatColor.stripColor(crate.getName());
+			if(n.equalsIgnoreCase(name) || n.replaceAll(" ", "_").equalsIgnoreCase(name)){
 				return crate;
 			}
 		}

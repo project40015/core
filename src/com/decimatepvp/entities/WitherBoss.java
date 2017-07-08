@@ -8,40 +8,6 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.stream.Collectors;
 
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.Color;
-import org.bukkit.FireworkEffect;
-import org.bukkit.FireworkEffect.Builder;
-import org.bukkit.FireworkEffect.Type;
-import org.bukkit.Location;
-import org.bukkit.Sound;
-import org.bukkit.World;
-import org.bukkit.craftbukkit.v1_8_R3.CraftWorld;
-import org.bukkit.craftbukkit.v1_8_R3.event.CraftEventFactory;
-import org.bukkit.entity.EntityType;
-import org.bukkit.entity.Firework;
-import org.bukkit.entity.LivingEntity;
-import org.bukkit.entity.Skeleton;
-import org.bukkit.entity.Skeleton.SkeletonType;
-import org.bukkit.event.entity.EntityDamageByEntityEvent;
-import org.bukkit.event.entity.EntityRegainHealthEvent;
-import org.bukkit.event.entity.ExplosionPrimeEvent;
-import org.bukkit.inventory.EntityEquipment;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.FireworkMeta;
-import org.bukkit.scheduler.BukkitRunnable;
-import org.bukkit.util.Vector;
-
-import com.decimatepvp.core.DecimateCore;
-import com.decimatepvp.functions.animation.sphere.MovementAnimation;
-import com.decimatepvp.utils.DecimateUtils;
-import com.decimatepvp.utils.ParticleEffect.OrdinaryColor;
-import com.decimatepvp.utils.ParticleUtils;
-import com.google.common.base.Predicate;
-import com.google.common.base.Predicates;
-import com.google.common.collect.Maps;
-
 import net.minecraft.server.v1_8_R3.Block;
 import net.minecraft.server.v1_8_R3.BlockPosition;
 import net.minecraft.server.v1_8_R3.Blocks;
@@ -49,16 +15,13 @@ import net.minecraft.server.v1_8_R3.DamageSource;
 import net.minecraft.server.v1_8_R3.Entity;
 import net.minecraft.server.v1_8_R3.EntityAnimal;
 import net.minecraft.server.v1_8_R3.EntityArrow;
-import net.minecraft.server.v1_8_R3.EntityFireball;
 import net.minecraft.server.v1_8_R3.EntityHuman;
 import net.minecraft.server.v1_8_R3.EntityInsentient;
-import net.minecraft.server.v1_8_R3.EntityLargeFireball;
+import net.minecraft.server.v1_8_R3.EntityItem;
 import net.minecraft.server.v1_8_R3.EntityLiving;
 import net.minecraft.server.v1_8_R3.EntityMonster;
 import net.minecraft.server.v1_8_R3.EntityPlayer;
-import net.minecraft.server.v1_8_R3.EntitySmallFireball;
 import net.minecraft.server.v1_8_R3.EntityWither;
-import net.minecraft.server.v1_8_R3.EntityWitherSkull;
 import net.minecraft.server.v1_8_R3.EnumDifficulty;
 import net.minecraft.server.v1_8_R3.EnumMonsterType;
 import net.minecraft.server.v1_8_R3.EnumParticle;
@@ -80,6 +43,42 @@ import net.minecraft.server.v1_8_R3.PathfinderGoalNearestAttackableTarget;
 import net.minecraft.server.v1_8_R3.PathfinderGoalRandomLookaround;
 import net.minecraft.server.v1_8_R3.PathfinderGoalRandomStroll;
 import net.minecraft.server.v1_8_R3.WorldServer;
+
+import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
+import org.bukkit.Color;
+import org.bukkit.FireworkEffect;
+import org.bukkit.FireworkEffect.Builder;
+import org.bukkit.FireworkEffect.Type;
+import org.bukkit.GameMode;
+import org.bukkit.Location;
+import org.bukkit.Sound;
+import org.bukkit.World;
+import org.bukkit.craftbukkit.v1_8_R3.CraftWorld;
+import org.bukkit.craftbukkit.v1_8_R3.inventory.CraftItemStack;
+import org.bukkit.entity.EntityType;
+import org.bukkit.entity.Firework;
+import org.bukkit.entity.LivingEntity;
+import org.bukkit.entity.Player;
+import org.bukkit.entity.Skeleton;
+import org.bukkit.entity.Skeleton.SkeletonType;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.entity.ExplosionPrimeEvent;
+import org.bukkit.inventory.EntityEquipment;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.FireworkMeta;
+import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.util.Vector;
+
+import com.decimatepvp.core.DecimateCore;
+import com.decimatepvp.functions.animation.sphere.MovementAnimation;
+import com.decimatepvp.utils.DecimateUtils;
+import com.decimatepvp.utils.ParticleEffect;
+import com.decimatepvp.utils.ParticleEffect.OrdinaryColor;
+import com.decimatepvp.utils.ParticleUtils;
+import com.google.common.base.Predicate;
+import com.google.common.base.Predicates;
+import com.google.common.collect.Maps;
 
 public class WitherBoss extends EntityMonster implements IRangedEntity {
 
@@ -140,6 +139,8 @@ public class WitherBoss extends EntityMonster implements IRangedEntity {
 			}
 		}
 	}
+	
+	private final int maxhealth = 600;
 
 	private final float[] a = new float[2];
 
@@ -167,7 +168,7 @@ public class WitherBoss extends EntityMonster implements IRangedEntity {
 
 	private final DecimalFormat df = new DecimalFormat("00.00");
 	
-	private float totalHealth = 100;
+	private float totalHealth = 600;
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public WitherBoss(net.minecraft.server.v1_8_R3.World world) {
@@ -195,6 +196,10 @@ public class WitherBoss extends EntityMonster implements IRangedEntity {
 		this.a(0, entityliving);
 	}
 
+	private double distance(double a, double b, double c, double d, double e, double f){
+		return Math.sqrt(Math.pow(a-d, 2) + Math.pow(b-e, 2) + Math.pow(c-f, 2));
+	}
+	
 	private void a(EntityLiving target, int i, double d0, double d1, double d2, boolean flag) {
 		world.a(null, 1014, new BlockPosition(this), 0);
 		double d3 = this.t(i);
@@ -206,23 +211,38 @@ public class WitherBoss extends EntityMonster implements IRangedEntity {
 
 		Location eyelocation = ((LivingEntity) this.getBukkitEntity()).getEyeLocation();
 
-		int rnd = random.nextInt(5);
-		if(rnd == 0) {
-			EntityWitherSkull entity = new EntityWitherSkull(world, this, d6, d7, d8);
-
-			if(flag) {
-				entity.setCharged(true);
+		int rnd = random.nextInt(7) + 1;
+//		if(rnd == 0) {
+//			EntityWitherSkull entity = new EntityWitherSkull(world, this, d6, d7, d8);
+//
+//			if(flag) {
+//				entity.setCharged(true);
+//			}
+//
+//			world.addEntity(entity);
+//		}
+//		else 
+//		if(rnd == 1) {
+//			EntityFireball entity = random.nextBoolean() ? new EntityLargeFireball(world, this, d6, d7, d8)
+//					: new EntitySmallFireball(world, this, d6, d7, d8);
+//
+//			world.addEntity(entity);
+//		}else
+		if(rnd == 1 && distance(target.locX, target.locY, target.locZ, super.locX, super.locY, super.locZ) < 4){
+			ParticleEffect.SPELL.display(2, 2, 2, 0, 15, new Location(Bukkit.getWorld(world.getWorld().getName()), locX, locY, locZ), 40);
+			for(org.bukkit.entity.Entity entity : Bukkit.getWorld(world.getWorld().getName()).getEntities()){
+				if(!(entity instanceof Player)){
+					continue;
+				}
+				if(((Player)entity).getGameMode().equals(GameMode.CREATIVE) ||
+						 ((Player)entity).getGameMode().equals(GameMode.SPECTATOR)){
+					continue;
+				}
+				if(distance(entity.getLocation().getX(), entity.getLocation().getY(), entity.getLocation().getZ(), locX, locY, locZ) < 4){
+					entity.setVelocity(new Vector(0, 2, 0));
+				}
 			}
-
-			world.addEntity(entity);
-		}
-		else if(rnd == 1) {
-			EntityFireball entity = random.nextBoolean() ? new EntityLargeFireball(world, this, d6, d7, d8)
-					: new EntitySmallFireball(world, this, d6, d7, d8);
-
-			world.addEntity(entity);
-		}
-		else if(rnd == 2) {
+		}else {
 			Location entityLocation = new Location(world.getWorld(), d0, d1, d2);
 			if(target != null) {
 				if(target != null && target instanceof EntityAnimal) {
@@ -239,25 +259,26 @@ public class WitherBoss extends EntityMonster implements IRangedEntity {
 			vector.multiply(0.0625);
 
 			ParticleUtils.sendBeamFromEntity(vector, this.getRandomColor(), (LivingEntity) this.getBukkitEntity(), 20,
-					true, 5, 1l, 1l);
+					true, (int) (20 - this.getHealth()/(maxhealth/5.0)), 1l, 1l);
 		}
-		else if(rnd == 3) {
-			Location entityLocation = new Location(world.getWorld(), d0, d1, d2);
-			if(target != null) {
-				if(target != null && target instanceof EntityAnimal) {
-					entityLocation = ((LivingEntity) target.getBukkitEntity()).getEyeLocation()
-							.subtract(entityLocation.getDirection());
-				}
-				else {
-					entityLocation = ((LivingEntity) target.getBukkitEntity()).getEyeLocation().subtract(0, 1, 0);
-				}
-			}
-			Vector direction = eyelocation.getDirection();
-
-			MovementAnimation animation = this.getRasenganAttack(new OrdinaryColor(this.getRandomColor()), eyelocation,
-					direction, 16);
-			animation.start(0l, random.nextInt(2) + 1);
-		}
+		//else
+//		if(rnd == 3) {
+//			Location entityLocation = new Location(world.getWorld(), d0, d1, d2);
+//			if(target != null) {
+//				if(target != null && target instanceof EntityAnimal) {
+//					entityLocation = ((LivingEntity) target.getBukkitEntity()).getEyeLocation()
+//							.subtract(entityLocation.getDirection());
+//				}
+//				else {
+//					entityLocation = ((LivingEntity) target.getBukkitEntity()).getEyeLocation().subtract(0, 1, 0);
+//				}
+//			}
+//			Vector direction = eyelocation.getDirection();
+//
+//			MovementAnimation animation = this.getRasenganAttack(new OrdinaryColor(this.getRandomColor()), eyelocation,
+//					direction, 16);
+//			animation.start(0l, random.nextInt(2) + 1);
+//		}
 
 		double chance = random.nextDouble();
 		// if(chance <= 0.10D) {
@@ -273,7 +294,6 @@ public class WitherBoss extends EntityMonster implements IRangedEntity {
 		if(chance <= 0.05D) {
 			if(target != null) {
 				world.getWorld().strikeLightning(target.getBukkitEntity().getLocation());
-				Bukkit.broadcastMessage(this.getHealth() + "/" + this.getMaxHealth());
 			}
 		}
 		chance = random.nextDouble();
@@ -325,12 +345,14 @@ public class WitherBoss extends EntityMonster implements IRangedEntity {
 
 	@Override
 	protected String bo() {
-		return "mob.wither.hurt";
+		return "mob.skeleton.hurt";
+//		return "mob.wither.hurt";
 	}
 
 	@Override
 	protected String bp() {
-		return "mob.wither.death";
+		return "mob.horse.skeleton.death";
+//		return "mob.wither.death";
 	}
 
 	@Override
@@ -391,25 +413,32 @@ public class WitherBoss extends EntityMonster implements IRangedEntity {
 
 		playerDamage = sortByValue(playerDamage);
 
-		Bukkit.broadcastMessage(ChatColor.GOLD + "=-=-=-=-=-=-=-=-=-=-=-=-=-=-");
-		Bukkit.broadcastMessage(ChatColor.GREEN + "The Wither has been defeated! Here are the top players:");
+		Bukkit.broadcastMessage(ChatColor.GOLD + "=-=-=-=-=-=-=-=-=-=-=-=-=-=-=");
+		Bukkit.broadcastMessage(ChatColor.GRAY + "The Wither has been defeated! Here are the top players:");
 
 		int position = 1;
 		for(Entry<String, Float> set : playerDamage.entrySet()) {
 			if(position <= 3) {
-				String damage = df.format(set.getValue());
-				damage = df.format((set.getValue() / totalHealth) * 100.0) + "%";
+				Player player = Bukkit.getServer().getPlayer(set.getKey());
+				double amount = (set.getValue() / totalHealth)*5000000;
+				if(player != null){
+					player.sendMessage(ChatColor.YELLOW + "You have been awarded " + ChatColor.GOLD + "$" + df.format(amount) + ChatColor.YELLOW + " and " +
+				ChatColor.GOLD + (4-position) + " keys" + ChatColor.YELLOW + "!");
+					DecimateCore.getCore().eco.depositPlayer(player, amount);
+					DecimateCore.getCore().getCrateManager().getCrate("god crate").giveKey(player, 4 - position);
+				}
+				String damage = df.format((set.getValue() / totalHealth) * 100.0) + "%";
 				String message = this.getPlaceColor(position) + DecimateUtils.color(
-						position + ". &b&l" + set.getKey() + "&2 with &b&l" + damage + "&2 of the total damage!");
+						position + ". &c&l" + set.getKey() + "&7 with &c&l" + damage + "&7 of the total damage!");
 
 				Bukkit.broadcastMessage(message);
+				position++;
+				continue;
 			}
-			else {
-				break;
-			}
+			break;
 		}
 
-		Bukkit.broadcastMessage(ChatColor.GOLD + "=-=-=-=-=-=-=-=-=-=-=-=-=-=-");
+		Bukkit.broadcastMessage(ChatColor.GOLD + "=-=-=-=-=-=-=-=-=-=-=-=-=-=-=");
 
 		startDeathEffect();
 
@@ -469,10 +498,12 @@ public class WitherBoss extends EntityMonster implements IRangedEntity {
 
 	@Override
 	protected void dropDeathLoot(boolean flag, int i) {
-		// EntityItem entityitem = a(Items.NETHER_STAR, 1);
-		// if (entityitem != null) {
-		// entityitem.u();
-		// }
+		ItemStack reward = DecimateCore.getCore().getCrateManager().getCrate("god crate").getItemStack();
+		 EntityItem entityitem = a(CraftItemStack.asNMSCopy(reward), 1);
+		 
+		 if (entityitem != null) {
+		 entityitem.u();
+		 }
 		// if (!this.world.isClientSide)
 		// {
 		// Iterator iterator = this.world.a(EntityHuman.class,
@@ -525,7 +556,7 @@ public class WitherBoss extends EntityMonster implements IRangedEntity {
 			}
 			this.r(i);
 			if(ticksLived % 10 == 0) {
-				this.heal(10.0F, EntityRegainHealthEvent.RegainReason.WITHER_SPAWN);
+				this.heal(4F);
 			}
 		}
 		else {
@@ -598,35 +629,35 @@ public class WitherBoss extends EntityMonster implements IRangedEntity {
 			}
 			if(bp > 0) {
 				bp -= 1;
-				if(bp == 0 && world.getGameRules().getBoolean("mobGriefing")) {
-					int i = MathHelper.floor(locY);
-					int j = MathHelper.floor(locX);
-					int j1 = MathHelper.floor(locZ);
-					boolean flag = false;
-					for(int k1 = -1; k1 <= 1; k1++) {
-						for(int l1 = -1; l1 <= 1; l1++) {
-							for(int i2 = 0; i2 <= 3; i2++) {
-								int j2 = j + k1;
-								int k2 = i + i2;
-								int l2 = j1 + l1;
-								BlockPosition blockposition = new BlockPosition(j2, k2, l2);
-								Block block = world.getType(blockposition).getBlock();
-								if(block.getMaterial() != Material.AIR && a(block)) {
-									if(!CraftEventFactory.callEntityChangeBlockEvent(this, j2, k2, l2, Blocks.AIR, 0)
-											.isCancelled()) {
-										flag = world.setAir(blockposition, true) || flag;
-									}
-								}
-							}
-						}
-					}
-					if(flag) {
-						world.a(null, 1012, new BlockPosition(this), 0);
-					}
-				}
+//				if(bp == 0 && world.getGameRules().getBoolean("mobGriefing")) {
+//					int i = MathHelper.floor(locY);
+//					int j = MathHelper.floor(locX);
+//					int j1 = MathHelper.floor(locZ);
+//					boolean flag = false;
+//					for(int k1 = -1; k1 <= 1; k1++) {
+//						for(int l1 = -1; l1 <= 1; l1++) {
+//							for(int i2 = 0; i2 <= 3; i2++) {
+//								int j2 = j + k1;
+//								int k2 = i + i2;
+//								int l2 = j1 + l1;
+//								BlockPosition blockposition = new BlockPosition(j2, k2, l2);
+//								Block block = world.getType(blockposition).getBlock();
+//								if(block.getMaterial() != Material.AIR && a(block)) {
+//									if(!CraftEventFactory.callEntityChangeBlockEvent(this, j2, k2, l2, Blocks.AIR, 0)
+//											.isCancelled()) {
+//										flag = world.setAir(blockposition, true) || flag;
+//									}
+//								}
+//							}
+//						}
+//					}
+//					if(flag) {
+//						world.a(null, 1012, new BlockPosition(this), 0);
+//					}
+//				}
 			}
 			if(ticksLived % 20 == 0) {
-				this.heal(1.0F, EntityRegainHealthEvent.RegainReason.REGEN);
+				this.heal(1.0F);
 			}
 		}
 	}
@@ -691,13 +722,13 @@ public class WitherBoss extends EntityMonster implements IRangedEntity {
 
 		switch (position) {
 		case 1:
-			return ChatColor.GOLD;
+			return ChatColor.GREEN;
 
 		case 2:
-			return ChatColor.GRAY;
+			return ChatColor.YELLOW;
 
 		case 3:
-			return ChatColor.DARK_AQUA;
+			return ChatColor.GRAY;
 		}
 
 		return ChatColor.GRAY;
@@ -743,11 +774,12 @@ public class WitherBoss extends EntityMonster implements IRangedEntity {
 	@Override
 	protected void initAttributes() {
 		super.initAttributes();
-		this.getAttributeInstance(GenericAttributes.maxHealth).setValue(100);
+		this.getAttributeInstance(GenericAttributes.maxHealth).setValue(maxhealth);
 		this.getAttributeInstance(GenericAttributes.MOVEMENT_SPEED).setValue(0.6000000238418579D);
 		this.getAttributeInstance(GenericAttributes.FOLLOW_RANGE).setValue(40.0D);
-		this.setCustomName(DecimateUtils.color("&4&lWither Boss"));
+		this.setCustomName(DecimateUtils.color("&cWither Boss"));
 		this.setCustomNameVisible(true);
+		this.setHealth(maxhealth);
 	}
 
 	@Override
@@ -836,7 +868,7 @@ public class WitherBoss extends EntityMonster implements IRangedEntity {
 	}
 
 	public void n() {
-		this.r(220);
+		this.r(600*3);
 		this.setHealth(this.getMaxHealth() / 3.0F);
 	}
 
@@ -903,8 +935,13 @@ public class WitherBoss extends EntityMonster implements IRangedEntity {
 	
 	@Override
 	public void heal(float f) {
-		super.heal(f);
-		totalHealth += f;
+		if(super.getHealth() + f <= maxhealth){
+			super.heal(f);
+			totalHealth += f;
+		}else{
+			totalHealth += maxhealth - super.getHealth();
+			super.heal(maxhealth - super.getHealth());
+		}
 	}
 
 }

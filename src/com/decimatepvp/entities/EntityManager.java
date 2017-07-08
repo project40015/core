@@ -8,6 +8,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
+import net.minecraft.server.v1_8_R3.EntityTypes;
+
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -27,8 +29,6 @@ import com.decimatepvp.core.Manager;
 import com.decimatepvp.utils.DecimateUtils;
 import com.decimatepvp.utils.PlayerUtils;
 import com.google.common.collect.Maps;
-
-import net.minecraft.server.v1_8_R3.EntityTypes;
 
 public class EntityManager implements Manager, Listener, CommandExecutor {
 
@@ -88,13 +88,26 @@ public class EntityManager implements Manager, Listener, CommandExecutor {
 			if(args.length == 3) {
 				double x = 0, y = 0, z = 0;
 				try {
-					x = Double.parseDouble(args[0]);
-					y = Double.parseDouble(args[1]);
-					z = Double.parseDouble(args[2]);
-				} catch (Exception e) {
-					sender.sendMessage("Proper Usage: /boss [x] [y] [z]");
+					if(!args[0].equals("~")){
+						x = Double.parseDouble(args[0]);
+					}else if(sender instanceof Player){
+						x = ((Player)sender).getLocation().getX();
+					}
+					if(!args[1].equals("~")){
+						y = Double.parseDouble(args[1]);
+					}else if(sender instanceof Player){
+						y = ((Player)sender).getLocation().getY();
+					}
+					if(!args[2].equals("~")){
+						z = Double.parseDouble(args[2]);
+					}else if(sender instanceof Player){
+						z = ((Player)sender).getLocation().getZ();
+					}
+					location = new Location(world, x, y, z);
+				}catch (Exception e) {
+					sender.sendMessage(ChatColor.BLUE + "Proper Usage: /boss [x] [y] [z]");
+					return false;
 				}
-				location = new Location(world, x, y, z);
 			}
 			else if(args.length == 4) {
 				World paramWorld = null;
@@ -105,7 +118,8 @@ public class EntityManager implements Manager, Listener, CommandExecutor {
 					y = Double.parseDouble(args[2]);
 					z = Double.parseDouble(args[3]);
 				} catch (Exception e) {
-					sender.sendMessage("Proper Usage: /boss [world] [x] [y] [z]");
+					sender.sendMessage(ChatColor.BLUE + "Proper Usage: /boss [world] [x] [y] [z]");
+					return false;
 				}
 				location = new Location(paramWorld, x, y, z);
 			}
@@ -118,9 +132,9 @@ public class EntityManager implements Manager, Listener, CommandExecutor {
 			}
 
 			Bukkit.broadcastMessage(ChatColor.GOLD + "=-=-=-=-=-=-=-=-=-=-=-=-=-=-");
-			Bukkit.broadcastMessage(DecimateUtils.color("&7&lThe Wither &8&lhas been spotted nearing &7&l"
-					+ location.getBlockX() + " " + location.getBlockZ() + "&8&l."));
-			Bukkit.broadcastMessage(DecimateUtils.color("&7Come defeat it for amazing rewards! Happy Hunting..."));
+			Bukkit.broadcastMessage(DecimateUtils.color("&7The&c Wither &7has been spotted nearing &c"
+					+ location.getBlockX() + " " + location.getBlockZ() + "&7."));
+			Bukkit.broadcastMessage(DecimateUtils.color("&7If you slay it you will be rewarded with amazing treasure. Be warned, it has killed many other wanderers."));
 			Bukkit.broadcastMessage(ChatColor.GOLD + "=-=-=-=-=-=-=-=-=-=-=-=-=-=-");
 		}
 		else {

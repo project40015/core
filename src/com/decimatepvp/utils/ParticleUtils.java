@@ -7,17 +7,25 @@ import org.bukkit.Location;
 import org.bukkit.entity.Damageable;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
+import org.bukkit.entity.Player;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 
 import com.decimatepvp.core.DecimateCore;
-import com.decimatepvp.utils.ParticleEffect;
 import com.decimatepvp.utils.ParticleEffect.OrdinaryColor;
 
 public class ParticleUtils {
 
 	private static final Random random = new Random();
 
+	private static void addEffect(Player player, PotionEffectType type, int duration, int amplifier){
+		if(!player.hasPotionEffect(type)){
+			player.addPotionEffect(new PotionEffect(type, duration, amplifier));
+		}
+	}
+	
 	/**
 	 * 
 	 * @param color
@@ -54,15 +62,29 @@ public class ParticleUtils {
 						if(damageable) {
 							for(Entity ent : loc.getWorld().getNearbyEntities(loc, 1, 1, 1)) {
 								if((ent instanceof Damageable) && (ent != entity)) {
-									((Damageable) ent).damage(damage, entity);
+									boolean t = false;
+									if(color == Color.RED){
+										((Damageable) ent).setFireTicks(30);
+									}else if(color == Color.PURPLE && ent instanceof Player){
+										addEffect((Player)ent, PotionEffectType.CONFUSION, 20*4, 0);
+									}else if(color == Color.BLACK && ent instanceof Player){
+										addEffect((Player)ent, PotionEffectType.WITHER, 20*4, 1);
+									}else if(color == Color.FUCHSIA && ent instanceof Player){
+										addEffect((Player)ent, PotionEffectType.SLOW, 20, 4);
+									}else if(color == Color.GRAY && ent instanceof Player){
+										addEffect((Player)ent, PotionEffectType.BLINDNESS, 30, 0);
+									}else if(color == Color.BLUE && ent instanceof Player){
+										t = true;
+									}
+									((Damageable) ent).damage(t ? damage*3 : damage, entity);
 								}
 							}
 						}
 
 						for(int i = 0; i < 10; i++) {
-							double x = random.nextDouble() / 3;
-							double y = random.nextDouble() / 3;
-							double z = random.nextDouble() / 3;
+							double x = random.nextDouble() / 3.0;
+							double y = random.nextDouble() / 3.0;
+							double z = random.nextDouble() / 3.0;
 
 							summonRedstoneParticle(particlecolor, loc.clone().add(x, y, z), 64);
 						}
@@ -80,10 +102,36 @@ public class ParticleUtils {
 				public void run() {
 					while (loc.distance(start) < range) {
 						loc.add(vector);
+						/*		case 0:
+						return Color.RED;
+					case 1:
+						return Color.BLACK;
+					case 2:
+						return Color.GRAY;
+					case 3:
+						return Color.BLUE;
+					case 4:
+						return Color.PURPLE;
+					case 5:
+						return Color.FUCHSIA;
+						*/
 						if(damageable) {
 							for(Entity ent : loc.getWorld().getNearbyEntities(loc, 1, 1, 1)) {
 								if((ent instanceof Damageable) && (ent != entity)) {
 									((Damageable) ent).damage(damage, entity);
+									if(color == Color.RED){
+										((Damageable) ent).setFireTicks(30);
+									}else if(color == Color.PURPLE && ent instanceof Player){
+										((Player)ent).addPotionEffect(new PotionEffect(PotionEffectType.CONFUSION, 0, 20*4));
+									}else if(color == Color.BLACK && ent instanceof Player){
+										((Player)ent).addPotionEffect(new PotionEffect(PotionEffectType.WITHER, 1, 20*4));
+									}else if(color == Color.FUCHSIA && ent instanceof Player){
+										((Player)ent).addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 4, 20));
+									}else if(color == Color.GRAY && ent instanceof Player){
+										((Player)ent).addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 0, 20));
+									}else if(color == Color.BLUE && ent instanceof Player){
+										ent.setVelocity(ent.getVelocity().setY(0));
+									}
 								}
 							}
 						}
