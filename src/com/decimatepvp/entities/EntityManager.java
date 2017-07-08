@@ -44,20 +44,21 @@ public class EntityManager implements Manager, Listener, CommandExecutor {
 	public void entityDamageWither(EntityDamageByEntityEvent event) {
 		org.bukkit.entity.Entity damager = event.getDamager();
 		org.bukkit.entity.Entity damagee = event.getEntity();
-
+		
 		if(damager instanceof Player) {
 			if(((CraftEntity) damagee).getHandle() instanceof WitherBoss) {
 				double damage = event.getFinalDamage();
 
 				Player player = (Player) damager;
 				WitherBoss boss = withers.get(damagee);
+				if(boss != null && damagee != null){
+					if(0 > ((org.bukkit.entity.Damageable) damagee).getHealth() - damage) {
+						damage = ((org.bukkit.entity.Damageable) damagee).getHealth();
+					}
 				
-				if(0 > boss.getHealth() - damage) {
-					damage = boss.getHealth();
+					boss.playerDamage.put(player.getName(), (float) (boss.playerDamage.containsKey(player.getName())
+							? boss.playerDamage.get(player.getName()) + damage : damage));
 				}
-				
-				boss.playerDamage.put(player.getName(), (float) (boss.playerDamage.containsKey(player.getName())
-						? boss.playerDamage.get(player.getName()) + damage : damage));
 			}
 		}
 	}
@@ -73,15 +74,36 @@ public class EntityManager implements Manager, Listener, CommandExecutor {
 		}
 		int y = world.getHighestBlockYAt(x, z) + 1;
 
-		return new Location(world, x, y, z);
+		Location location = new Location(world, x, y, z);
+		
+		return PlayerUtils.isInSpawn(location) ? getLocationNearSpawn(location.getWorld()) : location;
 	}
 
 	public Collection<WitherBoss> getWithers() {
 		return withers.values();
 	}
+	
+	private void sendWitherCoordinates(CommandSender player){
+		if(this.withers.keySet().size() == 0){
+			player.sendMessage(ChatColor.RED + "There are currently no living bosses.");
+			return;
+		}
+		player.sendMessage(ChatColor.YELLOW + "Alive bosses:");
+		for(Entity boss : this.withers.keySet()){
+			if(boss.isDead()){
+				continue;
+			}
+			player.sendMessage(ChatColor.GRAY + "   - " + boss.getCustomName() + ChatColor.GRAY + " (" + boss.getLocation().getBlockX() + ", " +
+					boss.getLocation().getBlockY() + ", " + boss.getLocation().getBlockZ() + ")");
+		}
+	}
 
 	@Override
 	public boolean onCommand(CommandSender sender, Command paramCommand, String paramString, String[] args) {
+		if(args.length >= 1 && args[0].toLowerCase().startsWith("l")){
+			sendWitherCoordinates(sender);
+			return false;
+		}
 		if(sender.hasPermission("Decimate.staff.witherboss")) {
 			World world = Bukkit.getServer().getWorlds().get(0);
 			Location location = this.getLocationNearSpawn(world);
@@ -138,7 +160,8 @@ public class EntityManager implements Manager, Listener, CommandExecutor {
 			Bukkit.broadcastMessage(ChatColor.GOLD + "=-=-=-=-=-=-=-=-=-=-=-=-=-=-");
 		}
 		else {
-			sender.sendMessage(ChatColor.RED + "You do not have the proper permissions.");
+//			sender.sendMessage(ChatColor.RED + "You do not have the proper permissions.");
+			sendWitherCoordinates(sender);
 		}
 
 		return false;
@@ -149,10 +172,6 @@ public class EntityManager implements Manager, Listener, CommandExecutor {
 		if(withers.containsKey(event.getEntity())) {
 			withers.remove(event.getEntity());
 		}
-	}
-
-	public void onPlayerDeath(EntityDamageByEntityEvent event) {
-		WitherBoss.spawnMinion(event);
 	}
 
 	public void registerEntity(Class<? extends WitherBoss> clazz, String name, int id) {

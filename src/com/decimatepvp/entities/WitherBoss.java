@@ -94,8 +94,8 @@ public class WitherBoss extends EntityMonster implements IRangedEntity {
 		}
 	};
 	public static ItemStack[] equipment = new ItemStack[] { new ItemStack(org.bukkit.Material.DIAMOND_SWORD),
-			new ItemStack(org.bukkit.Material.DIAMOND_BOOTS), new ItemStack(org.bukkit.Material.DIAMOND_LEGGINGS),
-			new ItemStack(org.bukkit.Material.DIAMOND_CHESTPLATE), new ItemStack(org.bukkit.Material.DIAMOND_HELMET) };
+			new ItemStack(org.bukkit.Material.CHAINMAIL_BOOTS), new ItemStack(org.bukkit.Material.CHAINMAIL_LEGGINGS),
+			new ItemStack(org.bukkit.Material.DIAMOND_CHESTPLATE), new ItemStack(org.bukkit.Material.PUMPKIN) };
 
 	public static boolean a(Block block) {
 		return block != Blocks.BEDROCK && block != Blocks.END_PORTAL && block != Blocks.END_PORTAL_FRAME
@@ -107,40 +107,24 @@ public class WitherBoss extends EntityMonster implements IRangedEntity {
 				.collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (e1, e2) -> e1, LinkedHashMap::new));
 	}
 
-	public static void spawnMinion(EntityDamageByEntityEvent event) {
-		if(event.getDamager() instanceof LivingEntity && event.getEntity() instanceof LivingEntity) {
-			LivingEntity damaged = (LivingEntity) event.getEntity();
-			LivingEntity damager = (LivingEntity) event.getDamager();
-			if(damager.toString().equals("DecimateWitherBoss") && // If the
-			// killer
-			// is a
-			// WitherBoss
-					damaged.getHealth() - event.getFinalDamage() <= 0 && // If
-					// the
-					// damaged
-					// entity
-					// will
-					// be
-					// killed
-					Math.random() < 0.25D) {
-				damaged.getWorld().strikeLightning(damaged.getLocation());
-				Skeleton witherskeleton = (Skeleton) damaged.getWorld().spawnEntity(damaged.getLocation(),
-						EntityType.SKELETON);
-				witherskeleton.setSkeletonType(SkeletonType.WITHER);
-				EntityEquipment equip = witherskeleton.getEquipment();
+	public static void spawnMinion(Location location) {
+		ParticleEffect.LAVA.display(1, 1, 1, 0, 12, location, 30);
+		Skeleton witherskeleton = (Skeleton) location.getWorld().spawnEntity(location, EntityType.SKELETON);
+		witherskeleton.setCustomName(ChatColor.RED + "Minion");
+		witherskeleton.setCustomNameVisible(true);
+		witherskeleton.setSkeletonType(SkeletonType.WITHER);
+		EntityEquipment equip = witherskeleton.getEquipment();
 
-				equip.setArmorContents(equipment.clone());
+		equip.setArmorContents(equipment.clone());
 
-				equip.setBootsDropChance(0);
-				equip.setLeggingsDropChance(0);
-				equip.setChestplateDropChance(0);
-				equip.setHelmetDropChance(0);
-				equip.setItemInHandDropChance(0);
-			}
-		}
+		equip.setBootsDropChance(0);
+		equip.setLeggingsDropChance(0);
+		equip.setChestplateDropChance(0);
+		equip.setHelmetDropChance(0);
+		equip.setItemInHandDropChance(0);
 	}
 	
-	private final int maxhealth = 600;
+	private final int maxhealth = 100;
 
 	private final float[] a = new float[2];
 
@@ -168,7 +152,7 @@ public class WitherBoss extends EntityMonster implements IRangedEntity {
 
 	private final DecimalFormat df = new DecimalFormat("00.00");
 	
-	private float totalHealth = 600;
+	private float totalHealth = maxhealth;
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public WitherBoss(net.minecraft.server.v1_8_R3.World world) {
@@ -205,13 +189,13 @@ public class WitherBoss extends EntityMonster implements IRangedEntity {
 		double d3 = this.t(i);
 		double d4 = this.u(i);
 		double d5 = this.v(i);
-		double d6 = d0 - d3;
-		double d7 = d1 - d4;
-		double d8 = d2 - d5;
+//		double d6 = d0 - d3;
+//		double d7 = d1 - d4;
+//		double d8 = d2 - d5;
+//
+//		Location eyelocation = ((LivingEntity) this.getBukkitEntity()).getEyeLocation();
 
-		Location eyelocation = ((LivingEntity) this.getBukkitEntity()).getEyeLocation();
-
-		int rnd = random.nextInt(7) + 1;
+		int rnd = random.nextInt(20) + 1;
 //		if(rnd == 0) {
 //			EntityWitherSkull entity = new EntityWitherSkull(world, this, d6, d7, d8);
 //
@@ -228,7 +212,7 @@ public class WitherBoss extends EntityMonster implements IRangedEntity {
 //
 //			world.addEntity(entity);
 //		}else
-		if(rnd == 1 && distance(target.locX, target.locY, target.locZ, super.locX, super.locY, super.locZ) < 4){
+		if(rnd <= 4 && distance(target.locX, target.locY, target.locZ, super.locX, super.locY, super.locZ) < 4){
 			ParticleEffect.SPELL.display(2, 2, 2, 0, 15, new Location(Bukkit.getWorld(world.getWorld().getName()), locX, locY, locZ), 40);
 			for(org.bukkit.entity.Entity entity : Bukkit.getWorld(world.getWorld().getName()).getEntities()){
 				if(!(entity instanceof Player)){
@@ -242,7 +226,11 @@ public class WitherBoss extends EntityMonster implements IRangedEntity {
 					entity.setVelocity(new Vector(0, 2, 0));
 				}
 			}
-		}else {
+		}
+//		}else if(rnd == 5) {
+//			spawnMinion(new Location(Bukkit.getWorld(target.getWorld().getWorld().getName()), target.locX, target.locY, target.locZ));
+//		}
+		else {
 			Location entityLocation = new Location(world.getWorld(), d0, d1, d2);
 			if(target != null) {
 				if(target != null && target instanceof EntityAnimal) {
@@ -375,7 +363,7 @@ public class WitherBoss extends EntityMonster implements IRangedEntity {
 
 	@Override
 	public boolean damageEntity(DamageSource damagesource, float damage) {
-		damage = damage / 10;
+		damage = damage / 25.0F;
 		if(this.isInvulnerable(damagesource)) {
 			return false;
 		}
@@ -420,17 +408,17 @@ public class WitherBoss extends EntityMonster implements IRangedEntity {
 		for(Entry<String, Float> set : playerDamage.entrySet()) {
 			if(position <= 3) {
 				Player player = Bukkit.getServer().getPlayer(set.getKey());
-				double amount = (set.getValue() / totalHealth)*5000000;
+				double value = set.getValue() > 100 ? 100 : set.getValue();
+				double amount = (value / totalHealth)*5000000;
 				if(player != null){
-					player.sendMessage(ChatColor.YELLOW + "You have been awarded " + ChatColor.GOLD + "$" + df.format(amount) + ChatColor.YELLOW + " and " +
-				ChatColor.GOLD + (4-position) + " keys" + ChatColor.YELLOW + "!");
 					DecimateCore.getCore().eco.depositPlayer(player, amount);
 					DecimateCore.getCore().getCrateManager().getCrate("god crate").giveKey(player, 4 - position);
 				}
-				String damage = df.format((set.getValue() / totalHealth) * 100.0) + "%";
+				String damage = df.format((value / totalHealth) * 100.0) + "%";
 				String message = this.getPlaceColor(position) + DecimateUtils.color(
-						position + ". &c&l" + set.getKey() + "&7 with &c&l" + damage + "&7 of the total damage!");
-
+						position + ". &c" + set.getKey() + "&7 with &c" + damage + "&7 of the total damage! (&c" + set.getValue()/2 + "hp&7)");
+				player.sendMessage(ChatColor.YELLOW + "You have been awarded " + ChatColor.GOLD + "$" + df.format(amount) + ChatColor.YELLOW + " and " +
+						ChatColor.GOLD + (4-position) + " keys" + ChatColor.YELLOW + "!");
 				Bukkit.broadcastMessage(message);
 				position++;
 				continue;
@@ -468,9 +456,10 @@ public class WitherBoss extends EntityMonster implements IRangedEntity {
 
 						FireworkMeta meta = fw.getFireworkMeta();
 						Builder a = FireworkEffect.builder();
-						a.withColor(getRandomColor());
-						a.with(random.nextBoolean() ? Type.BURST : Type.STAR);
-						a.withFade(Color.PURPLE, Color.BLUE, Color.BLACK, Color.FUCHSIA);
+//						a.withColor(getRandomColor());
+						a.withColor(Color.BLACK);
+						a.with(random.nextBoolean() ? Type.BURST : Type.BALL);
+						a.withFade(Color.PURPLE);
 						a.trail(true);
 						meta.addEffects(a.build());
 						if(random.nextBoolean()) {
@@ -498,12 +487,12 @@ public class WitherBoss extends EntityMonster implements IRangedEntity {
 
 	@Override
 	protected void dropDeathLoot(boolean flag, int i) {
-		ItemStack reward = DecimateCore.getCore().getCrateManager().getCrate("god crate").getItemStack();
-		 EntityItem entityitem = a(CraftItemStack.asNMSCopy(reward), 1);
-		 
-		 if (entityitem != null) {
-		 entityitem.u();
-		 }
+//		ItemStack reward = DecimateCore.getCore().getCrateManager().getCrate("god crate").getItemStack();
+//		 EntityItem entityitem = a(CraftItemStack.asNMSCopy(reward), 1);
+//		 
+//		 if (entityitem != null) {
+//		 entityitem.u();
+//		 }
 		// if (!this.world.isClientSide)
 		// {
 		// Iterator iterator = this.world.a(EntityHuman.class,
@@ -715,7 +704,7 @@ public class WitherBoss extends EntityMonster implements IRangedEntity {
 
 	@Override
 	public EnumMonsterType getMonsterType() {
-		return EnumMonsterType.UNDEAD;
+		return EnumMonsterType.UNDEFINED;
 	}
 
 	private ChatColor getPlaceColor(int position) {
@@ -756,8 +745,7 @@ public class WitherBoss extends EntityMonster implements IRangedEntity {
 		return Color.PURPLE;
 	}
 
-	private MovementAnimation getRasenganAttack(OrdinaryColor particlecolor, Location start, Vector direction,
-			double range) {
+	private MovementAnimation getRasenganAttack(OrdinaryColor particlecolor, Location start, Vector direction, double range) {
 		return new MovementAnimation(attackSphere, particlecolor, start, direction, range, 10.0D,
 				this.getBukkitEntity(), 0.50D);
 	}
@@ -774,6 +762,7 @@ public class WitherBoss extends EntityMonster implements IRangedEntity {
 	@Override
 	protected void initAttributes() {
 		super.initAttributes();
+		super.loadChunks = true;
 		this.getAttributeInstance(GenericAttributes.maxHealth).setValue(maxhealth);
 		this.getAttributeInstance(GenericAttributes.MOVEMENT_SPEED).setValue(0.6000000238418579D);
 		this.getAttributeInstance(GenericAttributes.FOLLOW_RANGE).setValue(40.0D);
@@ -937,11 +926,12 @@ public class WitherBoss extends EntityMonster implements IRangedEntity {
 	public void heal(float f) {
 		if(super.getHealth() + f <= maxhealth){
 			super.heal(f);
-			totalHealth += f;
+			totalHealth += (f/2.0);
 		}else{
 			totalHealth += maxhealth - super.getHealth();
 			super.heal(maxhealth - super.getHealth());
 		}
+		Bukkit.broadcastMessage(f + ", " + totalHealth + ", " + super.getHealth());
 	}
 
 }

@@ -7,7 +7,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import org.bukkit.ChatColor;
 import org.bukkit.OfflinePlayer;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandExecutor;
+import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -22,7 +26,7 @@ import com.google.common.collect.Maps;
 
 public class StaffCommandsManager implements Manager, Listener {
 
-	private List<String> ALLOWED = Arrays.asList("home", "spawn", "echest", "warp");
+	private List<String> ALLOWED = Arrays.asList("home", "spawn", "echest", "warp", "help", "who", "list", "gwho", "hub", "tpa");
 
 	Map<OfflinePlayer, List<String>> commands = Maps.newHashMap();
 
@@ -45,7 +49,7 @@ public class StaffCommandsManager implements Manager, Listener {
 
 	private boolean isAllowed(String message) {
 		for(String string : ALLOWED) {
-			if(string.startsWith(message)) {
+			if(string.toLowerCase().startsWith(message.toLowerCase())) {
 				return true;
 			}
 		}
@@ -62,8 +66,10 @@ public class StaffCommandsManager implements Manager, Listener {
 
 			Configuration cfg = new Configuration(DecimateCore.getCore(), "/stafflogs/" + username, month + ".yml");
 			FileConfiguration config = cfg.getData();
-
-			config.set(day, config.getStringList(day).addAll(set.getValue()));
+			
+			List<String> list = config.getStringList(day);
+			list.addAll(set.getValue());
+			config.set(day, list);
 			cfg.saveData();
 		}
 

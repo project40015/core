@@ -14,7 +14,9 @@ import org.bukkit.potion.PotionEffectType;
 
 import com.decimatepvp.core.DecimateCore;
 import com.decimatepvp.core.Manager;
+import com.decimatepvp.utils.FactionUtils;
 import com.decimatepvp.utils.PlayerUtils;
+import com.massivecraft.factions.struct.Relation;
 
 public class ComboManager implements Manager, Listener {
 
@@ -126,13 +128,21 @@ public class ComboManager implements Manager, Listener {
 		if(event.isCancelled()){
 			return;
 		}
-		if(event.getDamage() <= 0){
+		if(event.getFinalDamage() <= 0){
 			return;
 		}
 		if(event.getEntity() instanceof Player && event.getDamager() instanceof Player){
 			Player attacker = (Player) event.getDamager();
 			Player attacked = (Player) event.getEntity();
 			if(attacked.hasMetadata("NPC")){
+				return;
+			}
+			if(PlayerUtils.isInSpawn(attacker.getLocation()) || PlayerUtils.isInSpawn(attacked.getLocation())){
+				
+			}
+			if(!FactionUtils.getFaction(attacker).equals(FactionUtils.getWilderness())
+					&& !FactionUtils.getFaction(attacked).equals(FactionUtils.getWilderness())
+					&& FactionUtils.getFPlayer(attacker).getRelationTo(FactionUtils.getFPlayer(attacked)).isAtLeast(Relation.ALLY)){
 				return;
 			}
 			if(isInCombo(attacker, attacked)){
