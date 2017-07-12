@@ -76,6 +76,7 @@ import com.decimatepvp.utils.DecimateUtils;
 import com.decimatepvp.utils.ParticleEffect;
 import com.decimatepvp.utils.ParticleEffect.OrdinaryColor;
 import com.decimatepvp.utils.ParticleUtils;
+import com.decimatepvp.utils.PlayerUtils;
 import com.google.common.base.Predicate;
 import com.google.common.base.Predicates;
 import com.google.common.collect.Maps;
@@ -185,6 +186,9 @@ public class WitherBoss extends EntityMonster implements IRangedEntity {
 	}
 	
 	private void a(EntityLiving target, int i, double d0, double d1, double d2, boolean flag) {
+		if(PlayerUtils.isInSpawn(target.getWorld().getWorld().getName(), target.locX, target.locY, target.locZ)) {
+			return;
+		}
 		world.a(null, 1014, new BlockPosition(this), 0);
 		double d3 = this.t(i);
 		double d4 = this.u(i);
@@ -333,8 +337,8 @@ public class WitherBoss extends EntityMonster implements IRangedEntity {
 
 	@Override
 	protected String bo() {
-		return "mob.skeleton.hurt";
-//		return "mob.wither.hurt";
+//		return "mob.skeleton.hurt";
+		return "mob.wither.hurt";
 	}
 
 	@Override
@@ -408,7 +412,7 @@ public class WitherBoss extends EntityMonster implements IRangedEntity {
 		for(Entry<String, Float> set : playerDamage.entrySet()) {
 			if(position <= 3) {
 				Player player = Bukkit.getServer().getPlayer(set.getKey());
-				double value = set.getValue() > 100 ? 100 : set.getValue();
+				double value = set.getValue();
 				double amount = (value / totalHealth)*5000000;
 				if(player != null){
 					DecimateCore.getCore().eco.depositPlayer(player, amount);
@@ -416,7 +420,7 @@ public class WitherBoss extends EntityMonster implements IRangedEntity {
 				}
 				String damage = df.format((value / totalHealth) * 100.0) + "%";
 				String message = this.getPlaceColor(position) + DecimateUtils.color(
-						position + ". &c" + set.getKey() + "&7 with &c" + damage + "&7 of the total damage! (&c" + set.getValue()/2 + "hp&7)");
+						position + ". &c" + set.getKey() + "&7 with &c" + damage + "&7 of the total damage! (&c" + set.getValue() + "hp&7)");
 				player.sendMessage(ChatColor.YELLOW + "You have been awarded " + ChatColor.GOLD + "$" + df.format(amount) + ChatColor.YELLOW + " and " +
 						ChatColor.GOLD + (4-position) + " keys" + ChatColor.YELLOW + "!");
 				Bukkit.broadcastMessage(message);
@@ -926,12 +930,11 @@ public class WitherBoss extends EntityMonster implements IRangedEntity {
 	public void heal(float f) {
 		if(super.getHealth() + f <= maxhealth){
 			super.heal(f);
-			totalHealth += (f/2.0);
+			totalHealth += (f);
 		}else{
 			totalHealth += maxhealth - super.getHealth();
 			super.heal(maxhealth - super.getHealth());
 		}
-		Bukkit.broadcastMessage(f + ", " + totalHealth + ", " + super.getHealth());
 	}
 
 }

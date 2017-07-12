@@ -20,6 +20,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.craftbukkit.v1_8_R3.entity.CraftEntity;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.Projectile;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
@@ -45,6 +46,12 @@ public class EntityManager implements Manager, Listener, CommandExecutor {
 		org.bukkit.entity.Entity damager = event.getDamager();
 		org.bukkit.entity.Entity damagee = event.getEntity();
 		
+//		if(damager instanceof Projectile) {
+//			if(((Projectile)damager).getShooter() instanceof Player) {
+//				damager = (Player) ((Projectile)damager).getShooter();
+//			}
+//		}
+		
 		if(damager instanceof Player) {
 			if(((CraftEntity) damagee).getHandle() instanceof WitherBoss) {
 				double damage = event.getFinalDamage();
@@ -57,7 +64,7 @@ public class EntityManager implements Manager, Listener, CommandExecutor {
 					}
 				
 					boss.playerDamage.put(player.getName(), (float) (boss.playerDamage.containsKey(player.getName())
-							? boss.playerDamage.get(player.getName()) + damage : damage));
+							? boss.playerDamage.get(player.getName()) + (damage) : (damage)));
 				}
 			}
 		}
