@@ -1,13 +1,12 @@
 package com.decimatepvp.minievents;
 
-import java.text.DecimalFormat;
-import java.text.NumberFormat;
 import java.util.UUID;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Chicken;
 import org.bukkit.entity.Creeper;
 import org.bukkit.entity.EntityType;
@@ -29,20 +28,21 @@ import org.bukkit.event.inventory.InventoryOpenEvent;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerKickEvent;
-import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 import org.bukkit.event.weather.WeatherChangeEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.permissions.Permission;
+import org.bukkit.permissions.PermissionDefault;
 
 import com.decimatepvp.utils.FactionUtils;
 import com.decimatepvp.utils.PlayerUtils;
 import com.massivecraft.factions.Faction;
-<<<<<<< HEAD
-=======
 
->>>>>>> origin/master
+import decimate.WarSocket.ServerInformationPacketRequestEvent;
+import decimate.WarSocket.WarSocket;
+
 public class MiniEvents implements Listener {
 	
 	@EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
@@ -150,18 +150,6 @@ public class MiniEvents implements Listener {
 			}
 		}
 	}
-	
-	//TODO add back
-	
-//	@EventHandler
-//	public void onRequest(ServerInformationPacketRequestEvent event){
-//		Faction faction = FactionUtils.getFaction(Bukkit.getOfflinePlayer(UUID.fromString(event.getUUID())));
-//		if(faction.equals(FactionUtils.getWilderness())){
-//			WarSocket.getInstance().emitServerInformationPacketResult(event.getUUID(), "");
-//		}else{
-//			WarSocket.getInstance().emitServerInformationPacketResult(event.getUUID(), faction.getTag());
-//		}
-//	}
 	
 //	@EventHandler
 //	public void onMove(PlayerMoveEvent event){

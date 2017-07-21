@@ -89,3 +89,5 @@ commands:
     aliases: [trail]
   trade:
     description: Allows the trade of both item and money between two players.
+  war:
+    description: Unknown

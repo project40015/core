@@ -97,29 +97,10 @@ public class AccountIPManager implements Manager, Listener, CommandExecutor {
 			}
 			if(ip != null) {
 				List<OfflinePlayer> list = getAccountsOnIP(ip);
-<<<<<<< HEAD
 				sender.sendMessage(ChatColor.DARK_GRAY.toString() + ChatColor.STRIKETHROUGH + "-------------------------------");
 				sender.sendMessage(ChatColor.RED + "IP: " + ChatColor.GOLD + ip.getHostAddress() + ChatColor.GRAY + " (page " + (page+1) + "/" + (list.size()/3 + (list.size() % 3 == 0 ? 0 : 1)) + ")" + ChatColor.RED + ": ");
 				sender.sendMessage(ChatColor.RED + "Accounts on IP: " + ChatColor.GOLD + list.size());
-				
-				for(int i = 0; start < list.size(); start++) {
-					if(i < 3) {
-						OfflinePlayer offp = list.get(start);
-						sender.sendMessage((offp.isOnline() ? ChatColor.GREEN : ChatColor.GRAY) + offp.getName() + ChatColor.GRAY + ":");
-						sender.sendMessage(ChatColor.YELLOW + "    UUID: " + ChatColor.GREEN + offp.getUniqueId().toString());
-						if(offp.isOnline()) {
-							sender.sendMessage(ChatColor.YELLOW + "    Display: " + offp.getPlayer().getDisplayName());
-							sender.sendMessage(ChatColor.YELLOW + "    Online: " + ChatColor.GREEN + "TRUE");
-						}
-						else {
-							sender.sendMessage(
-									ChatColor.YELLOW + "    Last Online: "  + ChatColor.LIGHT_PURPLE + longToDate(offp.getLastPlayed()));
-							sender.sendMessage(ChatColor.YELLOW + "    Online: " + ChatColor.RED + "FALSE");
-						}
-=======
-//				for(OfflinePlayer pl : list) {
-//					Bukkit.broadcastMessage(pl.getName());
-//				}
+
 				sender.sendMessage(ChatColor.GOLD + "-------------------------------");
 				sender.sendMessage(ChatColor.RED + "IP: " + ChatColor.GOLD + ip.toString() + ChatColor.RED + ": ");
 				sender.sendMessage(ChatColor.RED + "Accounts on IP: " + ChatColor.GOLD + list.size());
@@ -131,7 +112,6 @@ public class AccountIPManager implements Manager, Listener, CommandExecutor {
 					if(offp.isOnline()) {
 						sender.sendMessage(ChatColor.YELLOW + "    Display: " + offp.getPlayer().getDisplayName());
 						sender.sendMessage(ChatColor.YELLOW + "    Online: " + ChatColor.GREEN + "True");
->>>>>>> origin/master
 					}
 					else {
 						sender.sendMessage(
@@ -246,11 +226,7 @@ public class AccountIPManager implements Manager, Listener, CommandExecutor {
 	}
 	
 	private String longToDate(long time) {
-<<<<<<< HEAD
 		SimpleDateFormat sdf = new SimpleDateFormat("MM.dd.yyyy HH:mm", Locale.US);
-=======
-		SimpleDateFormat sdf = new SimpleDateFormat("MM-dd-yyyy HH:mm",Locale.US);
->>>>>>> origin/master
 
 		GregorianCalendar calendar = new GregorianCalendar(TimeZone.getTimeZone("UTC"));
 		calendar.setTimeInMillis(time);

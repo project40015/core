@@ -36,6 +36,7 @@ import com.decimatepvp.functions.crate.CrateManager;
 import com.decimatepvp.functions.crate.rewards.RewardListener;
 import com.decimatepvp.functions.disabletnt.TntDisableManager;
 import com.decimatepvp.functions.extraexplodables.ExplodableManager;
+import com.decimatepvp.functions.joinWar.JoinWar;
 import com.decimatepvp.functions.misc.PlaytimeManager;
 import com.decimatepvp.functions.misc.crophopper.CropHopperCommand;
 import com.decimatepvp.functions.misc.crophopper.CropHopperManager;
@@ -140,6 +141,7 @@ public class DecimateCore extends JavaPlugin implements PluginMessageListener {
 	private AnnouncementManager announcementManager;
 	private TrenchPick trenchPick;
 	private ExplodableManager explodableManager;
+	private JoinWar joinWar;
 	
 	@Override
 	public void onEnable() {
@@ -158,6 +160,7 @@ public class DecimateCore extends JavaPlugin implements PluginMessageListener {
 		announcementManager = new AnnouncementManager();
 		entityManager = new EntityManager();
 		trenchPick = new TrenchPick();
+		joinWar = new JoinWar();
 
 		int n = 0;
 		managers[n++] = freezeManager = new FreezeManager(this);
@@ -197,7 +200,8 @@ public class DecimateCore extends JavaPlugin implements PluginMessageListener {
 				crateManager, comboManager, pvpManager, new EnchantmentLimitManager(), commandBookManager,
 				new RewardListener(), trenchPick, sellWandManager, new ExplosionListener(), new DecimateStop(),
 				new TntDisableManager(), new KillRewardListener(), new PreCommandCancel(), new BedrockFix(),
-				new VehiclePlaceBugListener(), playtimeManager, new EnemyTerritoryLogoutManager(), trailManager);
+				new VehiclePlaceBugListener(), playtimeManager, new EnemyTerritoryLogoutManager(), trailManager,
+				joinWar);
 		
 		loadListeners(worldBorders);
 	}
@@ -271,6 +275,8 @@ public class DecimateCore extends JavaPlugin implements PluginMessageListener {
 		getCommand("playtime").setExecutor(playtimeManager);
 		getCommand("trails").setExecutor(this.trailManager);
 		getCommand("trade").setExecutor(tradeManager);
+		
+		getCommand("war").setExecutor(joinWar);
 	}
 
 	public static DecimateCore getCore() {
