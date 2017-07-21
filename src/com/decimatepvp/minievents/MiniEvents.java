@@ -39,6 +39,10 @@ import org.bukkit.inventory.ItemStack;
 import com.decimatepvp.utils.FactionUtils;
 import com.decimatepvp.utils.PlayerUtils;
 import com.massivecraft.factions.Faction;
+<<<<<<< HEAD
+=======
+
+>>>>>>> origin/master
 public class MiniEvents implements Listener {
 	
 	@EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
@@ -184,10 +188,21 @@ public class MiniEvents implements Listener {
 	
 	@EventHandler
 	public void onPlace(BlockPlaceEvent event){
-		if(event.getBlock().getY() == event.getPlayer().getLocation().getBlockY() - 1){
-			if(event.getPlayer().getGameMode() == GameMode.CREATIVE){
-				event.getPlayer().setVelocity(event.getPlayer().getVelocity().setY(-1));
+		if(event.getBlock().getLocation().getBlockY() == event.getPlayer().getLocation().getBlockY() - 1){
+			if(PlayerUtils.isInSpawn(event.getPlayer())) {
+				return;
 			}
+			Faction faction = FactionUtils.getFactionByLoc(event.getBlock().getLocation()); 
+			if(faction.equals(FactionUtils.getWilderness())) {
+				return;
+			}
+			if(faction.getOnlinePlayers().contains(event.getPlayer())) {
+				return;
+			}
+			if(event.getPlayer().getGameMode() == GameMode.CREATIVE){
+				return;
+			}
+			event.getPlayer().setVelocity(event.getPlayer().getVelocity().setY(-1));
 		}
 	}
 	

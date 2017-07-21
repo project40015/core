@@ -47,25 +47,29 @@ public class PlayerUtils {
 		return isInSpawn(player.getLocation());
 	}
 	
-	public static boolean isInSpawn(Location loc){
-		if(loc.getWorld().getName().equals("world")){
-			if(loc.getX() > -75 && loc.getX() < 77){
-				if(loc.getY() > 64){
-					if(loc.getZ() > -75 && loc.getZ() < 77){
+	public static boolean isInSpawn(String world, double x, double y, double z) {
+		if(world.equals("world")){
+			if(x > -75 && x < 77){
+				if(y > 64){
+					if(z > -75 && z < 77){
 						return true;
 					}
 				}
 			}
-		}else if(loc.getWorld().getName().equals("world_the_end")){
-			if(loc.getX() > -7 && loc.getX() < 8){
-				if(loc.getY() > 68){
-					if(loc.getZ() > -7 && loc.getZ() < 8){
+		}else if(world.equals("world_the_end")){
+			if(x > -7 && x < 8){
+				if(y > 68){
+					if(z > -7 && z < 8){
 						return true;
 					}
 				}
 			}
 		}
 		return false;
+	}
+	
+	public static boolean isInSpawn(Location loc){
+		return isInSpawn(loc.getWorld().getName(), loc.getX(), loc.getY(), loc.getZ());
 	}
 	
 	public static BossBar sendBossbar(Player player, String message, BossBarAPI.Color color, BossBarAPI.Style style,

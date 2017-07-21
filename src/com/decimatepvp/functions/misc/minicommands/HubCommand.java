@@ -21,7 +21,7 @@ public class HubCommand implements CommandExecutor {
 		
 		Player player = (Player) arg0;
 		
-		if(!PlayerUtils.isInSpawn(player)){
+		if(!PlayerUtils.isInSpawn(player) && !player.hasPermission("Decimate.hub.everywhere")){
 			arg0.sendMessage(ChatColor.RED + "This command is only usable in safezones. If you wish to use it here please type " + ChatColor.YELLOW + "/logout" + ChatColor.RED + "!");
 			return false;
 		}
