@@ -1,5 +1,10 @@
 package com.decimatepvp.minievents;
 
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
+import java.util.UUID;
+
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
@@ -24,14 +29,16 @@ import org.bukkit.event.inventory.InventoryOpenEvent;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerKickEvent;
+import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 import org.bukkit.event.weather.WeatherChangeEvent;
 import org.bukkit.inventory.ItemStack;
 
+import com.decimatepvp.utils.FactionUtils;
 import com.decimatepvp.utils.PlayerUtils;
-
+import com.massivecraft.factions.Faction;
 public class MiniEvents implements Listener {
 	
 	@EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
@@ -139,6 +146,27 @@ public class MiniEvents implements Listener {
 			}
 		}
 	}
+	
+	//TODO add back
+	
+//	@EventHandler
+//	public void onRequest(ServerInformationPacketRequestEvent event){
+//		Faction faction = FactionUtils.getFaction(Bukkit.getOfflinePlayer(UUID.fromString(event.getUUID())));
+//		if(faction.equals(FactionUtils.getWilderness())){
+//			WarSocket.getInstance().emitServerInformationPacketResult(event.getUUID(), "");
+//		}else{
+//			WarSocket.getInstance().emitServerInformationPacketResult(event.getUUID(), faction.getTag());
+//		}
+//	}
+	
+//	@EventHandler
+//	public void onMove(PlayerMoveEvent event){
+//		if(event.getPlayer().getName().equalsIgnoreCase("_Ug")){
+//			NumberFormat formatter = new DecimalFormat("#0.00");
+//			double d = event.getTo().distance(event.getFrom())*2 - event.getPlayer().getVelocity().length();
+//			PlayerUtils.sendActionbar(event.getPlayer(), (d < 0 ? ChatColor.RED.toString() : ChatColor.GREEN.toString() + "+") + formatter.format(d));
+//		}
+//	}
 	
 	@EventHandler
 	public void onSpawn(CreatureSpawnEvent event){

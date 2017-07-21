@@ -22,8 +22,8 @@ import com.google.common.collect.Maps;
 
 public class BlacklistManager implements Manager, CommandExecutor {
 
-	public static final String BAN_MESSAGE_REASON = "Player {BANNER} permanently banned {BANNED}: {REASON}";
-	public static final String BAN_MESSAGE = "Player {BANNER} permanently banned {BANNED}";
+	public static final String BAN_MESSAGE_REASON = "Player {BANNER} blacklisted {BANNED}: {REASON}";
+	public static final String BAN_MESSAGE = "Player {BANNER} blacklisted {BANNED}";
 
 	private Map<OfflinePlayer, String> blacklisted = Maps.newHashMap();
 
@@ -39,12 +39,12 @@ public class BlacklistManager implements Manager, CommandExecutor {
 		if(sender.hasPermission("Decimate.staff.blacklist")) {
 			if(command.getName().equalsIgnoreCase("blacklist")) {
 				if(args.length == 0) {
-					sender.sendMessage(ChatColor.GOLD + "Proper Usage: /blacklist [player] [reason]");
+					sender.sendMessage(ChatColor.RED + "Proper Usage: /blacklist [player] [reason]");
 				}
 				else if(args.length == 1) {
 					OfflinePlayer plyr = Bukkit.getOfflinePlayer(args[0]);
 
-					if(!plyr.isOnline()) {
+					if(plyr == null) {
 						sender.sendMessage(ChatColor.RED + "Player not found...");
 						return false;
 					}
@@ -107,6 +107,7 @@ public class BlacklistManager implements Manager, CommandExecutor {
 					if(ip != null) {
 						sender.sendMessage(ChatColor.GREEN + "Player's ip has been pardoned.");
 						Bukkit.unbanIP(ip);
+						pardon(ip);
 					}
 
 					if(plyr != null) {
@@ -126,6 +127,14 @@ public class BlacklistManager implements Manager, CommandExecutor {
 
 		return false;
 	}
+	
+	private void pardon(String ip){
+		for(OfflinePlayer offpl : blacklisted.keySet()){
+			if(blacklisted.get(offpl).equals(ip)){
+				offpl.setBanned(false);
+			}
+		}
+	}
 
 	private String getIp(OfflinePlayer plyr) {
 		return ipaddresses.get(plyr);
@@ -137,6 +146,11 @@ public class BlacklistManager implements Manager, CommandExecutor {
 			plyr.setBanned(true);
 			Bukkit.banIP(plyr.getAddress().getAddress().getHostAddress());
 			ipaddresses.put(plyr, plyr.getAddress().getAddress().getHostAddress());
+			for(Player player : Bukkit.getServer().getOnlinePlayers()){
+				if(player.getAddress().getAddress().getHostAddress().equals(plyr.getAddress().getAddress().getHostAddress())){
+					player.kickPlayer(ChatColor.RED + "Blacklisted from decimatepvp.");
+				}
+			}
 		}
 	}
 

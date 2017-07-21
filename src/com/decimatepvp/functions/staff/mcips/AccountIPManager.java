@@ -54,7 +54,10 @@ public class AccountIPManager implements Manager, Listener, CommandExecutor {
 				InetAddress ip = InetAddress.getByName(str.replaceAll("_", "."));
 				List<OfflinePlayer> players = Lists.newArrayList();
 				for(String plyr : config.getStringList(str + ".players")) {
-					players.add(Bukkit.getOfflinePlayer(UUID.fromString(plyr)));
+					OfflinePlayer offpl = Bukkit.getOfflinePlayer(UUID.fromString(plyr));
+					if(!players.contains(offpl)){
+						players.add(offpl);
+					}
 				}
 				sharedIps.put(ip, players);
 			}
@@ -71,11 +74,11 @@ public class AccountIPManager implements Manager, Listener, CommandExecutor {
 				sender.sendMessage(ChatColor.GOLD + "Proper Usage: /iplist [player]");
 				return false;
 			}
-			int start = 0;
+			int start = 0, page = 0;
 			
 			if(args.length > 1) {
 				if(NumberUtils.isNumber(args[1]) && !args[1].contains("\\.")) {
-					int page = Math.max(0, (int) Double.parseDouble(args[1]));
+					page = Math.max(0, (int) Double.parseDouble(args[1]) - 1);
 					
 					start = page * 3;
 				}
@@ -85,27 +88,32 @@ public class AccountIPManager implements Manager, Listener, CommandExecutor {
 				}
 			}
 			
-			OfflinePlayer plyr = Bukkit.getOfflinePlayer(args[0]);
-			InetAddress ip = plyr.isOnline() ? plyr.getPlayer().getAddress().getAddress() : getPlayerAddress(plyr);
+			InetAddress ip;
+			try{
+				ip = InetAddress.getByName(args[0]);
+			}catch(Exception ex){
+				OfflinePlayer plyr = Bukkit.getOfflinePlayer(args[0]);
+				ip = plyr.isOnline() ? plyr.getPlayer().getAddress().getAddress() : getPlayerAddress(plyr);
+			}
 			if(ip != null) {
 				List<OfflinePlayer> list = getAccountsOnIP(ip);
-				sender.sendMessage(ChatColor.GOLD + "-------------------------------");
-				sender.sendMessage(ChatColor.RED + "IP: " + ChatColor.GOLD + ip.toString() + ChatColor.RED + ": ");
+				sender.sendMessage(ChatColor.DARK_GRAY.toString() + ChatColor.STRIKETHROUGH + "-------------------------------");
+				sender.sendMessage(ChatColor.RED + "IP: " + ChatColor.GOLD + ip.getHostAddress() + ChatColor.GRAY + " (page " + (page+1) + "/" + (list.size()/3 + (list.size() % 3 == 0 ? 0 : 1)) + ")" + ChatColor.RED + ": ");
 				sender.sendMessage(ChatColor.RED + "Accounts on IP: " + ChatColor.GOLD + list.size());
 				
 				for(int i = 0; start < list.size(); start++) {
 					if(i < 3) {
 						OfflinePlayer offp = list.get(start);
-						sender.sendMessage(ChatColor.GREEN + offp.getName() + ":");
+						sender.sendMessage((offp.isOnline() ? ChatColor.GREEN : ChatColor.GRAY) + offp.getName() + ChatColor.GRAY + ":");
 						sender.sendMessage(ChatColor.YELLOW + "    UUID: " + ChatColor.GREEN + offp.getUniqueId().toString());
 						if(offp.isOnline()) {
 							sender.sendMessage(ChatColor.YELLOW + "    Display: " + offp.getPlayer().getDisplayName());
-							sender.sendMessage(ChatColor.YELLOW + "    Online: " + ChatColor.GREEN + "True");
+							sender.sendMessage(ChatColor.YELLOW + "    Online: " + ChatColor.GREEN + "TRUE");
 						}
 						else {
 							sender.sendMessage(
-									ChatColor.YELLOW + "    Last Online: "  + ChatColor.AQUA + longToDate(offp.getLastPlayed()));
-							sender.sendMessage(ChatColor.YELLOW + "    Online: " + ChatColor.RED + "False");
+									ChatColor.YELLOW + "    Last Online: "  + ChatColor.LIGHT_PURPLE + longToDate(offp.getLastPlayed()));
+							sender.sendMessage(ChatColor.YELLOW + "    Online: " + ChatColor.RED + "FALSE");
 						}
 					}
 					else {
@@ -115,13 +123,13 @@ public class AccountIPManager implements Manager, Listener, CommandExecutor {
 					i++;
 				}
 				
-				sender.sendMessage(ChatColor.GOLD + "-------------------------------");
+				sender.sendMessage(ChatColor.DARK_GRAY.toString() + ChatColor.STRIKETHROUGH + "-------------------------------");
 				if(start < list.size()) {
-					sender.sendMessage(ChatColor.GOLD + "Use '/iplist [player] [page]' to see more.");
+					sender.sendMessage(ChatColor.GRAY + "Use '/iplist [player] [page]' to see more.");
 				}
 			}
 			else {
-				sender.sendMessage(ChatColor.RED + "This player has not joined.");
+				sender.sendMessage(ChatColor.RED + "IP list not found.");
 			}
 		}
 		else {
@@ -185,12 +193,13 @@ public class AccountIPManager implements Manager, Listener, CommandExecutor {
 	}
 
 	private void addPlayerToList(Player player) {
-		InetAddress ip = player.getAddress().getAddress();
-//		try {
-//			ip = InetAddress.getByName("66.172.68.177");
-//		} catch (UnknownHostException e) {
-//			e.printStackTrace();
-//		}
+//		InetAddress ip = player.getAddress().getAddress();
+		InetAddress ip;
+		try {
+			ip = InetAddress.getByName(player.getAddress().getAddress().getHostAddress());
+		} catch (UnknownHostException e) {
+			return;
+		}
 		if(sharedIps.containsKey(ip)) {
 			if(!sharedIps.get(ip).contains(player)) {
 				List<OfflinePlayer> newList = sharedIps.get(ip);
@@ -208,13 +217,17 @@ public class AccountIPManager implements Manager, Listener, CommandExecutor {
 	
 	private boolean isInList(Player player) {
 		if(sharedIps.containsKey(player.getAddress().getAddress())) {
-			return true;
+			for(OfflinePlayer offp : sharedIps.get(player.getAddress().getAddress())){
+				if(offp.getUniqueId().toString().equals(player.getUniqueId().toString())){
+					return true;
+				}
+			}
 		}
 		return false;
 	}
 	
 	private String longToDate(long time) {
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm",Locale.US);
+		SimpleDateFormat sdf = new SimpleDateFormat("MM.dd.yyyy HH:mm", Locale.US);
 
 		GregorianCalendar calendar = new GregorianCalendar(TimeZone.getTimeZone("UTC"));
 		calendar.setTimeInMillis(time);
