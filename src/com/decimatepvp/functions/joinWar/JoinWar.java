@@ -50,6 +50,8 @@ public class JoinWar implements Listener, CommandExecutor {
 			
 			if(player.hasPermission(new Permission("Decimate.rank.owner", PermissionDefault.FALSE))){
 				return "OWNER";
+			}else if(player.hasPermission(new Permission("Decimate.rank.developer", PermissionDefault.FALSE))){
+				return "DEVELOPER";
 			}else if(player.hasPermission(new Permission("Decimate.rank.moderator", PermissionDefault.FALSE))){
 				return "MODERATOR";
 			}else if(player.hasPermission(new Permission("Decimate.rank.helper", PermissionDefault.FALSE))){
