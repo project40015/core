@@ -24,8 +24,8 @@ import com.decimatepvp.functions.crate.Crate;
 import com.decimatepvp.functions.crate.CrateReward;
 import com.decimatepvp.functions.crate.Rarity;
 import com.decimatepvp.utils.ParticleEffect;
-import com.decimatepvp.utils.ParticleUtils;
 import com.decimatepvp.utils.ParticleEffect.OrdinaryColor;
+import com.decimatepvp.utils.ParticleUtils;
 
 public abstract class TypicalCrate extends Crate {
 
@@ -197,6 +197,10 @@ public abstract class TypicalCrate extends Crate {
 			inventory.setItem(i, reward().getIcon(super.getTotalChance()));
 		}
 		
+//		if(player.getOpenInventory() != null){
+//			player.closeInventory();
+//		}
+		
 		player.openInventory(inventory);
 		final int p = 20;
 		int[] runners = new int[p];
@@ -249,8 +253,9 @@ public abstract class TypicalCrate extends Crate {
 //		}
 		if(!this.closed.contains(player.getName())){
 			effect(player, reward, location);
+			return true;
 		}
-		return !this.closed.contains(player.getName());
+		return false;
 	}
 
 	@Override
