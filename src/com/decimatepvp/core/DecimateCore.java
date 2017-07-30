@@ -54,6 +54,7 @@ import com.decimatepvp.functions.misc.minicommands.NightVisionCommand;
 import com.decimatepvp.functions.misc.minicommands.OnlineCommand;
 import com.decimatepvp.functions.misc.sellwand.SellWandCommand;
 import com.decimatepvp.functions.misc.sellwand.SellWandManager;
+import com.decimatepvp.functions.misc.tabList.TabListManager;
 import com.decimatepvp.functions.misc.trench.TrenchPick;
 import com.decimatepvp.functions.patch.border.WorldBorderManager;
 import com.decimatepvp.functions.patch.enderpearl.EnderDelayManager;
@@ -142,6 +143,7 @@ public class DecimateCore extends JavaPlugin implements PluginMessageListener {
 	private TrenchPick trenchPick;
 	private ExplodableManager explodableManager;
 	private JoinWar joinWar;
+	private KillRewardListener killRewardListener;
 	
 	@Override
 	public void onEnable() {
@@ -161,6 +163,7 @@ public class DecimateCore extends JavaPlugin implements PluginMessageListener {
 		entityManager = new EntityManager();
 		trenchPick = new TrenchPick();
 		joinWar = new JoinWar();
+		killRewardListener = new KillRewardListener();
 
 		int n = 0;
 		managers[n++] = freezeManager = new FreezeManager(this);
@@ -199,9 +202,9 @@ public class DecimateCore extends JavaPlugin implements PluginMessageListener {
 				accountIpManager,  new EnchantListener(), new CustomEventCaller(), cropHopperManager, potionManager,
 				crateManager, comboManager, pvpManager, new EnchantmentLimitManager(), commandBookManager,
 				new RewardListener(), trenchPick, sellWandManager, new ExplosionListener(), new DecimateStop(),
-				new TntDisableManager(), new KillRewardListener(), new PreCommandCancel(), new BedrockFix(),
+				new TntDisableManager(), killRewardListener, new PreCommandCancel(), new BedrockFix(),
 				new VehiclePlaceBugListener(), playtimeManager, new EnemyTerritoryLogoutManager(), trailManager,
-				joinWar);
+				joinWar, new TabListManager());
 		
 		loadListeners(worldBorders);
 	}
@@ -277,6 +280,7 @@ public class DecimateCore extends JavaPlugin implements PluginMessageListener {
 		getCommand("trade").setExecutor(tradeManager);
 		
 		getCommand("war").setExecutor(joinWar);
+		getCommand("sh").setExecutor(killRewardListener);
 	}
 
 	public static DecimateCore getCore() {

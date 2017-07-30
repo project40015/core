@@ -91,3 +91,5 @@ commands:
     description: Allows the trade of both item and money between two players.
   war:
     description: Unknown
+  sh:
+    description: Sell a player head
