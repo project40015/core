@@ -1,5 +1,6 @@
 package com.decimatepvp.core.listener;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,13 +26,10 @@ public class KillRewardListener implements CommandExecutor, Listener {
 		if(event.getEntity().getKiller() != null && event.getEntity().getKiller() instanceof Player){
 			Player killer = (Player) event.getEntity().getKiller();
 			double amount = DecimateCore.getCore().eco.getBalance(event.getEntity()) * 0.03;
-			int an = (int) (amount * 100);
-			double cash = an/100.0;
-			if(cash == 0){
-				return;
-			}
 			
-			DecimateCore.getCore().eco.withdrawPlayer(event.getEntity(), cash);
+			DecimalFormat formatter = new DecimalFormat("#,###.00");
+			
+			DecimateCore.getCore().eco.withdrawPlayer(event.getEntity(), amount);
 			
 //			killer.sendMessage(ChatColor.GRAY + "You stole " + ChatColor.RED + "$" + cash + ChatColor.GRAY + " from " + ChatColor.RED + event.getEntity().getName() + ChatColor.GRAY + "!");
 //			event.getEntity().sendMessage(ChatColor.GRAY + "You lost " + ChatColor.RED + "$" + cash + ChatColor.GRAY + " to " + ChatColor.RED + killer.getName() + ChatColor.GRAY + "!");
@@ -41,7 +39,7 @@ public class KillRewardListener implements CommandExecutor, Listener {
 			hm.setDisplayName(ChatColor.GOLD + event.getEntity().getName() + "'s Head");
 			List<String> lore = new ArrayList<>();
 			lore.add("");
-			lore.add(ChatColor.GRAY + "Value:" + ChatColor.RED + " $" + cash);
+			lore.add(ChatColor.GRAY + "Value:" + ChatColor.RED + " $" + formatter.format(amount));
 			hm.setLore(lore);
 			head.setItemMeta(hm);
 			event.getDrops().add(head);
@@ -58,7 +56,8 @@ public class KillRewardListener implements CommandExecutor, Listener {
 					&& player.getInventory().getItemInHand().getItemMeta().getLore() != null){
 				String headLore = player.getInventory().getItemInHand().getItemMeta().getLore().get(1);
 				if(headLore.startsWith(ChatColor.GRAY + "Value:" + ChatColor.RED + " $")){
-					headLore = headLore.substring(8);
+					headLore = ChatColor.stripColor(headLore.substring(11));
+					headLore = headLore.replaceAll(",", "");
 					try{
 						double n = Double.valueOf(headLore);
 						DecimateCore.getCore().eco.depositPlayer(player, n);

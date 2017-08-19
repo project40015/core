@@ -35,7 +35,7 @@ public class TradeInventory  {
 		this.player1 = player1;
 		this.player2 = player2;
 		
-		trade1 = Bukkit.createInventory(null, 54, ChatColor.YELLOW + "Trade with " + player2.getName());
+		trade1 = Bukkit.createInventory(player1, 54, ChatColor.YELLOW + "Trade with " + player2.getName());
 
 		trade1.setItem(36, ItemUtils.createItem(Material.REDSTONE, 1, "&cDecline Trade"));
 		trade1.setItem(30, ItemUtils.createItem(Material.INK_SACK, 1, (byte) 8, "&7Ready?"));
@@ -49,10 +49,10 @@ public class TradeInventory  {
 		trade1.setItem(32, ItemUtils.createItem(Material.INK_SACK, 1, (byte) 8, "&7Not ready"));
 		trade1.setItem(41, ItemUtils.createItem(Material.GOLD_BLOCK, 1, (byte) 0, "&6Money Trading", "&2$0.00"));
 
-		trade2 = Bukkit.createInventory(null, 54, ChatColor.YELLOW + "Trade with " + player1.getName());
+		trade2 = Bukkit.createInventory(player2, 54, ChatColor.YELLOW + "Trade with " + player1.getName());
 		
 		trade2.setContents(trade1.getContents().clone());
-		trade2.setItem(9, bar.clone());
+//		trade2.setItem(9, bar.clone());
 		
 		for(int slot = 4; slot < 54; slot += 9) {
 			trade1.setItem(slot, bar);
@@ -63,13 +63,17 @@ public class TradeInventory  {
 	/**
 	 * Syncs the inventories of trade1 and trade2
 	 */
-	public void sync() {
-		syncReady();
+	public void sync(boolean reReady) {
+		syncReady(reReady);
 		syncItems();
 		syncMoney();
 
 		player1.updateInventory();
 		player2.updateInventory();
+		
+		if(ready1 && ready2){
+			this.endTrade(true);
+		}
 	}
 	
 	private void syncMoney() {
@@ -91,15 +95,23 @@ public class TradeInventory  {
 
 			if(item2 != null) {
 				trade1.setItem(manager.itemSlots.get(slot), item2);
+			}else{
+				trade1.setItem(manager.itemSlots.get(slot), new ItemStack(Material.AIR));
 			}
 			
 			if(item1 != null) {
 				trade2.setItem(manager.itemSlots.get(slot), item1);
+			}else{
+				trade2.setItem(manager.itemSlots.get(slot), new ItemStack(Material.AIR));
 			}
 		}
 	}
 
-	private void syncReady() {
+	private void syncReady(boolean reReady) {
+		if(reReady){
+			this.ready1 = false;
+			this.ready2 = false;
+		}
 		if(ready2) {
 			trade1.setItem(32, ItemUtils.createItem(Material.INK_SACK, 1, (byte) 10, "&aReady!"));
 			trade2.setItem(30, ItemUtils.createItem(Material.INK_SACK, 1, (byte) 10, "&aReady!"));
@@ -180,28 +192,52 @@ public class TradeInventory  {
 		player2.openInventory(trade2);
 	}
 	
-	public void endTrade() {
+	public void endTrade(boolean success) {
 		for(int slot : manager.itemSlots.keySet()) {
 			ItemStack i1 = trade1.getItem(slot);
 			ItemStack i2 = trade2.getItem(slot);
 
-			if(player1 != null && i1 != null) {
-				if(player1.getInventory().firstEmpty() != -1) {
-					player1.getInventory().addItem(i1);
+			if(!success){
+				if(player1 != null && i1 != null) {
+					if(player1.getInventory().firstEmpty() != -1) {
+						player1.getInventory().addItem(i1);
+					}
+					else {
+						player1.getWorld().dropItem(player1.getLocation(), i1);
+					}
 				}
-				else {
-					player1.getWorld().dropItem(player1.getLocation(), i1);
+			}else{
+				if(player2 != null && i1 != null) {
+					if(player2.getInventory().firstEmpty() != -1) {
+						player2.getInventory().addItem(i1);
+					}
+					else {
+						player2.getWorld().dropItem(player2.getLocation(), i1);
+					}
 				}
 			}
-			else if(player2 != null && i2 != null) {
-				if(player2.getInventory().firstEmpty() != -1) {
-					player2.getInventory().addItem(i2);
+			if(!success){
+				if(player2 != null && i2 != null) {
+					if(player2.getInventory().firstEmpty() != -1) {
+						player2.getInventory().addItem(i2);
+					}
+					else {
+						player2.getWorld().dropItem(player2.getLocation(), i2);
+					}
 				}
-				else {
-					player2.getWorld().dropItem(player2.getLocation(), i2);
+			}else{
+				if(player1 != null && i2 != null) {
+					if(player1.getInventory().firstEmpty() != -1) {
+						player1.getInventory().addItem(i2);
+					}
+					else {
+						player1.getWorld().dropItem(player1.getLocation(), i2);
+					}
 				}
 			}
 		}
+		player1.getOpenInventory().close();
+		player2.getOpenInventory().close();
 	}
 	
 }
