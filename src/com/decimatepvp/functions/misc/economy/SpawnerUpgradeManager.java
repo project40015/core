@@ -98,7 +98,7 @@ public class SpawnerUpgradeManager implements Listener, CommandExecutor {
 	}
 	
 	private void playUpgradeEffect(Location location){
-		for(int i = 0; i < 10; i++){
+		for(int i = 1; i <= 10; i++){
 			ParticleEffect.VILLAGER_HAPPY.display(0, 0, 0, 0, 1, location.clone().add(0, i/10.0, 0), 20);
 			ParticleEffect.VILLAGER_HAPPY.display(0, 0, 0, 0, 1, location.clone().add(1, i/10.0, 0), 20);
 			ParticleEffect.VILLAGER_HAPPY.display(0, 0, 0, 0, 1, location.clone().add(1, i/10.0, 1), 20);
