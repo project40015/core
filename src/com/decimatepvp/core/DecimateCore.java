@@ -42,6 +42,7 @@ import com.decimatepvp.functions.misc.crophopper.CropHopperCommand;
 import com.decimatepvp.functions.misc.crophopper.CropHopperManager;
 import com.decimatepvp.functions.misc.decimatestop.DecimateStop;
 import com.decimatepvp.functions.misc.delhome.DeleteHome;
+import com.decimatepvp.functions.misc.economy.SpawnerUpgradeManager;
 import com.decimatepvp.functions.misc.enemylogout.EnemyTerritoryLogoutManager;
 import com.decimatepvp.functions.misc.harvester.HarvesterCommand;
 import com.decimatepvp.functions.misc.harvester.HarvesterManager;
@@ -63,6 +64,7 @@ import com.decimatepvp.functions.potions.PotionAbilityManager;
 import com.decimatepvp.functions.pvp.PvPManager;
 import com.decimatepvp.functions.pvp.combo.ComboManager;
 import com.decimatepvp.functions.pvp.enchantment.EnchantmentLimitManager;
+import com.decimatepvp.functions.pvp.enhancements.PvpEnhancements;
 import com.decimatepvp.functions.staff.bans.BanManager;
 import com.decimatepvp.functions.staff.factions.FactionCommandListener;
 import com.decimatepvp.functions.staff.factions.FactionDamageListener;
@@ -136,6 +138,7 @@ public class DecimateCore extends JavaPlugin implements PluginMessageListener {
 	/*
 	 * Other
 	 */
+	private SpawnerUpgradeManager spawnerUpgradeManager = new SpawnerUpgradeManager();
 	private WorldBorderManager[] worldBorders = new WorldBorderManager[2];
 	private EnchantManager enchantManager;
 	private PotionAbilityManager potionManager;
@@ -204,7 +207,7 @@ public class DecimateCore extends JavaPlugin implements PluginMessageListener {
 				new RewardListener(), trenchPick, sellWandManager, new ExplosionListener(), new DecimateStop(),
 				new TntDisableManager(), killRewardListener, new PreCommandCancel(), new BedrockFix(),
 				new VehiclePlaceBugListener(), playtimeManager, new EnemyTerritoryLogoutManager(), trailManager,
-				joinWar, new TabListManager());
+				joinWar, new TabListManager(), new PvpEnhancements(), spawnerUpgradeManager);
 		
 		loadListeners(worldBorders);
 	}
@@ -277,10 +280,11 @@ public class DecimateCore extends JavaPlugin implements PluginMessageListener {
 		
 		getCommand("playtime").setExecutor(playtimeManager);
 		getCommand("trails").setExecutor(this.trailManager);
-		getCommand("trade").setExecutor(tradeManager);
+//		getCommand("trade").setExecutor(tradeManager);
 		
 		getCommand("war").setExecutor(joinWar);
 		getCommand("sh").setExecutor(killRewardListener);
+		getCommand("artifact").setExecutor(spawnerUpgradeManager);
 	}
 
 	public static DecimateCore getCore() {

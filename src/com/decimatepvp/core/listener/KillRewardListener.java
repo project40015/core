@@ -4,6 +4,7 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.command.Command;
@@ -53,13 +54,16 @@ public class KillRewardListener implements CommandExecutor, Listener {
 			if(player.getInventory().getItemInHand() != null &&
 					player.getInventory().getItemInHand().getItemMeta() != null
 					&& player.getInventory().getItemInHand().getItemMeta().getDisplayName() != null
-					&& player.getInventory().getItemInHand().getItemMeta().getLore() != null){
+					&& player.getInventory().getItemInHand().getItemMeta().getLore() != null &&
+					player.getInventory().getItemInHand().getItemMeta().getLore().size() >= 2){
 				String headLore = player.getInventory().getItemInHand().getItemMeta().getLore().get(1);
+//				Bukkit.broadcastMessage(headLore);
 				if(headLore.startsWith(ChatColor.GRAY + "Value:" + ChatColor.RED + " $")){
-					headLore = ChatColor.stripColor(headLore.substring(11));
+					headLore = ChatColor.stripColor(headLore.substring(12));
 					headLore = headLore.replaceAll(",", "");
+//					Bukkit.broadcastMessage(headLore);
 					try{
-						double n = Double.valueOf(headLore);
+						double n = Double.valueOf(headLore) * player.getInventory().getItemInHand().getAmount();
 						DecimateCore.getCore().eco.depositPlayer(player, n);
 						player.sendMessage(ChatColor.GRAY + "You have deposited " + ChatColor.YELLOW + "$" + n + ChatColor.GRAY + "!");
 						player.getInventory().setItemInHand(new ItemStack(Material.AIR));
