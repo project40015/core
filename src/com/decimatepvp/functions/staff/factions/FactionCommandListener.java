@@ -15,12 +15,12 @@ import com.decimatepvp.utils.FactionUtils;
 public class FactionCommandListener implements Listener {
 
 	private final List<String> allowedPvPCommands = Arrays.asList("msg", "m", "r", "f c", "f chat", "f map", "feed",
-			"f show");
+			"f show", "ban", "mute", "unban", "unmute", "pardon", "f who", "map", "boss");
 	
 	public static final List<String> ALLOWED_COMMANDS = 
 			Arrays.asList("spawn", "f ", "home", "feed", "echest",
 					"bal", "spectate", "msg", "m ", "r", "shop", "ah", "who",
-					"eat", "tpa ", "kick", "tempban", "plugman", "echest", "enderchest", "ftop");
+					"eat", "tpa ", "kick", "tempban", "plugman", "echest", "enderchest", "ftop", "freeze", "unmute", "unban", "ban", "mute", "pardon");
 
 	public static final List<String> ALLY_ONLY_COMMANDS = 
 			Arrays.asList("fly");

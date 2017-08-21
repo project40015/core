@@ -100,13 +100,9 @@ public class AccountIPManager implements Manager, Listener, CommandExecutor {
 				sender.sendMessage(ChatColor.DARK_GRAY.toString() + ChatColor.STRIKETHROUGH + "-------------------------------");
 				sender.sendMessage(ChatColor.RED + "IP: " + ChatColor.GOLD + ip.getHostAddress() + ChatColor.GRAY + " (page " + (page+1) + "/" + (list.size()/3 + (list.size() % 3 == 0 ? 0 : 1)) + ")" + ChatColor.RED + ": ");
 				sender.sendMessage(ChatColor.RED + "Accounts on IP: " + ChatColor.GOLD + list.size());
-
-				sender.sendMessage(ChatColor.GOLD + "-------------------------------");
-				sender.sendMessage(ChatColor.RED + "IP: " + ChatColor.GOLD + ip.toString() + ChatColor.RED + ": ");
-				sender.sendMessage(ChatColor.RED + "Accounts on IP: " + ChatColor.GOLD + list.size());
 				
 				for(int i = start; i < list.size() && i < start + 3; i++) {
-					OfflinePlayer offp = list.get(start + i);
+					OfflinePlayer offp = list.get(i);
 					sender.sendMessage(ChatColor.GREEN + offp.getName() + ":");
 					sender.sendMessage(ChatColor.YELLOW + "    UUID: " + ChatColor.GREEN + offp.getUniqueId().toString());
 					if(offp.isOnline()) {
@@ -202,6 +198,10 @@ public class AccountIPManager implements Manager, Listener, CommandExecutor {
 				List<OfflinePlayer> newList = sharedIps.get(ip);
 				newList.add(player);
 				sharedIps.put(ip, newList);
+<<<<<<< HEAD
+=======
+//				Bukkit.broadcastMessage(ChatColor.GOLD.toString() + sharedIps.size() + "");
+>>>>>>> season-3-enhancements
 			}
 		}
 		else {
@@ -209,6 +209,10 @@ public class AccountIPManager implements Manager, Listener, CommandExecutor {
 			list.add(player);
 //			list.add(Bukkit.getOfflinePlayer("Notch"));
 			sharedIps.put(ip, list);
+<<<<<<< HEAD
+=======
+//			Bukkit.broadcastMessage(ChatColor.GRAY.toString() + sharedIps.size() + "");
+>>>>>>> season-3-enhancements
 		}
 	}
 	

@@ -126,6 +126,10 @@ public class DeleteHome implements Listener {
 	@EventHandler
 	public void onPlayerTeleport(PlayerTeleportEvent event) {
 		Player player = event.getPlayer();
+		
+		if(player.isOp()){
+			return;
+		}
 
 		if(teleporting.containsKey(player.getName())) {
 			Faction territory = FactionUtils.getFactionByLoc(event.getTo());

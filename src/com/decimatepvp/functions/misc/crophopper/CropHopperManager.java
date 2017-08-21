@@ -6,7 +6,6 @@ import java.util.List;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.Chunk;
 import org.bukkit.Effect;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
@@ -14,14 +13,12 @@ import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.Hopper;
 import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
-import org.bukkit.event.entity.EntitySpawnEvent;
 import org.bukkit.event.entity.ItemSpawnEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
@@ -93,7 +90,7 @@ public class CropHopperManager implements Listener, Manager {
 	
 	public boolean isCropHopper(Chunk chunk, boolean crop){
 		for(CropHopper hopper : hoppers){
-			if(hopper.isCrop() == crop && hopper.getLocation().getChunk().equals(chunk)){
+			if(hopper.isCrop() == crop && new Chunk(hopper.getLocation()).equals(chunk)){
 				return true;
 			}
 		}
@@ -103,7 +100,7 @@ public class CropHopperManager implements Listener, Manager {
 	public CropHopper getCropHopper(Material drop, int amount, Chunk chunk, boolean crop){
 		for(int i = 0; i < hoppers.size(); i++){
 			CropHopper hopper = hoppers.get(i);
-			if(hopper.getLocation().getChunk().equals(chunk) && hopper.isCrop() == crop){
+			if(new Chunk(hopper.getLocation()).equals(chunk) && hopper.isCrop() == crop){
 				if(!(hopper.getLocation().getBlock().getState() instanceof Hopper)){
 					hoppers.remove(i--);
 					continue;
@@ -207,7 +204,7 @@ public class CropHopperManager implements Listener, Manager {
 	}
 	
 	private boolean fill(Location location, ItemStack item, boolean crop){
-		CropHopper ch = this.getCropHopper(item.getType(), item.getAmount(), location.getChunk(), crop); 
+		CropHopper ch = this.getCropHopper(item.getType(), item.getAmount(), new Chunk(location), crop); 
 		if(ch != null){
 			Block b = ch.getLocation().getBlock();
 			if(b.getState() instanceof Hopper){
@@ -223,7 +220,7 @@ public class CropHopperManager implements Listener, Manager {
 				this.removeHopper(ch);
 			}
 		}
-		return this.isCropHopper(location.getChunk(), crop);
+		return this.isCropHopper(new Chunk(location), crop);
 	}
 	
 //	@EventHandler

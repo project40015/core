@@ -108,6 +108,7 @@ public class TrailManager implements Manager, CommandExecutor, Listener {
 	
 	private void loadTrails(){
 		this.trails.add(new JulyTrail());
+		this.trails.add(new DecimateTrail());
 		this.trails.add(new WarVictorTrail());
 		this.trails.add(new HalloweenTrail());
 	}

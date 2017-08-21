@@ -13,7 +13,10 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.inventory.InventoryCloseEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
 
+import com.decimatepvp.core.DecimateCore;
 import com.decimatepvp.core.Manager;
 import com.google.common.collect.Maps;
 
@@ -33,6 +36,33 @@ public class TradeManager implements Manager, Listener, CommandExecutor {
 		createSlots();
 	}
 	
+	@EventHandler
+	public void onClose(InventoryCloseEvent event){
+		if(!(event.getPlayer() instanceof Player)){
+			return;
+		}
+		Player player = (Player) event.getPlayer();
+		if(trades1.containsKey(player) ||
+				trades2.containsKey(player)) {
+			TradeInventory trade = trades1.containsKey(player) ?
+					trades1.remove(player) :
+						trades2.remove(player);
+			trade.endTrade(false);
+		}
+	}
+	
+	@EventHandler
+	public void onQuit(PlayerQuitEvent event){
+		Player player = event.getPlayer();
+		if(trades1.containsKey(player) ||
+				trades2.containsKey(player)) {
+			TradeInventory trade = trades1.containsKey(player) ?
+					trades1.get(player) :
+						trades2.get(player);
+					trade.endTrade(false);
+		}
+	}
+	
 	@EventHandler(priority = EventPriority.LOW)
 	public void onTradeClick(InventoryClickEvent event) {
 		Player player = (Player) event.getWhoClicked();
@@ -41,16 +71,25 @@ public class TradeManager implements Manager, Listener, CommandExecutor {
 			int slot = event.getRawSlot();
 			
 //			Bukkit.broadcastMessage(""+(!itemSlots.containsKey(slot) && slot < 54));
+
+			TradeInventory trade = trades1.containsKey(player) ?
+					trades1.get(player) :
+						trades2.get(player);
+
 			if(!itemSlots.containsKey(slot) && slot < 54) {
 				event.setCancelled(true);
 			}
 			else {
+				Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(DecimateCore.getCore(), new Runnable(){
+
+					@Override
+					public void run() {
+						trade.sync(true);
+					}
+					
+				}, 4);
 				return;
 			}
-			
-			TradeInventory trade = trades1.containsKey(player) ?
-					trades1.get(player) :
-						trades2.get(player);
 			
 			int i = (player == trade.getPlayer1() ? 1 : 2);
 			
@@ -71,9 +110,13 @@ public class TradeManager implements Manager, Listener, CommandExecutor {
 			}
 			else if(slot == 46) { //Resets money
 				trade.resetMoney(i);
+			}else if(slot == 36) {
+				trade.endTrade(false);
+				return;
 			}
 			
-			trade.sync();
+			trade.sync(false);
+			
 		}
 	}
 
@@ -85,7 +128,7 @@ public class TradeManager implements Manager, Listener, CommandExecutor {
 				Player player = (Player) sender;
 				
 				if(args.length == 0) {
-					sender.sendMessage(ChatColor.RED + "Usage: /trade [Accept/Decline/Player]");
+					sender.sendMessage(ChatColor.RED + "Invalid syntax, try" +ChatColor.YELLOW + " /trade (accept/decline/player)");
 				}
 				else {
 					String arg = args[0];
@@ -95,7 +138,7 @@ public class TradeManager implements Manager, Listener, CommandExecutor {
 							accept(player);
 						}
 						else {
-							sender.sendMessage(ChatColor.GOLD + "You have no trade requests!");
+							sender.sendMessage(ChatColor.RED + "You have no trade requests!");
 						}
 					}
 					else if(arg.equalsIgnoreCase("decline")) {
@@ -103,7 +146,7 @@ public class TradeManager implements Manager, Listener, CommandExecutor {
 							decline(player);
 						}
 						else {
-							sender.sendMessage(ChatColor.GOLD + "You have no trade requests!");
+							sender.sendMessage(ChatColor.RED + "You have no trade requests!");
 						}
 					}
 					else if(arg.length() >= 3) {
@@ -117,7 +160,7 @@ public class TradeManager implements Manager, Listener, CommandExecutor {
 						}
 					}
 					else {
-						sender.sendMessage(ChatColor.RED + "Usage: /trade [Accept/Decline/Player]");
+						sender.sendMessage(ChatColor.RED + "Invalid syntax, try" +ChatColor.YELLOW + " /trade (accept/decline/player)");
 					}
 				}
 			}
@@ -161,7 +204,7 @@ public class TradeManager implements Manager, Listener, CommandExecutor {
 	@Override
 	public void disable() {
 		for(TradeInventory manager : trades1.values()) {
-			manager.endTrade();
+			manager.endTrade(false);
 		}
 	}
 	

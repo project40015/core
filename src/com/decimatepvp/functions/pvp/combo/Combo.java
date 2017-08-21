@@ -18,7 +18,9 @@ public class Combo {
 		this.combo++;
 		this.time = 20*3;
 		
-		return damage*(strength ? (1.1 + combo*0.025) : (1.2 + combo*0.05));
+//		return damage*(strength ? (1.1 + combo*0.025) : (1.2 + combo*0.05));
+		//Comboes do not amplify damage.
+		return damage;
 	}
 	
 	public boolean time(int n){

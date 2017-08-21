@@ -134,14 +134,30 @@ public class CrateManager implements Manager, Listener {
 	}
 	
 	private DecimateCrate setupDecimateCrate(){
+//		return new DecimateCrate(Arrays.asList(
+//				new CommandReward("Blaze Spawner (3)", new ItemStack(Material.MOB_SPAWNER), Rarity.RARE, 25, "es give %player% BLAZE 0 3", false),
+//				new CommandReward("Iron Golem Spawner (2)",new ItemStack(Material.MOB_SPAWNER), Rarity.RARE, 22, "es give %player% IRON_GOLEM 0 2", false),
+//				new CommandReward("Creeper Spawner (2)", new ItemStack(Material.MOB_SPAWNER), Rarity.RARE, 22, "es give %player% CREEPER 0 2", false),
+//				new CommandReward("Decimate Rank", new ItemStack(Material.BEDROCK), Rarity.MYTHICAL, 1, "manuadd %player% decimate", true, ChatColor.GRAY +
+//						"Receive the " + DecimateCore.getCore().getColoredDecimate() + ChatColor.GRAY + " rank!",
+//						ChatColor.GRAY + "You have unlocked the " + DecimateCore.getCore().getColoredDecimate() + ChatColor.GRAY + " rank!", "decimate.rank.decimate"),
+//				new CommandReward("Protection V Kit (1)", new ItemStack(Material.BOOK), Rarity.COMMON, 30, "kit p5 %player%", true)
+//				));
 		return new DecimateCrate(Arrays.asList(
-				new CommandReward("Blaze Spawner (3)", new ItemStack(Material.MOB_SPAWNER), Rarity.RARE, 25, "es give %player% BLAZE 0 3", false),
-				new CommandReward("Iron Golem Spawner (2)",new ItemStack(Material.MOB_SPAWNER), Rarity.RARE, 22, "es give %player% IRON_GOLEM 0 2", false),
-				new CommandReward("Creeper Spawner (2)", new ItemStack(Material.MOB_SPAWNER), Rarity.RARE, 22, "es give %player% CREEPER 0 2", false),
+				new CommandReward("Decimate Trail", new ItemStack(Material.GOLDEN_APPLE), Rarity.MYTHICAL, 3, "manuaddp %player% decimatepvp.trail.decimatetrail", true, ChatColor.GRAY +
+						"Receive the " + ChatColor.LIGHT_PURPLE + "Decimate Trail"  + ChatColor.GRAY + "!",
+						ChatColor.GRAY + "You have unlocked the " + ChatColor.LIGHT_PURPLE + "Decimate Trail"  + ChatColor.GRAY + "!", "decimatepvp.trail.decimatetrail"),
+				new CashReward("$1,000,000", new ItemStack(Material.PAPER), Rarity.RARE, 15, 1000000),
+				new CashReward("$500,000", new ItemStack(Material.PAPER), Rarity.COMMON, 25, 500000), 
+				new CommandReward("Decimate Key (2)", glowItem(Material.TRIPWIRE_HOOK, 1, true), Rarity.MYTHICAL, 1, "cratekey %player% decimate_key 2", false),
+				new CommandReward("Trench Pickaxe", new ItemStack(Material.DIAMOND_PICKAXE), Rarity.RARE, 10, "trenchpickaxe %player%", false),
+				new CommandReward("Sell Wand", new ItemStack(Material.DIAMOND_HOE), Rarity.RARE, 10, "dsellwand %player%", false),
 				new CommandReward("Decimate Rank", new ItemStack(Material.BEDROCK), Rarity.MYTHICAL, 1, "manuadd %player% decimate", true, ChatColor.GRAY +
-						"Receive the " + DecimateCore.getCore().getColoredDecimate() + ChatColor.GRAY + " rank!",
-						ChatColor.GRAY + "You have unlocked the " + DecimateCore.getCore().getColoredDecimate() + ChatColor.GRAY + " rank!", "decimate.rank.decimate"),
-				new CommandReward("Protection V Kit (1)", new ItemStack(Material.BOOK), Rarity.COMMON, 30, "kit p5 %player%", true)
+				"Receive the " + DecimateCore.getCore().getColoredDecimate() + ChatColor.GRAY + " rank!",
+				ChatColor.GRAY + "You have unlocked the " + DecimateCore.getCore().getColoredDecimate() + ChatColor.GRAY + " rank!", "decimate.rank.decimate"),
+				new CommandReward("Villager Upgrade Artifact (1)", glowItem(Material.PRISMARINE_SHARD, 1, true), Rarity.EPIC, 6, "artifact %player% IRON_GOLEM 1", false),
+				new CommandReward("Iron Golem Upgrade Artifact (2)", glowItem(Material.PRISMARINE_SHARD, 2, true), Rarity.EPIC, 9, "artifact %player% CREEPER 2", false),
+				new CommandReward("Iron Golem Upgrade Artifact (1)", glowItem(Material.PRISMARINE_SHARD, 1, true), Rarity.RARE, 20, "artifact %player% CREEPER 1", false)
 				));
 	}
 	
