@@ -198,10 +198,7 @@ public class AccountIPManager implements Manager, Listener, CommandExecutor {
 				List<OfflinePlayer> newList = sharedIps.get(ip);
 				newList.add(player);
 				sharedIps.put(ip, newList);
-<<<<<<< HEAD
-=======
 //				Bukkit.broadcastMessage(ChatColor.GOLD.toString() + sharedIps.size() + "");
->>>>>>> season-3-enhancements
 			}
 		}
 		else {
@@ -209,10 +206,7 @@ public class AccountIPManager implements Manager, Listener, CommandExecutor {
 			list.add(player);
 //			list.add(Bukkit.getOfflinePlayer("Notch"));
 			sharedIps.put(ip, list);
-<<<<<<< HEAD
-=======
 //			Bukkit.broadcastMessage(ChatColor.GRAY.toString() + sharedIps.size() + "");
->>>>>>> season-3-enhancements
 		}
 	}
 	

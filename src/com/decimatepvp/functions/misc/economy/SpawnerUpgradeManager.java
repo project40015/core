@@ -143,7 +143,7 @@ public class SpawnerUpgradeManager implements Listener, CommandExecutor {
 							for(int i = 0; i < amount; i++){
 								player.getInventory().addItem(type.getItemStack().clone());
 							}
-							player.sendMessage(ChatColor.YELLOW + "You received " + amount + " " + type.toString().toLowerCase().replaceAll("_", " ") + " artifact(s)!");
+							player.sendMessage(ChatColor.YELLOW + "You received " + amount + " " + type.getTypeAfter().toString().toLowerCase().replaceAll("_", " ") + " artifact(s)!");
 						}else{
 							arg0.sendMessage(ChatColor.RED + "This spawner type does not have an upgrade artifact.");
 						}
@@ -157,7 +157,7 @@ public class SpawnerUpgradeManager implements Listener, CommandExecutor {
 					arg0.sendMessage(ChatColor.RED + "Player not found.");
 				}
 			}else{
-				arg0.sendMessage(ChatColor.RED + "Invalid syntax, try: " + ChatColor.YELLOW + "/artifact give (player) (type) [amount]");
+				arg0.sendMessage(ChatColor.RED + "Invalid syntax, try: " + ChatColor.YELLOW + "/artifact (player) (type) [amount]");
 			}
 		}else{
 			arg0.sendMessage(ChatColor.RED + "You do not have permission to use this command.");

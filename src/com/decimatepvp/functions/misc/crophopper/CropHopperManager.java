@@ -197,7 +197,8 @@ public class CropHopperManager implements Listener, Manager {
 					 type == Material.TNT || type == Material.STRING ||
 					 type == Material.SPIDER_EYE || type == Material.RAW_CHICKEN ||
 					 type == Material.EGG || type == Material.RED_ROSE ||
-					 type == Material.GOLD_NUGGET){
+					 type == Material.GOLD_NUGGET || type == Material.COOKED_BEEF ||
+					 type == Material.APPLE || type == Material.EMERALD){
 				event.setCancelled(fill(event.getEntity().getLocation(), event.getEntity().getItemStack(), false));
 			}
 //		}
