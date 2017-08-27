@@ -32,6 +32,14 @@ public class SpawnerUpgradeManager implements Listener, CommandExecutor {
 				event.getDrops().add(new ItemStack(Material.APPLE));
 			}
 		}
+		if(event.getEntity().getType().equals(EntityType.PIG_ZOMBIE)){
+			if(Math.random() < 0.5){
+				event.getDrops().add(new ItemStack(Material.GOLD_INGOT));
+			}
+			if(Math.random() < 0.025){
+				event.getDrops().add(new ItemStack(Material.GOLDEN_APPLE));
+			}
+		}
 		DecimateSpawnerType type = DecimateSpawnerType.getSpawnerType(event.getEntityType());
 		if(type != null){
 			if(type.doesDropCrystal()){
