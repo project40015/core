@@ -16,7 +16,7 @@ import com.decimatepvp.core.DecimateCore;
 import com.decimatepvp.core.Manager;
 import com.decimatepvp.utils.FactionUtils;
 import com.decimatepvp.utils.PlayerUtils;
-import com.massivecraft.factions.struct.Relation;
+import com.massivecraft.factions.Rel;
 
 public class ComboManager implements Manager, Listener {
 
@@ -142,7 +142,7 @@ public class ComboManager implements Manager, Listener {
 			}
 			if(!FactionUtils.getFaction(attacker).equals(FactionUtils.getWilderness())
 					&& !FactionUtils.getFaction(attacked).equals(FactionUtils.getWilderness())
-					&& FactionUtils.getFPlayer(attacker).getRelationTo(FactionUtils.getFPlayer(attacked)).isAtLeast(Relation.ALLY)){
+					&& FactionUtils.getFPlayer(attacker).getRelationTo(FactionUtils.getFPlayer(attacked)).isAtLeast(Rel.ALLY)){
 				return;
 			}
 			if(isInCombo(attacker, attacked)){

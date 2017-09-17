@@ -15,8 +15,8 @@ import org.bukkit.scheduler.BukkitRunnable;
 import com.decimatepvp.core.DecimateCore;
 import com.decimatepvp.utils.FactionUtils;
 import com.google.common.collect.Maps;
-import com.massivecraft.factions.Faction;
-import com.massivecraft.factions.struct.Relation;
+import com.massivecraft.factions.Rel;
+import com.massivecraft.factions.entity.Faction;
 
 public class DeleteHome implements Listener {
 
@@ -117,8 +117,8 @@ public class DeleteHome implements Listener {
 
 			event.setCancelled(true);
 			lastHomeCommand.put(player.getName(), args[1]);
-			player.sendMessage(ChatColor.GOLD + "Teleportation will commence in " +
-					ChatColor.RED + "5 seconds" + ChatColor.GOLD + ". Don't move.");
+			player.sendMessage(ChatColor.YELLOW + "Teleportation will commence in " +
+					ChatColor.GOLD + "5 seconds" + ChatColor.YELLOW + ". Don't move.");
 			this.startDelay(player);
 		}
 	}
@@ -133,10 +133,10 @@ public class DeleteHome implements Listener {
 
 		if(teleporting.containsKey(player.getName())) {
 			Faction territory = FactionUtils.getFactionByLoc(event.getTo());
-			Relation rel = FactionUtils.getFaction(player).
+			Rel rel = FactionUtils.getFaction(player).
 					getRelationTo(territory);
 
-			if(rel != Relation.MEMBER &&
+			if(!rel.isAtLeast(Rel.MEMBER) &&
 					territory != FactionUtils.getWilderness()) {
 				//				Bukkit.dispatchCommand(Bukkit.getConsoleSender(),
 				//						"delhome " + player.getName() + ":" + teleporting.get(player.getName()));

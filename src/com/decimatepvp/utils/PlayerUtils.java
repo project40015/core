@@ -49,17 +49,17 @@ public class PlayerUtils {
 	
 	public static boolean isInSpawn(String world, double x, double y, double z) {
 		if(world.equals("world")){
-			if(x > -75 && x < 77){
-				if(y > 64){
-					if(z > -75 && z < 77){
+			if(x > -102 && x < 102){
+				if(y > 68){
+					if(z > -101 && z < 103){
 						return true;
 					}
 				}
 			}
 		}else if(world.equals("world_the_end")){
-			if(x > -7 && x < 8){
+			if(x > -6 && x < 6){
 				if(y > 68){
-					if(z > -7 && z < 8){
+					if(z > -6 && z < 6){
 						return true;
 					}
 				}

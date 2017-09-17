@@ -13,6 +13,9 @@ import org.bukkit.entity.Player;
 import com.decimatepvp.core.DecimateCore;
 import com.decimatepvp.utils.DecimateUtils;
 
+import decimatenetworkcore.core.DataUser;
+import decimatenetworkcore.core.DecimateNetworkCore;
+
 public class MicroCommands implements CommandExecutor {
 
 	long then;
@@ -72,6 +75,29 @@ public class MicroCommands implements CommandExecutor {
 				Bukkit.broadcastMessage(ChatColor.translateAlternateColorCodes('&', message));
 			}else{
 				arg0.sendMessage(ChatColor.RED + "You do not have permission for this.");
+			}
+		}else if(arg1.getName().equalsIgnoreCase("dpurchase")){
+			if(arg0.equals(Bukkit.getConsoleSender())){
+				if(arg3.length == 2){
+					String uuid = arg3[0];
+					double payment = Double.parseDouble(arg3[1]);
+					DataUser du = DecimateNetworkCore.getInstance().getDataUserManager().getDataUser(uuid); 
+					if(du != null){
+						du.setDonations(du.getTotalDonations() + payment);
+					}
+				}
+			}else{
+				arg0.sendMessage(ChatColor.RED + "Only the console can run this command.");
+			}
+		}else if(arg1.getName().equalsIgnoreCase("dsetrank")){
+			if(arg0.equals(Bukkit.getConsoleSender())){
+				if(arg3.length == 2){
+					String uuid = arg3[0];
+					String rank = arg3[1].toUpperCase();
+					DecimateNetworkCore.getInstance().getDataUserManager().setRank(uuid, rank);
+				}
+			}else{
+				arg0.sendMessage(ChatColor.RED + "Only the console can run this command.");
 			}
 		}
 		

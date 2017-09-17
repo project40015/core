@@ -14,11 +14,11 @@ import com.decimatepvp.utils.EnchantGlow;
 public enum DecimateSpawnerType {
 
 	VILLAGER(EntityType.VILLAGER),
-	IRON_GOLEM(EntityType.IRON_GOLEM, "Villager Upgrade Artifact &c(Tier VII)", VILLAGER, 0), // Does not drop from iron golems, just found in crates
-	CREEPER(EntityType.CREEPER, "Iron Golem Upgrade Artifact &d(Tier VI)", IRON_GOLEM, 0.01),
-	ZOMBIE_PIGMAN(EntityType.PIG_ZOMBIE, "Creeper Upgrade Artifact &3(Tier V)", CREEPER, 0.05),
-//	WITCH(EntityType.WITCH, "Zombie Pigman Upgrade Artifact &3(Tier V)", ZOMBIE_PIGMAN, 0.075),
-	SKELETON(EntityType.SKELETON, "Pig Zombie Upgrade Artifact &e(Tier IV)", ZOMBIE_PIGMAN /*WITCH*/, 0.15),
+	IRON_GOLEM(EntityType.IRON_GOLEM, "Villager Upgrade Artifact &c(Tier VIII)", VILLAGER, 0), // Does not drop from iron golems, just found in crates
+	CREEPER(EntityType.CREEPER, "Iron Golem Upgrade Artifact &d(Tier VII)", IRON_GOLEM, 0.01),
+	ENDERMAN(EntityType.ENDERMAN, "Creeper Upgrade Artifact &6(Tier VI)", CREEPER, 0.02),
+	ZOMBIE_PIGMAN(EntityType.PIG_ZOMBIE, "Enderman Upgrade Artifact &3(Tier V)", ENDERMAN, 0.05),
+	SKELETON(EntityType.SKELETON, "Pig Zombie Upgrade Artifact &e(Tier IV)", ZOMBIE_PIGMAN, 0.1),
 	ZOMBIE(EntityType.ZOMBIE, "Skeleton Upgrade Artifact &f(Tier III)", SKELETON, 0.25),
 	COW(EntityType.COW, "Zombie Upgrade Artifact &7(Tier II)", ZOMBIE, 0.5),
 	PIG(EntityType.PIG, "Cow Upgrade Artifact &8(Tier I)", COW, 0.8);

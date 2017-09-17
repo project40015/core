@@ -10,7 +10,7 @@ import com.decimatepvp.utils.ParticleUtils;
 public class WarVictorTrail extends Trail {
 
 	public WarVictorTrail() {
-		super("Coming Soon", "???", "decimatepvp.trail.warvictor", Material.GOLDEN_CARROT);
+		super("Warrior Trail", "Win a faction war", "decimatepvp.trail.warvictor", Material.GOLDEN_CARROT);
 	}
 	
 	private Color randomColor(){

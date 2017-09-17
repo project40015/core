@@ -14,11 +14,16 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
+import com.decimatepvp.core.DecimateCore;
 import com.decimatepvp.core.Manager;
+
+import decimatenetworkcore.core.DataUser;
+import decimatenetworkcore.core.DecimateNetworkCore;
 
 public class TrailManager implements Manager, CommandExecutor, Listener {
 
@@ -43,12 +48,40 @@ public class TrailManager implements Manager, CommandExecutor, Listener {
 	}
 	
 	@EventHandler
+	public void onJoin(PlayerJoinEvent event){
+		Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(DecimateCore.getCore(), new Runnable(){
+
+			@Override
+			public void run() {
+				DataUser du = DecimateNetworkCore.getInstance().getDataUserManager().getDataUser(event.getPlayer().getUniqueId().toString());
+				if(du != null && du.getFac1ActiveTrail() != null && !du.getFac1ActiveTrail().equals("")){
+					Trail trail = getTrail(du.getFac1ActiveTrail());
+					if(trail != null){
+						activeTrails.put(event.getPlayer(), trail);
+					}
+				}				
+			}
+			
+		}, 20);
+
+	}	
+	
+	@EventHandler
 	public void onMove(PlayerMoveEvent event){
 		if(this.activeTrails.containsKey(event.getPlayer())){
 			if(event.getPlayer().getGameMode() != GameMode.SPECTATOR){
 				this.activeTrails.get(event.getPlayer()).display(event.getPlayer().getLocation());
 			}
 		}
+	}
+	
+	private Trail getTrail(String name){
+		for(Trail trail : this.trails){
+			if(trail.getName().equalsIgnoreCase(name)){
+				return trail;
+			}
+		}
+		return null;
 	}
 	
 	private Trail getTrail(ItemStack item){
@@ -80,12 +113,14 @@ public class TrailManager implements Manager, CommandExecutor, Listener {
 					if(this.activeTrails.get(player).equals(trail)){
 						this.activeTrails.remove(player);
 						player.sendMessage(ChatColor.GRAY + "Disabled your " + trail.getName() + ChatColor.GRAY + "!");
+						DecimateNetworkCore.getInstance().getDataUserManager().getDataUser(player.getUniqueId().toString()).setFac1ActiveTrail("");
 						return true;
 					}
 					this.activeTrails.remove(player);
 				}
 				this.activeTrails.put(player, trail);
 				player.sendMessage(ChatColor.GRAY + "Activated your " + trail.getName() + ChatColor.GRAY + "!");
+				DecimateNetworkCore.getInstance().getDataUserManager().getDataUser(player.getUniqueId().toString()).setFac1ActiveTrail(trail.getName());
 				return true;
 			}
 		}

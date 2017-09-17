@@ -93,3 +93,7 @@ commands:
     description: Sell a player head
   artifact:
     description: Give an artifact...
+  dpurchase:
+    description: Denied.
+  dsetrank:
+    description: Set a user rank

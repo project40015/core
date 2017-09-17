@@ -124,12 +124,25 @@ public class CrateManager implements Manager, Listener {
 	}
 	
 	private GodCrate setupGodCrate(){
+//		return new GodCrate(Arrays.asList(
+//				new CommandReward("Blaze Spawner (2)", new ItemStack(Material.MOB_SPAWNER), Rarity.COMMON, 25+3+3, "es give %player% BLAZE 0 2", false),
+//				new CommandReward("Iron Golem Spawner (1)",new ItemStack(Material.MOB_SPAWNER), Rarity.RARE, 22-3, "es give %player% IRON_GOLEM 0 1", false),
+//				new CommandReward("Creeper Spawner (1)", new ItemStack(Material.MOB_SPAWNER), Rarity.RARE, 22-3, "es give %player% CREEPER 0 1", false),
+//				new CommandReward("Decimate Key (1)", glowItem(Material.TRIPWIRE_HOOK, 1, true), Rarity.MYTHICAL, 1, "cratekey %player% decimate_key 1", false),
+//				new CommandReward("Decimate Kit (1)", new ItemStack(Material.BOOK), Rarity.COMMON, 30, "kit decimate %player%", true)
+//				));
 		return new GodCrate(Arrays.asList(
-				new CommandReward("Blaze Spawner (2)", new ItemStack(Material.MOB_SPAWNER), Rarity.COMMON, 25+3+3, "es give %player% BLAZE 0 2", false),
-				new CommandReward("Iron Golem Spawner (1)",new ItemStack(Material.MOB_SPAWNER), Rarity.RARE, 22-3, "es give %player% IRON_GOLEM 0 1", false),
-				new CommandReward("Creeper Spawner (1)", new ItemStack(Material.MOB_SPAWNER), Rarity.RARE, 22-3, "es give %player% CREEPER 0 1", false),
-				new CommandReward("Decimate Key (1)", glowItem(Material.TRIPWIRE_HOOK, 1, true), Rarity.MYTHICAL, 1, "cratekey %player% decimate_key 1", false),
-				new CommandReward("Decimate Kit (1)", new ItemStack(Material.BOOK), Rarity.COMMON, 30, "kit decimate %player%", true)
+				new CashReward("$1,000,000", new ItemStack(Material.PAPER), Rarity.RARE, 10, 1000000),
+				new CashReward("$500,000", new ItemStack(Material.PAPER), Rarity.RARE, 15, 500000),
+				new CashReward("$200,000", new ItemStack(Material.PAPER), Rarity.COMMON, 25, 200000), 
+				new CommandReward("Decimate Key (1)", glowItem(Material.TRIPWIRE_HOOK, 1, true), Rarity.MYTHICAL, 2, "cratekey %player% decimate_key 1", false),
+				new CommandReward("Trench Pickaxe", new ItemStack(Material.DIAMOND_PICKAXE), Rarity.MYTHICAL, 2, "trenchpickaxe %player%", false),
+				new CommandReward("Sell Wand", new ItemStack(Material.DIAMOND_HOE), Rarity.MYTHICAL, 2, "dsellwand %player%", false),
+				new CommandReward("Harvester Hoe", new ItemStack(Material.DIAMOND_HOE), Rarity.MYTHICAL, 2, "harvester %player%", false),
+				new CommandReward("Artifact Sword", new ItemStack(Material.DIAMOND_SWORD), Rarity.MYTHICAL, 2, "artifact %player% sword", false),
+				new CommandReward("Creeper Upgrade Artifact (2)", glowItem(Material.PRISMARINE_SHARD, 2, true), Rarity.RARE, 15, "artifact %player% ZOMBIE_PIGMAN 2", false),
+				new CommandReward("Creeper Upgrade Artifact (1)", glowItem(Material.PRISMARINE_SHARD, 1, true), Rarity.RARE, 20, "artifact %player% ZOMBIE_PIGMAN 1", false),
+				new CommandReward("Iron Golem Upgrade Artifact (1)", glowItem(Material.PRISMARINE_SHARD, 1, true), Rarity.EPIC, 5, "artifact %player% CREEPER 1", false)
 				));
 	}
 	
@@ -150,8 +163,10 @@ public class CrateManager implements Manager, Listener {
 				new CashReward("$1,000,000", new ItemStack(Material.PAPER), Rarity.RARE, 15, 1000000),
 				new CashReward("$500,000", new ItemStack(Material.PAPER), Rarity.COMMON, 25, 500000), 
 				new CommandReward("Decimate Key (2)", glowItem(Material.TRIPWIRE_HOOK, 1, true), Rarity.MYTHICAL, 1, "cratekey %player% decimate_key 2", false),
-				new CommandReward("Trench Pickaxe", new ItemStack(Material.DIAMOND_PICKAXE), Rarity.RARE, 10, "trenchpickaxe %player%", false),
-				new CommandReward("Sell Wand", new ItemStack(Material.DIAMOND_HOE), Rarity.RARE, 10, "dsellwand %player%", false),
+				new CommandReward("Trench Pickaxe", new ItemStack(Material.DIAMOND_PICKAXE), Rarity.EPIC, 5, "trenchpickaxe %player%", false),
+				new CommandReward("Sell Wand", new ItemStack(Material.DIAMOND_HOE), Rarity.EPIC, 5, "dsellwand %player%", false),
+				new CommandReward("Harvester Hoe", new ItemStack(Material.DIAMOND_HOE), Rarity.EPIC, 5, "harvester %player%", false),
+				new CommandReward("Artifact Sword", new ItemStack(Material.DIAMOND_SWORD), Rarity.EPIC, 5, "artifact %player% sword", false),
 				new CommandReward("Decimate Rank", new ItemStack(Material.BEDROCK), Rarity.MYTHICAL, 1, "manuadd %player% decimate", true, ChatColor.GRAY +
 				"Receive the " + DecimateCore.getCore().getColoredDecimate() + ChatColor.GRAY + " rank!",
 				ChatColor.GRAY + "You have unlocked the " + DecimateCore.getCore().getColoredDecimate() + ChatColor.GRAY + " rank!", "decimate.rank.decimate"),
@@ -176,15 +191,29 @@ public class CrateManager implements Manager, Listener {
 				));
 	}	
 	private VoteCrate setupVoteCrate(){
+//		return new VoteCrate(Arrays.asList(
+//				new CommandReward("Creeper Spawner (1)", new ItemStack(Material.MOB_SPAWNER), Rarity.MYTHICAL, 1, "es give %player% CREEPER 0 1", false),
+//				new ItemReward("Hopper (4)", item(Material.HOPPER, 0, 4), Rarity.RARE, 15),
+//				new CommandReward("God Key (1)", glowItem(Material.TRIPWIRE_HOOK, 1, true), Rarity.MYTHICAL, 2, "cratekey %player% god_crate 1", false),
+//				new CommandReward("Zombie Spawner (1)", new ItemStack(Material.MOB_SPAWNER), Rarity.COMMON, 20, "es give %player% ZOMBIE 0 1", false),
+//				new CommandReward("Skeleton Spawner (1)", new ItemStack(Material.MOB_SPAWNER), Rarity.COMMON, 20, "es give %player% SKELETON 0 1", false),
+//				new CommandReward("Cow Spawner (1)", new ItemStack(Material.MOB_SPAWNER), Rarity.EPIC, 5, "es give %player% COW 0 1", false),
+//				new ItemReward("God Apple (4)", item(Material.GOLDEN_APPLE, 1, 4), Rarity.COMMON, 20),
+//				new CashReward("$100,000", new ItemStack(Material.PAPER), Rarity.RARE, 17, 100000)
+//				));
 		return new VoteCrate(Arrays.asList(
-				new CommandReward("Creeper Spawner (1)", new ItemStack(Material.MOB_SPAWNER), Rarity.MYTHICAL, 1, "es give %player% CREEPER 0 1", false),
-				new ItemReward("Hopper (4)", item(Material.HOPPER, 0, 4), Rarity.RARE, 15),
-				new CommandReward("God Key (1)", glowItem(Material.TRIPWIRE_HOOK, 1, true), Rarity.MYTHICAL, 2, "cratekey %player% god_crate 1", false),
-				new CommandReward("Zombie Spawner (1)", new ItemStack(Material.MOB_SPAWNER), Rarity.COMMON, 20, "es give %player% ZOMBIE 0 1", false),
-				new CommandReward("Skeleton Spawner (1)", new ItemStack(Material.MOB_SPAWNER), Rarity.COMMON, 20, "es give %player% SKELETON 0 1", false),
-				new CommandReward("Cow Spawner (1)", new ItemStack(Material.MOB_SPAWNER), Rarity.EPIC, 5, "es give %player% COW 0 1", false),
-				new ItemReward("God Apple (4)", item(Material.GOLDEN_APPLE, 1, 4), Rarity.COMMON, 20),
-				new CashReward("$100,000", new ItemStack(Material.PAPER), Rarity.RARE, 17, 100000)
+				new CommandReward("Zombie Pigman Artifact (1)", glowItem(Material.PRISMARINE_SHARD, 1, true), Rarity.MYTHICAL, 1, "artifact %player% SKELETON 1", false),
+				new ItemReward("Hopper (4)", item(Material.HOPPER, 0, 4), Rarity.COMMON, 20),
+				new CommandReward("Crop Hopper (1)", glowItem(Material.HOPPER, 1, true), Rarity.RARE, 18, "give %player% hopper 1 name:&2Crop_Hopper lore:|&7Collects_all_dropped_cactus_in_a_chunk.", false),
+				new CommandReward("Mob Hopper (1)", glowItem(Material.HOPPER, 1, true), Rarity.EPIC, 6, "give %player% hopper 1 name:&cMob_Hopper lore:|&7Collects_all_mob_drops_in_a_chunk.", false),
+				new CommandReward("God Key (1)", glowItem(Material.TRIPWIRE_HOOK, 1, true), Rarity.MYTHICAL, 1, "cratekey %player% god_crate 1", false),
+				new CommandReward("Zombie Upgrade Artifact (1)", glowItem(Material.PRISMARINE_SHARD, 1, true), Rarity.EPIC, 5, "artifact %player% COW 1", false),
+				new CommandReward("Skeleton Upgrade Artifact (1)", glowItem(Material.PRISMARINE_SHARD, 1, true), Rarity.EPIC, 3, "artifact %player% ZOMBIE 1", false),
+				new CommandReward("Cow Upgrade Artifact (1)", glowItem(Material.PRISMARINE_SHARD, 1, true), Rarity.EPIC, 8, "artifact %player% COW 1", false),
+				new CommandReward("Pig Spawner (1)", new ItemStack(Material.MOB_SPAWNER), Rarity.COMMON, 30, "es give %player% PIG 0 1", false),
+				new ItemReward("God Apple (1)", item(Material.GOLDEN_APPLE, 1, 1), Rarity.COMMON, 20),
+				new CashReward("$20,000", new ItemStack(Material.PAPER), Rarity.COMMON, 20, 20000),
+				new CashReward("$50,000", new ItemStack(Material.PAPER), Rarity.RARE, 12, 50000)
 				));
 	}
 	

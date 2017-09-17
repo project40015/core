@@ -35,7 +35,7 @@ public class HarvesterManager implements Manager, Listener {
 	private final ItemStack harvesterItem;
 	
 	public HarvesterManager() {
-		harvesterItem = ItemUtils.createItem(Material.DIAMOND_HOE, 1, (byte) 0, "&6&l* &2&lHarvester Hoe &l&6*",
+		harvesterItem = ItemUtils.createItem(Material.DIAMOND_HOE, 1, (byte) 0, "&eHarvester Hoe",
 				ChatColor.GRAY + "Mode: " + ChatColor.GOLD + "SELL");
 		harvesterItem.addEnchantment(Enchantment.DURABILITY, 3);
 		random = new Random();
@@ -169,7 +169,7 @@ public class HarvesterManager implements Manager, Listener {
 		}
 		if(lore.size()>=3){
 			int totalMined = (Integer.parseInt(ChatColor.stripColor(lore.get(2).split(" ")[2])) + mined);
-			double value = (((int)((totalMined > 500000 ? 500000 : totalMined)/500.0)))/500.0;
+			double value = (((int)((totalMined > 2500000 ? 2500000 : totalMined)/500.0)))/500.0;
 			value = value*100;
 			value = Math.round(value);
 			value = value/100;

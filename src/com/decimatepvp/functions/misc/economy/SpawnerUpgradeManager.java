@@ -1,5 +1,7 @@
 package com.decimatepvp.functions.misc.economy;
 
+import java.util.Arrays;
+
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -9,6 +11,7 @@ import org.bukkit.block.CreatureSpawner;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -17,10 +20,15 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 
 import com.decimatepvp.utils.ParticleEffect;
 
 public class SpawnerUpgradeManager implements Listener, CommandExecutor {
+	
+	public SpawnerUpgradeManager(){
+		this.setupSword();
+	}
 	
 	@EventHandler
 	public void onDeath(EntityDeathEvent event){
@@ -50,7 +58,7 @@ public class SpawnerUpgradeManager implements Listener, CommandExecutor {
 					if(event.getEntity().getKiller() instanceof Player){
 						Player player = (Player) event.getEntity().getKiller();
 						ItemStack hand = player.getItemInHand();
-						if(hand != null && hand.getItemMeta() != null && hand.getItemMeta().getLore() != null && hand.getItemMeta().getLore().contains(ChatColor.GRAY + "Soul I")){
+						if(hand != null && hand.getItemMeta() != null && hand.getItemMeta().getLore() != null && hand.getItemMeta().getLore().contains(ChatColor.GRAY + "Soul Catcher I")){
 							chance*=2.5;
 						}
 					}
@@ -133,6 +141,20 @@ public class SpawnerUpgradeManager implements Listener, CommandExecutor {
 		return null;
 	}
 	
+	private ItemStack sword;
+	
+	private void setupSword(){
+		sword = new ItemStack(Material.DIAMOND_SWORD);
+		ItemMeta sm = sword.getItemMeta();
+		sm.setDisplayName(ChatColor.YELLOW + "Artifact Sword");
+		sm.setLore(Arrays.asList(ChatColor.GRAY + "Soul Catcher I"));
+		sword.setItemMeta(sm);
+		sword.addEnchantment(Enchantment.DAMAGE_ALL, 5);
+		sword.addUnsafeEnchantment(Enchantment.DURABILITY, 8);
+		sword.addEnchantment(Enchantment.DAMAGE_UNDEAD, 5);
+		sword.addUnsafeEnchantment(Enchantment.LOOT_BONUS_MOBS, 4);
+	}
+	
 	@Override
 	public boolean onCommand(CommandSender arg0, Command arg1, String arg2, String[] arg3) {
 		if(arg0.isOp()){
@@ -155,8 +177,18 @@ public class SpawnerUpgradeManager implements Listener, CommandExecutor {
 						}else{
 							arg0.sendMessage(ChatColor.RED + "This spawner type does not have an upgrade artifact.");
 						}
+					}else if(arg3[1].equalsIgnoreCase("sword")){
+						if(player.getInventory().firstEmpty() != -1){
+							player.getInventory().addItem(sword);
+						}else{
+							player.getWorld().dropItem(player.getLocation(), sword);
+							player.sendMessage("");
+							player.sendMessage(ChatColor.RED.toString() + ChatColor.BOLD + "ALERT! " + ChatColor.GRAY + "Your artifact sword was placed on the ground as your inventory is full!");
+							player.sendMessage("");
+						}
 					}else{
 						arg0.sendMessage(ChatColor.RED + "Invalid artifact name, list of artifacts:");
+						arg0.sendMessage(ChatColor.GRAY + "  - " + ChatColor.YELLOW + "SWORD " + ChatColor.GRAY + "(gives artifact sword)");
 						for(DecimateSpawnerType t : DecimateSpawnerType.values()){
 							arg0.sendMessage(ChatColor.GRAY + "  - " + ChatColor.YELLOW + t.toString());
 						}

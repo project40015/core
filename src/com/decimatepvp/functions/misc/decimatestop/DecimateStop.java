@@ -33,11 +33,8 @@ public class DecimateStop implements Listener, CommandExecutor {
 
 		
 		for(Player player : Bukkit.getServer().getOnlinePlayers()){
+			player.sendMessage(ChatColor.RED + "Server restarting... Join back soon.");
 			BungeeUtils.send(player, "lobby");
-		}
-		
-		for(Player player : Bukkit.getServer().getOnlinePlayers()){
-			player.kickPlayer(ChatColor.RED + "Server restarting...");
 		}
 		
 		
@@ -47,10 +44,13 @@ public class DecimateStop implements Listener, CommandExecutor {
 			public void run() {
 //				Bukkit.getServer().shutdown();
 //				Bukkit.getServer().setWhitelist(false);
+				for(Player player : Bukkit.getServer().getOnlinePlayers()){
+					player.kickPlayer(ChatColor.RED + "Server restarting...");
+				}
 				Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), "stop");
 			}
 			
-		}, 20*5);
+		}, 20*3);
 		
 		
 		return false;

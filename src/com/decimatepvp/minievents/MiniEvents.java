@@ -10,17 +10,21 @@ import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Chicken;
 import org.bukkit.entity.Creeper;
 import org.bukkit.entity.EntityType;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Monster;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.Projectile;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.event.entity.CreatureSpawnEvent.SpawnReason;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.EntityTargetLivingEntityEvent;
+import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.entity.SpawnerSpawnEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
@@ -33,15 +37,14 @@ import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 import org.bukkit.event.weather.WeatherChangeEvent;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.permissions.Permission;
-import org.bukkit.permissions.PermissionDefault;
+import org.bukkit.util.Vector;
 
 import com.decimatepvp.utils.FactionUtils;
 import com.decimatepvp.utils.PlayerUtils;
-import com.massivecraft.factions.Faction;
+import com.massivecraft.factions.entity.Faction;
 
-import decimate.WarSocket.ServerInformationPacketRequestEvent;
-import decimate.WarSocket.WarSocket;
+import decimatenetworkcore.core.DataUser;
+import decimatenetworkcore.core.DecimateNetworkCore;
 
 public class MiniEvents implements Listener {
 	
@@ -50,6 +53,50 @@ public class MiniEvents implements Listener {
 		if(event.getEntityType() == EntityType.ZOMBIE) {
 			if(event.getEntity().getVehicle() != null) {
 				event.getEntity().getVehicle().remove();
+			}
+		}
+	}
+	
+	//Statistic Tracking:
+	@EventHandler
+	public void onStatBlockPlace(BlockPlaceEvent event){
+		if(!event.isCancelled()){
+			DataUser du = DecimateNetworkCore.getInstance().getDataUserManager().getDataUser(event.getPlayer().getUniqueId().toString());
+			du.setBlocksPlaced(du.getBlocksPlaced() + 1);
+		}
+	}
+	
+	@EventHandler
+	public void onStatBlockBreak(BlockBreakEvent event){
+		if(!event.isCancelled()){
+			DataUser du = DecimateNetworkCore.getInstance().getDataUserManager().getDataUser(event.getPlayer().getUniqueId().toString());
+			du.setBlocksBroken(du.getBlocksBroken() + 1);
+		}
+	}
+	
+	@EventHandler
+	public void onStatKill(EntityDeathEvent event){
+		if(event.getEntity() instanceof Player){
+			DataUser ddu = DecimateNetworkCore.getInstance().getDataUserManager().getDataUser(event.getEntity().getUniqueId().toString());
+			ddu.setDeaths(ddu.getDeaths() + 1);
+		}
+		if(event.getEntity().getKiller() == null){
+			return;
+		}
+		Player player = null;
+		if(event.getEntity().getKiller() instanceof Player){
+			player = (Player) event.getEntity().getKiller();
+		}else if(event.getEntity().getKiller() instanceof Projectile){
+			if(((Projectile)event.getEntity().getKiller()).getShooter() instanceof Player){
+				player = (Player) ((Projectile)event.getEntity().getKiller()).getShooter();
+			}
+		}
+		if(player != null){
+			DataUser du = DecimateNetworkCore.getInstance().getDataUserManager().getDataUser(player.getUniqueId().toString());
+			if(event.getEntity() instanceof Player){
+				du.setPlayersKilled(du.getPlayersKilled() + 1);
+			}else if(event.getEntity() instanceof LivingEntity){
+				du.setMobsKilled(du.getMobsKilled() + 1);
 			}
 		}
 	}
@@ -176,7 +223,9 @@ public class MiniEvents implements Listener {
 	
 	@EventHandler
 	public void onPlace(BlockPlaceEvent event){
-		if(event.getBlock().getLocation().getBlockY() == event.getPlayer().getLocation().getBlockY() - 1){
+		if(event.getBlock().getLocation().getBlockY() == event.getPlayer().getLocation().getBlockY() - 1 &&
+				event.getBlock().getLocation().getBlockX() == event.getPlayer().getLocation().getBlockX() &&
+				event.getBlock().getLocation().getBlockZ() == event.getPlayer().getLocation().getBlockZ()){
 			if(PlayerUtils.isInSpawn(event.getPlayer())) {
 				return;
 			}
@@ -190,7 +239,7 @@ public class MiniEvents implements Listener {
 			if(event.getPlayer().getGameMode() == GameMode.CREATIVE){
 				return;
 			}
-			event.getPlayer().setVelocity(event.getPlayer().getVelocity().setY(-1));
+			event.getPlayer().setVelocity(new Vector(0, -1, 0));
 		}
 	}
 	

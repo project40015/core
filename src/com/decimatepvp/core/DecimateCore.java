@@ -83,6 +83,7 @@ import com.decimatepvp.functions.tntfill.TntFillManager;
 import com.decimatepvp.functions.trade.TradeManager;
 import com.decimatepvp.functions.trails.TrailManager;
 import com.decimatepvp.minievents.MiniEvents;
+import com.decimatepvp.utils.BungeeUtils;
 import com.google.common.io.ByteArrayDataInput;
 import com.google.common.io.ByteStreams;
 
@@ -207,7 +208,7 @@ public class DecimateCore extends JavaPlugin implements PluginMessageListener {
 				new RewardListener(), trenchPick, sellWandManager, new ExplosionListener(), new DecimateStop(),
 				new TntDisableManager(), killRewardListener, new PreCommandCancel(), new BedrockFix(),
 				new VehiclePlaceBugListener(), playtimeManager, new EnemyTerritoryLogoutManager(), trailManager,
-				joinWar, new TabListManager(), new PvpEnhancements(), spawnerUpgradeManager);
+				joinWar, new TabListManager(), new PvpEnhancements(), spawnerUpgradeManager, new BungeeUtils());
 		
 		loadListeners(worldBorders);
 	}
@@ -274,6 +275,9 @@ public class DecimateCore extends JavaPlugin implements PluginMessageListener {
 		getCommand("map").setExecutor(mc);
 		getCommand("store").setExecutor(mc);
 		getCommand("dbroadcast").setExecutor(mc);
+		getCommand("dpurchase").setExecutor(mc);
+		getCommand("dsetrank").setExecutor(mc);
+
 		getCommand("trenchpickaxe").setExecutor(trenchPick);
 		getCommand("hub").setExecutor(new HubCommand());
 		getCommand("announcements").setExecutor(this.announcementManager);

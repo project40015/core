@@ -16,7 +16,7 @@ import org.bukkit.permissions.PermissionDefault;
 
 import com.decimatepvp.utils.BungeeUtils;
 import com.decimatepvp.utils.FactionUtils;
-import com.massivecraft.factions.Faction;
+import com.massivecraft.factions.entity.Faction;
 
 import decimate.WarSocket.ServerInformationPacketRequestEvent;
 import decimate.WarSocket.WarSocket;
@@ -31,7 +31,7 @@ public class JoinWar implements Listener, CommandExecutor {
 				Faction faction = FactionUtils.getFaction(player);
 				String fString = "";
 				if(!faction.equals(FactionUtils.getWilderness())){
-					fString = faction.getTag();
+					fString = faction.getName();
 				}
 				String rankString = toRankString(player);
 				WarSocket.getInstance().emitServerInformationPacketResult(player.getUniqueId().toString(), rankString, fString);
