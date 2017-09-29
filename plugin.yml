@@ -40,10 +40,6 @@ commands:
   ping:
     description: View your ping
     aliases: [ms]
-  blacklist:
-    description: Permanently bans the player with no chance of being redeemed.
-  blacklistpardon: 
-    description: Removes a player from the blacklist.
   iplist:
     description: Lists players on a single IP.
   giveenchantment:
@@ -97,3 +93,5 @@ commands:
     description: Denied.
   dsetrank:
     description: Set a user rank
+  tntbank:
+    description: Access TNT bank.

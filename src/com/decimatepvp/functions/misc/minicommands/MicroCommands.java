@@ -22,7 +22,7 @@ public class MicroCommands implements CommandExecutor {
 	
 	@SuppressWarnings("deprecation")
 	public MicroCommands(){
-		then = (new Date(2017-1900, 6-1, 16+7, 15, 0)).getTime();
+		then = (new Date(2017-1900, 10-1, 7, 15, 0)).getTime();
 	}
 	
 	private String tntEnable(){
@@ -42,7 +42,7 @@ public class MicroCommands implements CommandExecutor {
 			arg0.sendMessage(ChatColor.GRAY + "Discord: " + ChatColor.BLUE + "" + ChatColor.UNDERLINE + 
 					"https://discord.gg/znFvYra");
 		}else if(arg1.getName().equalsIgnoreCase("map")){
-			arg0.sendMessage(DecimateCore.getCore().getColoredDecimate() + ChatColor.WHITE + "PVP " + ChatColor.GRAY + "(season II):");
+			arg0.sendMessage(DecimateCore.getCore().getColoredDecimate() + ChatColor.WHITE + "PVP " + ChatColor.GRAY + "(season III):");
 			arg0.sendMessage("");
 			arg0.sendMessage(ChatColor.GRAY + "TNT Enable: " + ChatColor.RED + tntEnable());
 			arg0.sendMessage(ChatColor.GRAY + "Worldborder:");

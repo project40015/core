@@ -16,6 +16,9 @@ import org.bukkit.entity.Player;
 import com.decimatepvp.core.DecimateCore;
 import com.decimatepvp.utils.PlayerUtils;
 
+import decimatenetworkcore.core.DataUser;
+import decimatenetworkcore.core.DecimateNetworkCore;
+
 public class TntFillCommand implements CommandExecutor {
 
 	DecimateCore core;
@@ -46,7 +49,7 @@ public class TntFillCommand implements CommandExecutor {
 		}
 		
 		if(arg3.length != 2){
-			player.sendMessage(ChatColor.RED + "Invalid syntax. Try " + ChatColor.YELLOW + "/tntfill (# of tnt) (range)" + ChatColor.RED + "!");
+			player.sendMessage(ChatColor.RED + "Invalid syntax. Try " + ChatColor.YELLOW + "/tntfill (# of tnt per dispenser) (range)" + ChatColor.RED + "!");
 			return false;
 		}
 		
@@ -80,17 +83,45 @@ public class TntFillCommand implements CommandExecutor {
 				List<Location> dispensers = getLocations(player.getLocation(), range);
 				
 				int size = dispensers.size();
-				int total = 0;
+				int total = 0, extra = 0;
 				int inventory = PlayerUtils.getTotal(player.getInventory(), Material.TNT);
+				DataUser du = DecimateNetworkCore.getInstance().getDataUserManager().getDataUser(player.getUniqueId().toString());
 				if(amount*size > inventory){
-					total = inventory;
+					int poExtra = du.getFac1TNT();
+					if(poExtra > 1){
+						if(amount*size > poExtra + inventory){
+							extra = poExtra;
+							total = extra + inventory;
+							du.removeFac1TNT(extra);
+						}else{
+							int needed = amount*size - inventory;
+							extra = needed;
+							du.removeFac1TNT(extra);
+						}
+					}else{
+						total = inventory;
+					}
 				}else{
 					total = amount*size;
 				}
-				int saved = core.getTntFillManager().fill(dispensers, total);
+				int saved = 0;
+				if(total - extra > 0){
+					core.getTntFillManager().fill(dispensers, total - extra);
+				}
+				Bukkit.broadcastMessage(ChatColor.YELLOW.toString() + saved + ", " + total + ", " + extra);
+				int extraSaved = 0;
+				if(extra > 0){
+					List<Location> dispensers2 = new ArrayList<>();
+					dispensers.forEach(l -> dispensers2.add(l));
+					extraSaved = core.getTntFillManager().fill(dispensers2, extra);
+					Bukkit.broadcastMessage(ChatColor.GOLD.toString() + extraSaved);
+				}
 				PlayerUtils.removeItems(player, Material.TNT, total - saved);
-				
-				player.sendMessage(ChatColor.GREEN + "Spread " + ChatColor.AQUA + (total - saved) + " TNT " + ChatColor.GREEN
+				du.addFac1TNT(extraSaved);
+				if(extra - extraSaved > 0){
+					player.sendMessage(ChatColor.YELLOW + "Added " + ChatColor.GOLD + (extra - extraSaved) + ChatColor.YELLOW + " TNT from your TNT bank.");
+				}
+				player.sendMessage(ChatColor.GREEN + "Spread " + ChatColor.AQUA + (total - (saved + extraSaved)) + " TNT " + ChatColor.GREEN
 						+ "over " + ChatColor.AQUA + size + " dispensers" + ChatColor.GREEN + "!");
 				
 				core.getTntFillManager().putOnCooldown(player);

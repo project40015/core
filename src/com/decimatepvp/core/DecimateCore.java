@@ -78,6 +78,7 @@ import com.decimatepvp.functions.staff.staffchat.StaffChatManager;
 import com.decimatepvp.functions.staff.stafflog.StaffCommandsManager;
 import com.decimatepvp.functions.staff.togglechat.ToggleChatCommand;
 import com.decimatepvp.functions.staff.togglechat.ToggleChatManager;
+import com.decimatepvp.functions.tntbank.TntBankCommand;
 import com.decimatepvp.functions.tntfill.TntFillCommand;
 import com.decimatepvp.functions.tntfill.TntFillManager;
 import com.decimatepvp.functions.trade.TradeManager;
@@ -254,8 +255,8 @@ public class DecimateCore extends JavaPlugin implements PluginMessageListener {
 		getCommand("nv").setExecutor(new NightVisionCommand());
 		getCommand("bottleexp").setExecutor(new BottleExpCommand());
 		getCommand("who").setExecutor(new OnlineCommand());
-		getCommand("blacklist").setExecutor(blacklistManager);
-		getCommand("blacklistpardon").setExecutor(blacklistManager);
+//		getCommand("blacklist").setExecutor(blacklistManager);
+//		getCommand("blacklistpardon").setExecutor(blacklistManager);
 		getCommand("iplist").setExecutor(accountIpManager);
 		getCommand("giveenchantment").setExecutor(new EnchantCommand());
 		CropHopperCommand chc = new CropHopperCommand();
@@ -279,6 +280,7 @@ public class DecimateCore extends JavaPlugin implements PluginMessageListener {
 		getCommand("dsetrank").setExecutor(mc);
 
 		getCommand("trenchpickaxe").setExecutor(trenchPick);
+		getCommand("tntbank").setExecutor(new TntBankCommand());
 		getCommand("hub").setExecutor(new HubCommand());
 		getCommand("announcements").setExecutor(this.announcementManager);
 		
